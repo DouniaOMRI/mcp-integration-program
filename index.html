@@ -1,0 +1,993 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Interactive architecture and delivery brief for a Claude MCP integration pilot.">
+<title>MCP Integration Programme</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f5f6f8; --surface:#fff; --ink:#0f1b2d; --muted:#5a6678; --line:#dde1e8;
+  --law:#1d4ed8; --law-soft:#e6edfd; --fit:#0f766e; --fit-soft:#dff3f0;
+  --ok:#15803d; --ok-soft:#e4f4ea; --warn:#b45309; --warn-soft:#fdf1de; --risk:#b42318; --risk-soft:#fde8e6;
+  --rail:#0f1b2d; --rail-ink:#c9d2e0;
+  --sans:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --display:"Manrope","DM Sans",system-ui,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:16px}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.15;margin:0;letter-spacing:-.01em}
+p{margin:0 0 .9em}
+a{color:var(--law)}
+button{font:inherit;cursor:pointer;color:inherit}
+:focus-visible{outline:3px solid var(--law);outline-offset:2px}
+code{font:500 13px var(--mono);background:#eceff4;padding:2px 6px;border-radius:5px}
+pre{margin:0;font:500 13px/1.55 var(--mono);background:#0f1b2d;color:#d6e2f5;padding:14px 16px;border-radius:10px;overflow:auto}
+
+.app{display:grid;grid-template-columns:288px 1fr;min-height:100vh}
+.rail{background:var(--rail);color:var(--rail-ink);padding:24px 18px;position:sticky;top:0;height:100vh;overflow:auto;display:flex;flex-direction:column;gap:20px}
+.brand{display:flex;gap:12px;align-items:center}
+.brand-mark{width:38px;height:38px;flex:none;border-radius:10px;background:var(--law);display:grid;place-items:center}
+.brand-mark svg{width:22px;height:22px}
+.brand strong{display:block;color:#fff;font:700 15px/1.2 var(--display)}
+.brand span{font-size:12.5px;color:#93a1b8}
+.nav-title{font-size:12.5px;color:#7b8aa3;margin-bottom:-8px}
+nav{display:flex;flex-direction:column;gap:2px}
+nav button{display:flex;align-items:center;gap:11px;width:100%;text-align:left;background:none;border:0;color:var(--rail-ink);padding:10px 12px;border-radius:8px;font-weight:500;font-size:14.5px}
+nav button svg{width:18px;height:18px;flex:none;stroke-width:1.6}
+nav button:hover{background:rgba(255,255,255,.07)}
+nav button.active{background:#fff;color:var(--ink);font-weight:700}
+.rail-note{margin-top:auto;font-size:12.5px;line-height:1.5;color:#93a1b8;border-top:1px solid rgba(255,255,255,.12);padding-top:14px}
+.rail-note strong{display:block;color:#fff;margin-bottom:3px}
+
+main{padding:0 clamp(18px,4vw,56px) 64px;min-width:0}
+.mast{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 0;border-bottom:1px solid var(--line);margin-bottom:36px;flex-wrap:wrap}
+.mast-meta{font-size:13.5px;color:var(--muted)}
+.print{display:flex;gap:8px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 14px;font-weight:600}
+.print svg{width:16px;height:16px}
+.print:hover{border-color:var(--ink)}
+
+.page{display:none;max-width:1100px}
+.page.active{display:block}
+.page-head{margin-bottom:26px;max-width:70ch}
+.page-head h2{font-size:clamp(26px,3.4vw,38px);margin-bottom:10px}
+.page-head p{color:var(--muted);font-size:17px}
+.sec{margin:38px 0 14px}
+.sec h3{font-size:22px;margin-bottom:6px}
+.sec p{color:var(--muted);max-width:68ch}
+.kicker{font-weight:700;font-size:14px;color:var(--law);margin-bottom:10px}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px}
+.card h3{font-size:18px;margin-bottom:8px}
+.card p,.card li{color:var(--muted);font-size:15.5px}
+.card p:last-child{margin-bottom:0}
+.card ul{margin:0;padding-left:20px}
+.card li{margin-bottom:5px}
+.grid{display:grid;gap:18px}
+.grid.two{grid-template-columns:repeat(2,1fr)}
+.grid.three{grid-template-columns:repeat(3,1fr)}
+.notice{margin-top:22px;background:var(--law-soft);border-left:4px solid var(--law);padding:16px 20px;border-radius:0 10px 10px 0}
+.notice.warn{background:var(--warn-soft);border-color:var(--warn)}
+.tag{display:inline-block;font-size:13px;font-weight:600;padding:4px 11px;border-radius:99px;background:#eceff4}
+.tag.ok{background:var(--ok-soft);color:var(--ok)}
+.tag.warn{background:var(--warn-soft);color:var(--warn)}
+.tag.risk{background:var(--risk-soft);color:var(--risk)}
+.tag.law{background:var(--law-soft);color:var(--law)}
+.tag.fit{background:var(--fit-soft);color:var(--fit)}
+.meta-row{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 20px}
+
+/* segmented control */
+.seg{display:inline-flex;background:#e8ebf1;border-radius:10px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:none;padding:8px 14px;border-radius:8px;font-weight:600;font-size:14.5px;color:var(--muted)}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(15,27,45,.15)}
+.seg button:hover:not(.on){color:var(--ink)}
+.btn{background:var(--ink);color:#fff;border:0;border-radius:8px;padding:9px 16px;font-weight:600;font-size:14.5px}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn:hover{opacity:.9}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* overview */
+.executive{display:grid;grid-template-columns:1.6fr 1fr;gap:36px;margin-bottom:28px}
+.executive h1{font-size:clamp(30px,4.2vw,50px);margin-bottom:18px;max-width:18ch}
+.summary{font-size:18px;color:var(--muted);max-width:60ch}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.chip{background:var(--law-soft);color:var(--law);font-weight:600;font-size:13.5px;padding:5px 12px;border-radius:99px}
+.hub{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px;display:flex;flex-direction:column}
+.hub svg{width:100%;height:auto;display:block}
+.hub-cap{font-size:13px;color:var(--muted);padding:2px 10px 8px}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-bottom:28px;overflow:hidden}
+.stat{padding:18px 20px;border-right:1px solid var(--line)}
+.stat:last-child{border-right:0;background:var(--ink);color:#fff}
+.stat:last-child span,.stat:last-child small{color:#9fb0cc}
+.stat span{display:block;font-size:13px;color:var(--muted)}
+.stat b{display:block;font:800 30px/1.2 var(--display);margin:2px 0}
+.stat small{color:var(--muted);font-size:13px}
+
+/* generic svg */
+.diagram{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;overflow-x:auto}
+.diagram svg{display:block;width:100%;height:auto}
+.diagram svg text{font-family:var(--sans)}
+.flow{stroke-dasharray:6 6;animation:dash 1s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-12}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(29,78,216,.0)}50%{box-shadow:0 0 0 6px rgba(29,78,216,.18)}}
+
+/* stepper */
+.stepper{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px}
+.st-nodes{display:flex;align-items:center;gap:0;flex-wrap:wrap;row-gap:10px}
+.st-node{display:flex;align-items:center;gap:9px;background:#f0f2f6;border:2px solid transparent;border-radius:10px;padding:10px 14px;font-weight:600;font-size:14.5px;transition:.25s}
+.st-node .ic{font-size:19px;line-height:1}
+.st-node.done{background:var(--ok-soft);color:var(--ok)}
+.st-node.on{background:var(--law-soft);border-color:var(--law);color:var(--law);transform:translateY(-2px)}
+.st-arrow{width:34px;height:2px;background:var(--line);position:relative;flex:none;transition:.25s}
+.st-arrow::after{content:"";position:absolute;right:-1px;top:-4px;border-left:7px solid var(--line);border-top:5px solid transparent;border-bottom:5px solid transparent;transition:.25s}
+.st-arrow.done{background:var(--ok)}
+.st-arrow.done::after{border-left-color:var(--ok)}
+.st-cap{margin:18px 0 14px;min-height:78px;border-left:3px solid var(--law);padding-left:16px}
+.st-cap h4{font-size:17px;margin-bottom:4px}
+.st-cap p{margin:0;color:var(--muted);max-width:70ch}
+.st-ctl{display:flex;gap:8px}
+
+/* demo */
+.demo{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;align-items:start}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.panel-h{padding:12px 16px;border-bottom:1px solid var(--line);font:700 14.5px var(--display);display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.chat{padding:16px;display:flex;flex-direction:column;gap:12px;min-height:320px;max-height:460px;overflow:auto}
+.bubble{max-width:88%;padding:11px 15px;border-radius:14px;font-size:15px;line-height:1.5;animation:pop .3s ease}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.bubble.u{align-self:flex-end;background:var(--ink);color:#fff;border-bottom-right-radius:4px}
+.bubble.c{align-self:flex-start;background:#eef1f6;border-bottom-left-radius:4px}
+.bubble.c.bad{background:var(--risk-soft);color:var(--risk)}
+.bubble small{display:block;margin-top:6px;font-size:12px;color:var(--muted)}
+.bubble .row{display:flex;gap:8px;margin-top:10px}
+.empty{color:var(--muted);font-size:14.5px;align-self:center;margin:auto;text-align:center;max-width:32ch}
+.chips-q{padding:14px 16px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px;background:#fafbfc}
+.qchip{background:#fff;border:1px solid var(--line);border-radius:99px;padding:7px 13px;font-size:14px;font-weight:500}
+.qchip:hover:not(:disabled){border-color:var(--law);color:var(--law)}
+.qchip:disabled{opacity:.45;cursor:not-allowed}
+.log{list-style:none;margin:0;padding:12px 16px;display:flex;flex-direction:column;gap:8px;min-height:140px;max-height:240px;overflow:auto;font-size:14px}
+.log li{display:flex;gap:10px;animation:pop .3s ease}
+.log li i{flex:none;width:8px;height:8px;border-radius:50%;background:var(--law);margin-top:8px}
+.log li.ok i{background:var(--ok)} .log li.bad i{background:var(--risk)} .log li.wait i{background:var(--warn)}
+.dnode rect{fill:#fff;stroke:var(--line);stroke-width:2;transition:.3s}
+.dnode.on rect{stroke:var(--law);fill:var(--law-soft)}
+.dnode.ok rect{stroke:var(--ok);fill:var(--ok-soft)}
+.dnode.bad rect{stroke:var(--risk);fill:var(--risk-soft)}
+.dnode.wait rect{stroke:var(--warn);fill:var(--warn-soft)}
+
+/* architecture */
+.arch-node{cursor:pointer}
+.arch-node rect.bx{transition:.2s}
+.arch-node:hover rect.bx,.arch-node:focus-visible rect.bx{stroke:var(--ink);stroke-width:2.5}
+.arch-node.sel rect.bx{stroke:var(--ink);stroke-width:3}
+.info{margin-top:14px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 22px;display:grid;grid-template-columns:1fr 1fr;gap:6px 28px}
+.info h4{grid-column:1/-1;font-size:18px}
+.info p{margin:0;color:var(--muted);font-size:15.5px}
+.info ul{margin:0;padding-left:18px;color:var(--muted);font-size:15px}
+
+/* dossiers */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin-bottom:22px}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:10px 14px;font-weight:600;color:var(--muted);margin-bottom:-1px}
+.tabs button:hover{color:var(--ink)}
+.tabs button.active{color:var(--ink);border-bottom-color:var(--law)}
+.dos h3{font-size:26px;margin-bottom:6px}
+.dos .lead{color:var(--muted);font-size:16.5px;max-width:64ch}
+.metric{display:grid;grid-template-columns:150px 1fr 40px;gap:12px;align-items:center;margin-bottom:10px;font-size:14.5px}
+.track{height:10px;background:#e8ebf1;border-radius:99px;overflow:hidden}
+.fill{height:100%;width:0;border-radius:99px;background:var(--ok);transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.fill.mid{background:#d4a017} .fill.low{background:var(--risk)} .fill.sens{background:var(--warn)}
+.toolrow{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;padding:10px 0;border-bottom:1px solid var(--line);align-items:center}
+.toolrow:last-child{border-bottom:0}
+.toolrow code{justify-self:start}
+.toolrow span.d{color:var(--muted);font-size:14.5px;grid-column:1/-1}
+.pill{font-size:12px;font-weight:700;padding:2px 8px;border-radius:99px}
+.pill.r{background:var(--ok-soft);color:var(--ok)} .pill.w{background:var(--risk-soft);color:var(--risk)}
+.authchain{display:flex;gap:0;flex-wrap:wrap;row-gap:10px;align-items:stretch}
+.auth-step{flex:1 1 150px;background:#f0f2f6;border-radius:10px;padding:12px 14px;font-size:14px;animation:glow 6s infinite}
+.auth-step b{display:block;font:700 12.5px var(--sans);color:var(--muted);margin-bottom:3px}
+@keyframes glow{0%,20%,100%{background:#f0f2f6}6%,14%{background:var(--law-soft)}}
+.auth-gap{width:16px;flex:none}
+
+/* security */
+.matrix{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:620px;font-size:15px}
+th,td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#f0f2f6;font-weight:700;font-size:14px}
+tr:last-child td{border-bottom:0}
+td .cell{display:inline-block;font-weight:700;padding:3px 10px;border-radius:99px;font-size:13.5px;animation:pop .35s ease}
+.cell.y{background:var(--ok-soft);color:var(--ok)} .cell.n{background:var(--risk-soft);color:var(--risk)} .cell.c{background:var(--warn-soft);color:var(--warn)}
+.check{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px;cursor:pointer}
+.check:last-child{border-bottom:0}
+.check input{width:19px;height:19px;margin-top:3px;accent-color:var(--ok);flex:none}
+.progress{height:12px;background:#e8ebf1;border-radius:99px;overflow:hidden;margin:6px 0 4px}
+.progress i{display:block;height:100%;width:0;background:var(--ok);transition:width .4s ease}
+.twocol{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.twocol ul{margin:0;padding-left:20px;font-size:15px}
+.twocol li{margin-bottom:5px;color:var(--muted)}
+
+/* roadmap */
+.gantt{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow-x:auto}
+.ginner{min-width:760px;position:relative}
+.grow{display:grid;grid-template-columns:200px repeat(10,1fr);align-items:center;border-bottom:1px solid var(--line);min-height:52px}
+.grow:last-child{border-bottom:0}
+.grow.hd{background:#f0f2f6;min-height:38px;font-weight:700;font-size:13.5px;text-align:center}
+.grow .lab{padding:8px 14px;font-weight:600;font-size:14.5px;text-align:left}
+.gbar{border:0;height:30px;border-radius:8px;background:#cfd7e6;color:var(--ink);font-size:12.5px;font-weight:700;margin:0 2px;transition:.3s}
+.gbar.law{background:#cfdcfa} .gbar.fit{background:#c6e8e3} .gbar.gen{background:#dfe3ea}
+.gbar.active{background:var(--law);color:#fff;box-shadow:0 0 0 4px rgba(29,78,216,.18)}
+.gbar.active.fit{background:var(--fit);box-shadow:0 0 0 4px rgba(15,118,110,.2)}
+.gbar.done{background:var(--ok);color:#fff}
+.gbar.sel{outline:3px solid var(--ink);outline-offset:1px}
+.gcols{position:absolute;left:200px;right:0;top:0;bottom:0;pointer-events:none}
+.gmark{position:absolute;top:0;bottom:0;width:2px;background:var(--risk);left:calc((var(--day) - .5) * 10%);transition:left .4s ease}
+.gmark::before{content:"";position:absolute;top:-1px;left:-5px;border:6px solid transparent;border-top-color:var(--risk)}
+.ms{font-size:18px;color:var(--ink)}
+.ctlbar{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin:0 0 14px}
+input[type=range]{accent-color:var(--law);width:min(340px,100%)}
+.estimate{display:grid;grid-template-columns:1.4fr 1fr;gap:18px}
+.opt{display:grid;grid-template-columns:22px 1fr auto;gap:12px;align-items:start;padding:10px 0;border-bottom:1px solid var(--line);cursor:pointer;font-size:15px}
+.opt:last-child{border-bottom:0}
+.opt input{width:19px;height:19px;margin-top:2px;accent-color:var(--law)}
+.opt small{display:block;color:var(--muted);font-size:13.5px}
+.opt b{font-family:var(--display);white-space:nowrap}
+.total{background:var(--ink);color:#fff;border-radius:12px;padding:24px;display:flex;flex-direction:column;justify-content:center}
+.total span{color:#9fb0cc;font-size:14px}
+.total strong{font:800 64px/1 var(--display);margin:6px 0}
+.total p{color:#c9d2e0;margin:0;font-size:14.5px}
+.total .bar{height:10px;background:rgba(255,255,255,.15);border-radius:99px;margin:12px 0;overflow:hidden}
+.total .bar i{display:block;height:100%;background:#7aa2ff;width:0;transition:width .5s ease}
+
+/* decisions */
+.dq{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px}
+.dq h3{font-size:17px;margin-bottom:4px}
+.dq>p{color:var(--muted);font-size:15px;margin-bottom:12px}
+.dq .seg{margin-bottom:12px}
+.impact{font-size:14.5px;color:var(--muted);min-height:48px;border-left:3px solid var(--line);padding-left:12px}
+.impact.set{border-color:var(--law);color:var(--ink)}
+.impact b{display:block;font-size:13px;color:var(--law);margin-bottom:2px}
+
+details.card{padding:0}
+details.card summary{padding:20px 22px;cursor:pointer;font:700 17px var(--display);list-style:none;display:flex;justify-content:space-between;gap:10px;align-items:center}
+details.card summary::-webkit-details-marker{display:none}
+details.card summary::after{content:"+";font-size:22px;color:var(--muted);transition:transform .25s}
+details.card[open] summary::after{transform:rotate(45deg)}
+details.card .body{padding:0 22px 20px}
+details.card .body p,details.card .body li{color:var(--muted);font-size:15.5px}
+details.card .body ul{margin:8px 0 0;padding-left:20px}
+details.card.q summary{font:600 16px var(--sans)}
+.src-list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.src-list li{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 20px}
+.src-list strong{display:block}
+.src-list span{color:var(--muted);font-size:14.5px}
+
+@media (max-width:980px){
+  .app{grid-template-columns:1fr}
+  .rail{position:static;height:auto;padding:16px}
+  nav{flex-direction:row;flex-wrap:wrap}
+  nav button{width:auto;padding:8px 12px}
+  .rail-note{display:none}
+  .executive,.grid.two,.grid.three,.demo,.estimate,.twocol,.info{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stat{border-bottom:1px solid var(--line)}
+  .metric{grid-template-columns:110px 1fr 32px}
+}
+@media print{
+  .rail,.print,.seg,.st-ctl,.chips-q{display:none}
+  .app{display:block}
+  .page{display:block!important;break-after:page}
+  .dos{display:block!important}
+  body{background:#fff}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="rail" aria-label="Programme navigation">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="19" cy="19" r="2"/><path d="M7 12h4m0 0 6-6m-6 6 6 6"/></svg></div>
+      <div><strong>MCP Integration Programme</strong><span>Architecture &amp; delivery brief</span></div>
+    </div>
+    <div class="nav-title">Document sections</div>
+    <nav id="nav"></nav>
+    <div class="rail-note"><strong>Working document</strong>Prepared for stakeholder review. Scope and timing depend on access, test accounts and provider approval.</div>
+  </aside>
+
+  <main>
+    <header class="mast">
+      <div class="mast-meta">Internal programme · Version 2.0 · 06 October 2026</div>
+      <button class="print" id="printButton"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M7 8V3h10v5M7 17H4V9h16v8h-3M7 14h10v7H7z"/></svg><span>Print brief</span></button>
+    </header>
+
+    <!-- OVERVIEW -->
+    <section class="page active" id="overview">
+      <div class="executive">
+        <div>
+          <div class="kicker">Executive recommendation</div>
+          <h1>Build one controlled MCP pilot, not four isolated experiments.</h1>
+          <p class="summary">Create a first functional version connecting Claude to Swiss case law and three fitness platforms through one governed architecture. Reuse the community servers for rapid validation, while keeping every provider adapter replaceable.</p>
+          <div class="chips"><span class="chip">Read-only first</span><span class="chip">Role-based access</span><span class="chip">Replaceable adapters</span><span class="chip">Audit-ready design</span></div>
+        </div>
+        <div class="hub">
+          <svg viewBox="0 0 520 300" role="img" aria-label="Claude and the gateway at the centre, connected to OpenCaseLaw on the left and Garmin, MyFitnessPal and TrainingPeaks on the right.">
+            <g fill="none" stroke-width="2">
+              <path class="flow" stroke="#1d4ed8" d="M200 150H120"/>
+              <path class="flow" stroke="#0f766e" d="M320 150C360 150 360 50 400 50"/>
+              <path class="flow" stroke="#0f766e" d="M320 150H400"/>
+              <path class="flow" stroke="#0f766e" d="M320 150C360 150 360 250 400 250"/>
+            </g>
+            <circle r="5" fill="#1d4ed8"><animateMotion dur="2.4s" repeatCount="indefinite" path="M200 150H120"/></circle>
+            <circle r="5" fill="#0f766e"><animateMotion dur="2.8s" begin="0.3s" repeatCount="indefinite" path="M320 150C360 150 360 50 400 50"/></circle>
+            <circle r="5" fill="#0f766e"><animateMotion dur="2.2s" begin="0.9s" repeatCount="indefinite" path="M320 150H400"/></circle>
+            <circle r="5" fill="#0f766e"><animateMotion dur="3s" begin="1.4s" repeatCount="indefinite" path="M320 150C360 150 360 250 400 250"/></circle>
+            <rect x="200" y="105" width="120" height="90" rx="14" fill="#0f1b2d"/>
+            <text x="260" y="143" text-anchor="middle" fill="#fff" font-size="16" font-weight="700">Claude</text>
+            <text x="260" y="165" text-anchor="middle" fill="#9fb0cc" font-size="12">+ firm gateway</text>
+            <rect x="10" y="118" width="110" height="64" rx="10" fill="#e6edfd" stroke="#1d4ed8" stroke-width="2"/>
+            <text x="65" y="146" text-anchor="middle" fill="#0f1b2d" font-size="13" font-weight="700">OpenCaseLaw</text>
+            <text x="65" y="164" text-anchor="middle" fill="#1d4ed8" font-size="11">all employees</text>
+            <g font-size="13" font-weight="700" fill="#0f1b2d">
+              <rect x="400" y="22" width="110" height="56" rx="10" fill="#dff3f0" stroke="#0f766e" stroke-width="2"/><text x="455" y="55" text-anchor="middle">Garmin</text>
+              <rect x="400" y="122" width="110" height="56" rx="10" fill="#dff3f0" stroke="#0f766e" stroke-width="2"/><text x="455" y="148" text-anchor="middle">MyFitnessPal</text><text x="455" y="166" text-anchor="middle" font-size="11" font-weight="500" fill="#0f766e">fitness group</text>
+              <rect x="400" y="222" width="110" height="56" rx="10" fill="#dff3f0" stroke="#0f766e" stroke-width="2"/><text x="455" y="255" text-anchor="middle">TrainingPeaks</text>
+            </g>
+          </svg>
+          <div class="hub-cap">Blue is open to the whole firm. Green is restricted to the fitness group.</div>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat"><span>Provider domains</span><b data-count="4">4</b><small>law + fitness</small></div>
+        <div class="stat"><span>Access populations</span><b data-count="2">2</b><small>firm-wide + selected group</small></div>
+        <div class="stat"><span>Delivery checkpoints</span><b data-count="5">5</b><small>feasibility to handover</small></div>
+        <div class="stat"><span>Initial operating mode</span><b>RO</b><small>read-only by default</small></div>
+        <div class="stat"><span>Recommended commitment</span><b>8–10</b><small>working days for V1</small></div>
+      </div>
+      <div class="grid three">
+        <article class="card"><h3>What the client wants</h3><p>Claude should answer using authorised data from OpenCaseLaw, Garmin, MyFitnessPal and TrainingPeaks without users manually copying information.</p></article>
+        <article class="card"><h3>What the pilot proves</h3><p>Technical compatibility, authentication paths, access separation and useful end-to-end queries for each platform.</p></article>
+        <article class="card"><h3>What it does not claim</h3><p>This is not yet a production rollout, formal legal sign-off, full security audit or guaranteed provider partnership approval.</p></article>
+      </div>
+      <div class="notice"><strong>Where to start:</strong> open <b>Live demo</b> to watch a request travel through the system, then <b>Target architecture</b> to click through each component.</div>
+    </section>
+
+    <!-- LIVE DEMO -->
+    <section class="page" id="demo">
+      <div class="page-head">
+        <h2>Live demo</h2>
+        <p>Pick who you are, then ask Claude a question. The diagram shows what happens behind the scenes. All results are sample data to illustrate the flow.</p>
+      </div>
+      <div class="ctlbar"><b>Signed in as</b>
+        <div class="seg" id="roleSeg" role="group" aria-label="User role">
+          <button class="on" data-role="fitness">Fitness pilot member</button>
+          <button data-role="employee">Firm employee</button>
+        </div>
+      </div>
+      <div class="diagram" style="margin-bottom:18px">
+        <svg viewBox="0 0 900 190" id="demoSvg" role="img" aria-label="Request path from user to Claude, gateway, adapter and platform">
+          <g stroke="#dde1e8" stroke-width="3" fill="none"><path d="M130 100H195M315 100H395M515 100H590M710 100H770"/></g>
+          <g class="dnode" id="n-user"><rect x="10" y="68" width="120" height="64" rx="12"/><text x="70" y="97" text-anchor="middle" font-size="15" font-weight="700" fill="#0f1b2d">User</text><text x="70" y="116" text-anchor="middle" font-size="11.5" fill="#5a6678">asks a question</text></g>
+          <g class="dnode" id="n-claude"><rect x="195" y="68" width="120" height="64" rx="12"/><text x="255" y="97" text-anchor="middle" font-size="15" font-weight="700" fill="#0f1b2d">Claude</text><text x="255" y="116" text-anchor="middle" font-size="11.5" fill="#5a6678">picks a tool</text></g>
+          <g class="dnode" id="n-gateway"><rect x="395" y="68" width="120" height="64" rx="12"/><text x="455" y="97" text-anchor="middle" font-size="15" font-weight="700" fill="#0f1b2d">Gateway</text><text x="455" y="116" text-anchor="middle" font-size="11.5" fill="#5a6678">checks access</text></g>
+          <g class="dnode" id="n-adapter"><rect x="590" y="68" width="120" height="64" rx="12"/><text x="650" y="97" text-anchor="middle" font-size="15" font-weight="700" fill="#0f1b2d">Adapter</text><text x="650" y="116" text-anchor="middle" font-size="11.5" fill="#5a6678">translates</text></g>
+          <g class="dnode" id="n-platform"><rect x="770" y="68" width="120" height="64" rx="12"/><text x="830" y="97" text-anchor="middle" font-size="15" font-weight="700" fill="#0f1b2d" id="platLabel">Platform</text><text x="830" y="116" text-anchor="middle" font-size="11.5" fill="#5a6678">holds the data</text></g>
+          <circle id="pkt" r="9" cx="70" cy="100" fill="#1d4ed8" opacity="0"/>
+          <text id="dcap" x="450" y="170" text-anchor="middle" font-size="14" fill="#5a6678">Choose a question below to start.</text>
+        </svg>
+      </div>
+      <div class="demo">
+        <div class="panel">
+          <div class="panel-h">Conversation <button class="btn ghost" id="demoReset" style="padding:4px 10px;font-size:13px">Clear</button></div>
+          <div class="chat" id="chat"><div class="empty">Nothing asked yet. Pick a question to see Claude, the gateway and the platform work together.</div></div>
+          <div class="chips-q" id="qchips"></div>
+        </div>
+        <div style="display:grid;gap:18px">
+          <div class="panel"><div class="panel-h">What is happening</div><ul class="log" id="log"><li><i></i><span>Waiting for a question.</span></li></ul></div>
+          <div class="panel"><div class="panel-h">Tool call sent by Claude</div><pre id="toolcall">// appears when Claude picks a tool</pre></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FUNDAMENTALS -->
+    <section class="page" id="fundamentals">
+      <div class="page-head">
+        <h2>MCP fundamentals</h2>
+        <p>MCP (Model Context Protocol) is an open standard that lets an AI assistant like Claude connect to external data and services. Think of it as a universal plug between Claude and a platform.</p>
+      </div>
+      <div class="sec"><h3>A question’s journey</h3><p>Step through what happens when someone asks “What was my average sleep this week?”</p></div>
+      <div id="stepJourney"></div>
+
+      <div class="sec"><h3>Local or remote MCP</h3><p>The same connector can run on one person’s computer or on a server run by the firm. Switch to compare.</p></div>
+      <div class="ctlbar"><div class="seg" id="locSeg"><button class="on" data-loc="local">Local MCP</button><button data-loc="remote">Remote MCP</button></div></div>
+      <div class="diagram"><svg viewBox="0 0 900 190" id="locSvg" role="img" aria-label="Comparison of local and remote MCP deployment"></svg></div>
+      <div class="grid two" style="margin-top:14px" id="locCards"></div>
+
+      <div class="sec"><h3>Anatomy of a tool</h3><p>A tool is a named action the server offers to Claude. Claude reads the description to decide when to use it. Hover a part to see what it does.</p></div>
+      <div class="grid two">
+        <pre id="toolAnat"><span data-t="name">"name"</span>: "get_sleep_data",
+<span data-t="desc">"description"</span>: "Average and nightly sleep
+  for the last N days",
+<span data-t="args">"arguments"</span>: { "days": 7 },
+<span data-t="mode">"access"</span>: "read-only"</pre>
+        <div class="card"><h3 id="anatTitle">Hover a line</h3><p id="anatText">Each part of the definition has a job. The name identifies the tool, the description tells Claude when to use it, the arguments are what Claude fills in, and the access mode decides whether it can change data.</p></div>
+      </div>
+
+      <div class="sec"><h3>Glossary</h3></div>
+      <div class="grid two" id="gloss"></div>
+      <div class="sec"><h3>Frequently asked</h3></div>
+      <div class="grid" id="faq"></div>
+    </section>
+
+    <!-- ARCHITECTURE -->
+    <section class="page" id="architecture">
+      <div class="page-head">
+        <h2>Target architecture</h2>
+        <p>Claude talks to one gateway run by the firm. The gateway checks who the user is, then routes each request to a replaceable adapter. Click any box for details.</p>
+      </div>
+      <div class="ctlbar"><b>Implementation stage</b>
+        <div class="seg" id="modeSeg"><button class="on" data-mode="pilot">Pilot (community servers)</button><button data-mode="prod">Production (official APIs)</button></div>
+      </div>
+      <div class="diagram">
+        <svg viewBox="0 0 1000 560" id="archSvg" role="group" aria-label="Interactive architecture diagram">
+          <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#5a6678"/></marker></defs>
+          <rect x="225" y="25" width="310" height="510" rx="16" fill="#f1f4fb" stroke="#1d4ed8" stroke-width="2" stroke-dasharray="2 0"/>
+          <text x="380" y="52" text-anchor="middle" font-size="15" font-weight="700" fill="#1d4ed8">MCP Gateway · run by the firm</text>
+          <g fill="none" stroke="#5a6678" stroke-width="2" marker-end="url(#ar)">
+            <path class="flow" d="M150 280H223"/>
+            <path class="flow" d="M535 100C575 100 580 85 618 85"/>
+            <path class="flow" d="M535 200C575 200 580 215 618 215"/>
+            <path class="flow" d="M535 330C575 330 580 345 618 345"/>
+            <path class="flow" d="M535 440C575 440 580 475 618 475"/>
+            <path class="flow" d="M790 85H858"/><path class="flow" d="M790 215H858"/><path class="flow" d="M790 345H858"/><path class="flow" d="M790 475H858"/>
+          </g>
+          <g class="arch-node" data-info="claude" tabindex="0" role="button"><rect class="bx" x="20" y="225" width="130" height="110" rx="12" fill="#0f1b2d" stroke="#0f1b2d"/><text x="85" y="275" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">Claude</text><text x="85" y="297" text-anchor="middle" fill="#9fb0cc" font-size="12">web &amp; app</text></g>
+          <g class="arch-node" data-info="identity" tabindex="0" role="button"><rect class="bx" x="250" y="72" width="260" height="62" rx="10" fill="#fff" stroke="#c4cbd8" stroke-width="1.5"/><text x="380" y="98" text-anchor="middle" font-size="14" font-weight="700" fill="#0f1b2d">Identity</text><text x="380" y="118" text-anchor="middle" font-size="12" fill="#5a6678">Microsoft sign-in</text></g>
+          <g class="arch-node" data-info="policy" tabindex="0" role="button"><rect class="bx" x="250" y="172" width="260" height="62" rx="10" fill="#fff" stroke="#c4cbd8" stroke-width="1.5"/><text x="380" y="198" text-anchor="middle" font-size="14" font-weight="700" fill="#0f1b2d">Access policy</text><text x="380" y="218" text-anchor="middle" font-size="12" fill="#5a6678">groups · roles · per tool</text></g>
+          <g class="arch-node" data-info="vault" tabindex="0" role="button"><rect class="bx" x="250" y="272" width="260" height="62" rx="10" fill="#fff" stroke="#c4cbd8" stroke-width="1.5"/><text x="380" y="298" text-anchor="middle" font-size="14" font-weight="700" fill="#0f1b2d">Token vault</text><text x="380" y="318" text-anchor="middle" font-size="12" fill="#5a6678">one set per user · encrypted</text></g>
+          <g class="arch-node" data-info="guard" tabindex="0" role="button"><rect class="bx" x="250" y="372" width="260" height="62" rx="10" fill="#fff" stroke="#c4cbd8" stroke-width="1.5"/><text x="380" y="398" text-anchor="middle" font-size="14" font-weight="700" fill="#0f1b2d">Confirmation guard</text><text x="380" y="418" text-anchor="middle" font-size="12" fill="#5a6678">asks before any change</text></g>
+          <g class="arch-node" data-info="audit" tabindex="0" role="button"><rect class="bx" x="250" y="456" width="260" height="62" rx="10" fill="#fff" stroke="#c4cbd8" stroke-width="1.5"/><text x="380" y="482" text-anchor="middle" font-size="14" font-weight="700" fill="#0f1b2d">Audit log</text><text x="380" y="502" text-anchor="middle" font-size="12" fill="#5a6678">who · what · when (no content)</text></g>
+          <g id="adapters"></g>
+          <g id="platforms"></g>
+        </svg>
+      </div>
+      <div class="info" id="archInfo"></div>
+      <div class="sec"><h3>Why this shape</h3></div>
+      <div class="grid three">
+        <article class="card"><h3>One door</h3><p>Users and administrators deal with one stable entry point. Rules, logging and confirmations live in one place instead of being rebuilt per platform.</p></article>
+        <article class="card"><h3>Swappable parts</h3><p>Change the Garmin adapter from a community server to the official API without touching Claude or what users see. Use the stage switch above to see the change.</p></article>
+        <article class="card"><h3>Law and fitness separated</h3><p>OpenCaseLaw needs no personal credentials. The fitness adapters only run with the user’s own tokens and only for the pilot group.</p></article>
+      </div>
+      <div class="notice warn"><strong>Open point:</strong> the existing Microsoft sign-in in <code>bear_backend</code> may be reusable for the gateway. This needs confirming before the design is final.</div>
+    </section>
+
+    <!-- CONNECTORS -->
+    <section class="page" id="connectors">
+      <div class="page-head">
+        <h2>Platform dossiers</h2>
+        <p>Four very different platforms. Each dossier covers what it holds, the tools exposed, how sign-in works and what to watch. Scores are our own assessment from testing and reading the repos.</p>
+      </div>
+      <div class="tabs" id="dosTabs" role="tablist"></div>
+      <div id="dosBody"></div>
+    </section>
+
+    <!-- SECURITY -->
+    <section class="page" id="security">
+      <div class="page-head">
+        <h2>Security &amp; access</h2>
+        <p>Law is for everyone in the firm. Fitness is for a selected group. Each person connects their own account and nobody else can see it.</p>
+      </div>
+      <div class="ctlbar"><b>View permissions as</b>
+        <div class="seg" id="permSeg"><button class="on" data-r="employee">Firm employee</button><button data-r="fitness">Fitness pilot member</button><button data-r="admin">Administrator</button></div>
+      </div>
+      <div class="matrix"><table id="permTable"></table></div>
+      <p style="font-size:14px;color:var(--muted);margin-top:8px">Phase 1 is read-only. “Confirm first” applies once write actions are switched on in phase 2.</p>
+
+      <div class="sec"><h3>How a personal account gets connected</h3><p>Step through the sign-in and token journey. Passwords and cookies are never shared between users.</p></div>
+      <div id="stepToken"></div>
+
+      <div class="sec"><h3>What is stored</h3></div>
+      <div class="twocol">
+        <article class="card"><h3>Kept by the gateway</h3><ul><li>Per-user provider tokens, encrypted</li><li>Group membership (from the firm’s directory)</li><li>Audit entries: user, tool, time, allowed or refused</li></ul></article>
+        <article class="card"><h3>Not kept by the gateway</h3><ul><li>Search text or fitness values returned to Claude</li><li>Shared passwords or shared cookies</li><li>Anything for users outside the allowed group</li></ul></article>
+      </div>
+      <p style="font-size:14px;color:var(--muted);margin-top:8px">What Claude itself retains depends on the firm’s Claude plan settings, to be confirmed with the plan owner.</p>
+
+      <div class="sec"><h3>Before production: checklist</h3><p>Tick items as they are done. These are the gates between pilot and rollout.</p></div>
+      <div class="card">
+        <b id="chkLabel">0 of 10 complete</b>
+        <div class="progress"><i id="chkBar"></i></div>
+        <div id="chkList"></div>
+      </div>
+      <div class="notice"><strong>Why fitness data is sensitive:</strong> weight, sleep, heart rate, stress, GPS routes and food logs are health-related personal data. In Switzerland they count as sensitive personal data under data-protection law, so the legal review comes before any production use.</div>
+    </section>
+
+    <!-- ROADMAP -->
+    <section class="page" id="roadmap">
+      <div class="page-head">
+        <h2>Delivery roadmap</h2>
+        <p>A realistic V1 takes 8 to 10 working days. Drag the day slider to see what is under way, and click any bar for the detail.</p>
+      </div>
+      <div class="ctlbar"><b>Day</b><input type="range" id="daySlider" min="1" max="10" value="1" aria-label="Project day"><b id="dayLabel">Day 1</b></div>
+      <div class="gantt"><div class="ginner" id="gantt" style="--day:1"></div></div>
+      <div class="info" id="ganttInfo" style="grid-template-columns:1fr"></div>
+
+      <div class="sec"><h3>Effort estimator</h3><p>Tick the pieces in scope to see the effort. Indicative figures that assume test accounts and Claude admin access are ready.</p></div>
+      <div class="estimate">
+        <div class="card" id="estOpts"></div>
+        <div class="total"><span>Estimated effort</span><strong id="estTotal">9.5</strong><div class="bar"><i id="estBar"></i></div><p id="estNote"></p></div>
+      </div>
+    </section>
+
+    <!-- DELIVERABLES -->
+    <section class="page" id="deliverables">
+      <div class="page-head">
+        <h2>Deliverables</h2>
+        <p>What the client receives at the end of the pilot. Open a card for the contents.</p>
+      </div>
+      <div class="grid two" id="delivGrid"></div>
+    </section>
+
+    <!-- DECISIONS -->
+    <section class="page" id="decisions">
+      <div class="page-head">
+        <h2>Decisions required</h2>
+        <p>Points the client has not settled yet. Pick an option on each card to see what it means for scope and timing.</p>
+      </div>
+      <div class="card" style="margin-bottom:18px"><b id="decLabel">0 of 6 decided</b><div class="progress"><i id="decBar"></i></div><p id="decSummary" style="margin:6px 0 0;font-size:14.5px">No decision recorded yet.</p></div>
+      <div class="grid two" id="decGrid"></div>
+    </section>
+
+    <!-- SOURCES -->
+    <section class="page" id="sources">
+      <div class="page-head">
+        <h2>Sources</h2>
+        <p>References used for this brief. The three fitness repos are examples; the final implementations may differ.</p>
+      </div>
+      <ul class="src-list">
+        <li><strong><a target="_blank" rel="noopener" href="https://github.com/taxuspt/garmin_mcp">garmin_mcp</a></strong><span>Community MCP server for Garmin, tested by the client.</span></li>
+        <li><strong><a target="_blank" rel="noopener" href="https://github.com/AdamWalt/myfitnesspal-mcp-python">myfitnesspal-mcp-python</a></strong><span>Community MCP server for MyFitnessPal, tested by the client.</span></li>
+        <li><strong><a target="_blank" rel="noopener" href="https://github.com/JamsusMaximus/trainingpeaks-mcp">trainingpeaks-mcp</a></strong><span>Community MCP server for TrainingPeaks, tested by the client.</span></li>
+        <li><strong><a target="_blank" rel="noopener" href="https://mcp.opencaselaw.ch">OpenCaseLaw MCP</a></strong><span>Remote, read-only MCP server for Swiss case law.</span></li>
+        <li><strong><a target="_blank" rel="noopener" href="https://modelcontextprotocol.io">Model Context Protocol</a></strong><span>Official specification and documentation.</span></li>
+        <li><strong><a target="_blank" rel="noopener" href="https://www.edoeb.admin.ch">FDPIC</a></strong><span>Swiss Federal Data Protection and Information Commissioner, for health and personal data guidance.</span></li>
+        <li><strong><a target="_blank" rel="noopener" href="https://support.claude.com">Claude Help Center</a></strong><span>Connector setup and organisation-level administration.</span></li>
+      </ul>
+    </section>
+  </main>
+</div>
+
+<script>
+(() => {
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const wait = ms => new Promise(r => setTimeout(r, reduced ? 0 : ms));
+if (reduced) $$('svg').forEach(s => s.pauseAnimations && s.pauseAnimations());
+
+/* ---------- navigation ---------- */
+const PAGES = [
+  ['overview','Executive view','<path d="M4 13h6V4H4v9Zm10 7h6V11h-6v9ZM4 20h6v-3H4v3Zm10-13h6V4h-6v3Z"/>'],
+  ['demo','Live demo','<path d="M8 5v14l11-7z"/>'],
+  ['fundamentals','MCP fundamentals','<circle cx="5" cy="12" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="19" cy="18" r="2"/><path d="M7 12h5m2-4 3-1m-3 9 3 1m-5-8v6"/>'],
+  ['architecture','Target architecture','<rect x="3" y="3" width="18" height="5"/><rect x="3" y="16" width="6" height="5"/><rect x="15" y="16" width="6" height="5"/><path d="M12 8v4M6 12h12M6 12v4m12-4v4"/>'],
+  ['connectors','Platform dossiers','<path d="M9 3v5m6-5v5M7 8h10v4a5 5 0 0 1-10 0V8Zm5 9v4"/>'],
+  ['security','Security &amp; access','<path d="M12 3 4 6v5c0 5 3.4 8.5 8 10 4.6-1.5 8-5 8-10V6l-8-3Z"/><path d="m9 12 2 2 4-5"/>'],
+  ['roadmap','Delivery roadmap','<path d="M5 3v18M5 6h12l-2 4 2 4H5"/>'],
+  ['deliverables','Deliverables','<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>'],
+  ['decisions','Decisions required','<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3 2.45c-.5.2-.5.55-.5 1.55m0 4h.01"/>'],
+  ['sources','Sources','<path d="M4 5a3 3 0 0 1 3-3h12v17H7a3 3 0 0 0-3 3V5Z"/><path d="M4 19h15M8 7h7m-7 4h7"/>']
+];
+$('#nav').innerHTML = PAGES.map(([id, t, ic]) => `<button data-page="${id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor">${ic}</svg>${t}</button>`).join('');
+const navBtns = $$('#nav button'), pages = $$('.page');
+function showPage(id, upd = true) {
+  const t = document.getElementById(id) && pages.includes(document.getElementById(id)) ? document.getElementById(id) : $('#overview');
+  pages.forEach(p => p.classList.toggle('active', p === t));
+  navBtns.forEach(b => b.classList.toggle('active', b.dataset.page === t.id));
+  if (upd) { try { history.replaceState(null, '', '#' + t.id); } catch (e) {} }
+  window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+  document.dispatchEvent(new CustomEvent('pageshow', { detail: t.id }));
+}
+navBtns.forEach(b => b.addEventListener('click', () => showPage(b.dataset.page)));
+$('#printButton').addEventListener('click', () => window.print());
+window.addEventListener('hashchange', () => showPage(location.hash.slice(1) || 'overview', false));
+
+/* ---------- segmented control helper ---------- */
+function seg(root, cb) {
+  $$('button', root).forEach(b => b.addEventListener('click', () => {
+    $$('button', root).forEach(x => x.classList.toggle('on', x === b));
+    cb(b);
+  }));
+}
+
+/* ---------- generic stepper ---------- */
+function stepper(root, steps) {
+  let i = 0, timer = null;
+  root.className = 'stepper';
+  root.innerHTML = '<div class="st-nodes"></div><div class="st-cap"></div><div class="st-ctl"><button class="btn ghost" data-a="prev">Previous</button><button class="btn" data-a="play">Play</button><button class="btn ghost" data-a="next">Next</button></div>';
+  const nodes = $('.st-nodes', root), cap = $('.st-cap', root), play = $('[data-a=play]', root);
+  nodes.innerHTML = steps.map((s, k) => (k ? '<span class="st-arrow"></span>' : '') + `<button class="st-node" data-i="${k}"><span class="ic">${s.icon}</span>${s.label}</button>`).join('');
+  const arrows = $$('.st-arrow', root), nb = $$('.st-node', root);
+  function set(n) {
+    i = Math.max(0, Math.min(steps.length - 1, n));
+    nb.forEach((b, k) => { b.classList.toggle('done', k < i); b.classList.toggle('on', k === i); });
+    arrows.forEach((a, k) => a.classList.toggle('done', k < i));
+    cap.innerHTML = `<h4>${steps[i].title}</h4><p>${steps[i].text}</p>`;
+  }
+  function stop() { clearInterval(timer); timer = null; play.textContent = 'Play'; }
+  nb.forEach(b => b.addEventListener('click', () => { stop(); set(+b.dataset.i); }));
+  $('[data-a=prev]', root).addEventListener('click', () => { stop(); set(i - 1); });
+  $('[data-a=next]', root).addEventListener('click', () => { stop(); set(i + 1); });
+  play.addEventListener('click', () => {
+    if (timer) return stop();
+    if (i >= steps.length - 1) set(0);
+    play.textContent = 'Pause';
+    timer = setInterval(() => { if (i >= steps.length - 1) return stop(); set(i + 1); }, 2400);
+  });
+  set(0);
+}
+
+/* ---------- overview: count up ---------- */
+document.addEventListener('pageshow', e => {
+  if (e.detail !== 'overview' || reduced) return;
+  $$('[data-count]').forEach(el => {
+    const end = +el.dataset.count, t0 = performance.now();
+    (function f(t) { const k = Math.min(1, (t - t0) / 900); el.textContent = Math.round(end * k); if (k < 1) requestAnimationFrame(f); })(t0);
+  });
+});
+
+/* ---------- LIVE DEMO ---------- */
+const NODE = { user: [70, 100], claude: [255, 100], gateway: [455, 100], adapter: [650, 100], platform: [830, 100] };
+const SC = {
+  law: { q: 'Find Federal Supreme Court decisions on employer liability for workplace accidents.', plat: 'OpenCaseLaw', group: 'law', write: false, tool: 'search_decisions',
+    args: { query: 'employer liability workplace accident', court: 'Federal Supreme Court', max_results: 5 },
+    note: 'No personal token needed: OpenCaseLaw is public and read-only.',
+    ans: 'I found 5 matching decisions. For each one I can give the reference, the date, the legal question and a link to the full text. Want me to compare how the court reasons across them?' },
+  sleep: { q: 'What was my average sleep this week?', plat: 'Garmin', group: 'fitness', write: false, tool: 'get_sleep_data', args: { days: 7 },
+    note: 'Adapter uses this user’s own Garmin token from the vault.',
+    ans: 'Your average sleep over the last 7 days was <b>7 h 12 min</b>. Your shortest night was 6 h 05 min on Thursday, and deep sleep averaged 1 h 24 min.' },
+  food: { q: 'How much protein did I eat on average this week?', plat: 'MyFitnessPal', group: 'fitness', write: false, tool: 'get_nutrition_summary', args: { days: 7, nutrient: 'protein' },
+    note: 'Adapter uses this user’s own MyFitnessPal access.',
+    ans: 'You averaged <b>128 g of protein per day</b>, about 94% of your 136 g goal. Your lowest day was Wednesday at 96 g.' },
+  train: { q: 'Review my training load and suggest a session for Tuesday.', plat: 'TrainingPeaks', group: 'fitness', write: false, tool: 'get_fitness', args: { range: '6w' },
+    note: 'Adapter uses this user’s own TrainingPeaks access.',
+    ans: 'Fitness (CTL) is <b>62</b> and fatigue (ATL) is <b>71</b>, so form is −9: tired but normal in a build block. For Tuesday I’d suggest an easy 60-minute aerobic session. I have not added it to your calendar.' },
+  del: { q: 'Delete my workout of 5 October.', plat: 'TrainingPeaks', group: 'fitness', write: true, tool: 'delete_workout', args: { date: '2026-10-05' },
+    note: 'Write action: the gateway pauses for the user’s confirmation.',
+    ans: 'Done. The workout of 5 October has been deleted.' }
+};
+let role = 'fitness', running = false;
+const chat = $('#chat'), logEl = $('#log');
+$('#qchips').innerHTML = Object.entries(SC).map(([k, s]) => `<button class="qchip" data-k="${k}">${s.q.length > 44 ? s.q.slice(0, 42) + '…' : s.q}</button>`).join('');
+function mark(id, cls) { const g = $('#n-' + id); g.classList.remove('on', 'ok', 'bad', 'wait'); if (cls) g.classList.add(cls); }
+function resetNodes() { Object.keys(NODE).forEach(k => mark(k)); $('#pkt').style.opacity = 0; }
+function cap(t) { $('#dcap').textContent = t; }
+function addLog(t, cls = '') { if (logEl.firstElementChild && logEl.firstElementChild.dataset.ph) logEl.innerHTML = ''; const li = document.createElement('li'); if (cls) li.className = cls; li.innerHTML = `<i></i><span>${t}</span>`; logEl.appendChild(li); logEl.scrollTop = logEl.scrollHeight; }
+function bubble(cls, html) { const e = chat.querySelector('.empty'); if (e) e.remove(); const b = document.createElement('div'); b.className = 'bubble ' + cls; b.innerHTML = html; chat.appendChild(b); chat.scrollTop = chat.scrollHeight; return b; }
+function fly(a, b, color) {
+  return new Promise(res => {
+    const p = $('#pkt'), [x1, y1] = NODE[a], [x2, y2] = NODE[b];
+    p.setAttribute('fill', color || '#1d4ed8'); p.style.opacity = 1;
+    if (reduced) { p.setAttribute('cx', x2); p.setAttribute('cy', y2); return res(); }
+    const t0 = performance.now(), d = 650;
+    (function f(t) {
+      const k = Math.min(1, (t - t0) / d), e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      p.setAttribute('cx', x1 + (x2 - x1) * e); p.setAttribute('cy', y1 + (y2 - y1) * e);
+      k < 1 ? requestAnimationFrame(f) : res();
+    })(t0);
+  });
+}
+function lockChips(v) { $$('.qchip').forEach(b => b.disabled = v); }
+function ask(label) {
+  return new Promise(res => {
+    const b = bubble('c', `<b>Confirmation needed</b><br>${label}<div class="row"><button class="btn" data-y>Confirm</button><button class="btn ghost" data-n>Cancel</button></div>`);
+    b.querySelector('[data-y]').onclick = () => { b.querySelector('.row').remove(); res(true); };
+    b.querySelector('[data-n]').onclick = () => { b.querySelector('.row').remove(); res(false); };
+  });
+}
+async function run(key) {
+  if (running) return; running = true; lockChips(true);
+  const s = SC[key]; resetNodes(); logEl.innerHTML = '';
+  $('#platLabel').textContent = s.plat;
+  $('#toolcall').textContent = '// appears when Claude picks a tool';
+  bubble('u', s.q);
+  mark('user', 'on'); cap('The user asks a question in Claude.'); addLog('Question typed in Claude.'); await wait(500);
+  await fly('user', 'claude'); mark('user'); mark('claude', 'on'); cap('Claude chooses a tool.');
+  addLog(`Claude picks the tool <code>${s.tool}</code> and fills in the arguments.`);
+  $('#toolcall').textContent = JSON.stringify({ tool: s.tool, arguments: s.args }, null, 2);
+  await wait(700);
+  await fly('claude', 'gateway'); mark('claude'); mark('gateway', 'on'); cap('The gateway checks who is asking.');
+  addLog(`Gateway identifies the user as <b>${role === 'fitness' ? 'fitness pilot member' : 'firm employee'}</b> via Microsoft sign-in.`); await wait(800);
+  if (s.group === 'fitness' && role === 'employee') {
+    mark('gateway', 'bad'); cap('Refused: this user is not in the fitness group.');
+    addLog('Access policy: the <b>fitness</b> connectors are not enabled for this user. Request refused.', 'bad');
+    addLog('Audit log records the refusal (user, tool, time).', 'bad'); await wait(500);
+    await fly('gateway', 'claude', '#b42318'); mark('claude', 'bad');
+    bubble('c bad', 'I can’t reach ' + s.plat + ' from your account. The fitness connectors are only enabled for the pilot group. Ask an administrator to add you if you need access.');
+    running = false; lockChips(false); return;
+  }
+  mark('gateway', 'ok'); addLog('Access policy: allowed.', 'ok'); await wait(500);
+  if (s.write) {
+    mark('gateway', 'wait'); cap('Waiting for the user to confirm the change.');
+    addLog('This tool changes data, so the confirmation guard pauses the request.', 'wait');
+    const yes = await ask('Claude wants to <b>delete</b> the TrainingPeaks workout of 5 October. This cannot be undone.');
+    if (!yes) {
+      mark('gateway', 'bad'); cap('Cancelled by the user. Nothing changed.');
+      addLog('User cancelled. Nothing was sent to TrainingPeaks.', 'bad');
+      await fly('gateway', 'claude', '#b42318'); mark('claude', 'on');
+      bubble('c', 'Cancelled. Nothing was changed.'); running = false; lockChips(false); return;
+    }
+    mark('gateway', 'ok'); addLog('User confirmed.', 'ok');
+  }
+  await fly('gateway', 'adapter'); mark('gateway'); mark('adapter', 'on'); cap('The adapter translates the call for the platform.');
+  addLog(s.note); await wait(700);
+  await fly('adapter', 'platform'); mark('adapter'); mark('platform', 'on'); cap(s.plat + ' returns the data.');
+  addLog(`${s.plat} answers the request.`); await wait(700);
+  await fly('platform', 'adapter', '#15803d'); mark('platform', 'ok'); mark('adapter', 'ok');
+  await fly('adapter', 'gateway', '#15803d'); mark('gateway', 'ok'); addLog('Gateway writes an audit entry: who, which tool, when. No content is stored.', 'ok');
+  await wait(400);
+  await fly('gateway', 'claude', '#15803d'); mark('claude', 'ok'); cap('Claude reads the result and writes the answer.'); await wait(500);
+  await fly('claude', 'user', '#15803d'); mark('user', 'ok');
+  bubble('c', s.ans + (s.write ? '' : '<small>Sample data for illustration only.</small>'));
+  cap('Done.'); running = false; lockChips(false);
+}
+$$('.qchip').forEach(b => b.addEventListener('click', () => run(b.dataset.k)));
+seg($('#roleSeg'), b => { role = b.dataset.role; });
+$('#demoReset').addEventListener('click', () => {
+  if (running) return;
+  chat.innerHTML = '<div class="empty">Nothing asked yet. Pick a question to see Claude, the gateway and the platform work together.</div>';
+  logEl.innerHTML = '<li data-ph="1"><i></i><span>Waiting for a question.</span></li>'; resetNodes(); cap('Choose a question below to start.');
+  $('#toolcall').textContent = '// appears when Claude picks a tool';
+});
+logEl.innerHTML = '<li data-ph="1"><i></i><span>Waiting for a question.</span></li>';
+
+/* ---------- FUNDAMENTALS ---------- */
+stepper($('#stepJourney'), [
+  { icon: '💬', label: 'User', title: 'The user asks a question', text: 'In Claude, in plain language: “What was my average sleep this week?” No technical knowledge needed.' },
+  { icon: '🧠', label: 'Claude', title: 'Claude picks a tool', text: 'Claude cannot see a Garmin account on its own. It reads the list of tools offered by connected MCP servers and chooses <code>get_sleep_data</code>.' },
+  { icon: '🔌', label: 'MCP server', title: 'The server talks to the platform', text: 'With the user’s permission, the server signs in to the platform, requests the sleep data for the last 7 days and sends it back to Claude.' },
+  { icon: '📊', label: 'Platform', title: 'The platform holds the data', text: 'Garmin returns nightly sleep records. The same pattern applies to nutrition in MyFitnessPal, training in TrainingPeaks and decisions in OpenCaseLaw.' },
+  { icon: '✅', label: 'Answer', title: 'Claude writes the answer', text: 'Claude turns the raw numbers into a clear reply with the average, the best and worst nights and any pattern worth noting.' }
+]);
+const LOC = {
+  local: { nodes: ['Claude Desktop', 'Local server on the PC', 'Platform'], cards: [
+    ['Local MCP', 'Runs on one person’s computer and is launched by Claude Desktop. Quick to set up, so it suits a prototype.'],
+    ['Trade-offs', 'Each user installs and updates it. Tokens sit on the PC. Hard for an administrator to control or switch off for one person.']] },
+  remote: { nodes: ['Claude web &amp; app', 'URL of the firm’s gateway', 'Platform'], cards: [
+    ['Remote MCP', 'Hosted on a server run by the firm and added to Claude through a URL. One setup serves everyone who is allowed.'],
+    ['Trade-offs', 'Needs hosting and sign-in design. In return, access, logging and updates are managed centrally. This is the target for production.']] }
+};
+function drawLoc(k) {
+  const L = LOC[k], col = k === 'local' ? '#b45309' : '#1d4ed8', soft = k === 'local' ? '#fdf1de' : '#e6edfd';
+  $('#locSvg').innerHTML = `<g fill="none" stroke="${col}" stroke-width="2.5"><path class="flow" d="M250 95H330"/><path class="flow" d="M570 95H650"/></g>
+  <circle r="6" fill="${col}"><animateMotion dur="2s" repeatCount="indefinite" path="M250 95H330"/></circle><circle r="6" fill="${col}"><animateMotion dur="2s" begin=".6s" repeatCount="indefinite" path="M570 95H650"/></circle>
+  ${[[20, 0], [330, 1], [650, 2]].map(([x, i]) => `<rect x="${x}" y="55" width="230" height="80" rx="12" fill="${i === 1 ? soft : '#fff'}" stroke="${i === 1 ? col : '#c4cbd8'}" stroke-width="2"/><text x="${x + 115}" y="100" text-anchor="middle" font-size="15" font-weight="700" fill="#0f1b2d">${L.nodes[i]}</text>`).join('')}
+  <text x="450" y="170" text-anchor="middle" font-size="13.5" fill="#5a6678">${k === 'local' ? 'Everything runs on the user’s own machine' : 'The server runs in the firm’s environment'}</text>`;
+  $('#locCards').innerHTML = L.cards.map(c => `<article class="card"><h3>${c[0]}</h3><p>${c[1]}</p></article>`).join('');
+  if (reduced) $('#locSvg').pauseAnimations && $('#locSvg').pauseAnimations();
+}
+drawLoc('local'); seg($('#locSeg'), b => drawLoc(b.dataset.loc));
+const ANAT = { name: ['Name', 'The identifier Claude uses to call the tool. Stable names let us swap the implementation behind them.'], desc: ['Description', 'Plain text Claude reads to decide when this tool fits the question. Clear descriptions mean better tool choices.'], args: ['Arguments', 'The inputs Claude fills in from the user’s question, here the number of days.'], mode: ['Access mode', 'Read-only tools cannot change anything. Tools that write or delete are held for confirmation by the gateway.'] };
+$$('#toolAnat span').forEach(s => { s.style.cssText = 'cursor:help;border-bottom:1px dashed #7aa2ff'; const f = () => { $('#anatTitle').textContent = ANAT[s.dataset.t][0]; $('#anatText').textContent = ANAT[s.dataset.t][1]; }; s.addEventListener('mouseenter', f); s.addEventListener('click', f); });
+const GL = [['MCP', 'Model Context Protocol. An open standard for connecting AI assistants to tools and data.'], ['MCP server', 'A small program that offers a list of tools to Claude and talks to one platform.'], ['Tool', 'A named action, such as search_decisions or get_sleep_data.'], ['Gateway', 'The firm’s single entry point. It checks identity and permissions before any tool runs.'], ['Adapter', 'The part that speaks to one platform. It can be replaced without changing what Claude sees.'], ['Token', 'A key that proves a user’s permission to a platform, issued per user and stored encrypted.'], ['OAuth', 'The official way to let an app act for a user without ever seeing their password.'], ['Read-only', 'A mode in which tools can look at data but never create, change or delete it.'], ['Audit log', 'A record of who used which tool and when, without storing the content.'], ['Role / group', 'A label such as “fitness pilot” that decides which connectors a person can use.']];
+$('#gloss').innerHTML = GL.map(g => `<details class="card q"><summary>${g[0]}</summary><div class="body"><p>${g[1]}</p></div></details>`).join('');
+const FQ = [['Can my colleagues see my fitness data?', 'Not by design. Each person connects their own account, and administrators only see audit metadata, never the data itself.'], ['Can Claude change or delete my data?', 'Not in phase 1, which is read-only. If write tools are enabled later, each change asks for confirmation first.'], ['What if a community server stops working?', 'That is the reason for adapters. We replace the adapter, for example with the official API, and users keep the same tools.'], ['Is OpenCaseLaw private?', 'The decisions are public, but a search query can reveal a confidential case. The client chooses between the public server, an internal proxy or a self-hosted copy.'], ['Does this need a new AI model?', 'No. MCP only connects Claude to platforms. It is neither a new AI nor a database.']];
+$('#faq').innerHTML = FQ.map(g => `<details class="card q"><summary>${g[0]}</summary><div class="body"><p>${g[1]}</p></div></details>`).join('');
+
+/* ---------- ARCHITECTURE ---------- */
+const ADA = [
+  { id: 'a-law', y: 40, grp: 'law', name: 'OpenCaseLaw adapter', pilot: 'Public remote MCP', prod: 'Internal proxy or self-hosted', plat: 'OpenCaseLaw' },
+  { id: 'a-garmin', y: 170, grp: 'fit', name: 'Garmin adapter', pilot: 'garmin_mcp (community)', prod: 'Official Garmin API', plat: 'Garmin' },
+  { id: 'a-mfp', y: 300, grp: 'fit', name: 'MyFitnessPal adapter', pilot: 'myfitnesspal-mcp-python', prod: 'Official OAuth API', plat: 'MyFitnessPal' },
+  { id: 'a-tp', y: 430, grp: 'fit', name: 'TrainingPeaks adapter', pilot: 'trainingpeaks-mcp', prod: 'Official API (approval)', plat: 'TrainingPeaks' }
+];
+const COL = { law: ['#e6edfd', '#1d4ed8'], fit: ['#dff3f0', '#0f766e'] };
+function drawAdapters(mode) {
+  $('#adapters').innerHTML = ADA.map(a => `<g class="arch-node" data-info="${a.id}" tabindex="0" role="button"><rect class="bx" x="620" y="${a.y}" width="170" height="90" rx="12" fill="${COL[a.grp][0]}" stroke="${COL[a.grp][1]}" stroke-width="2"/><text x="705" y="${a.y + 28}" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0f1b2d">${a.name}</text><text x="705" y="${a.y + 52}" text-anchor="middle" font-size="12" fill="#0f1b2d">${a[mode]}</text><rect x="660" y="${a.y + 62}" width="90" height="18" rx="9" fill="${mode === 'pilot' ? '#b45309' : '#15803d'}"/><text x="705" y="${a.y + 75}" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">${mode === 'pilot' ? 'pilot' : 'production'}</text></g>`).join('');
+  $('#platforms').innerHTML = ADA.map(a => `<g class="arch-node" data-info="p-${a.id.slice(2)}" tabindex="0" role="button"><rect class="bx" x="860" y="${a.y}" width="120" height="90" rx="12" fill="#fff" stroke="${COL[a.grp][1]}" stroke-width="2"/><text x="920" y="${a.y + 40}" text-anchor="middle" font-size="13" font-weight="700" fill="#0f1b2d">${a.plat}</text><text x="920" y="${a.y + 60}" text-anchor="middle" font-size="11" fill="${COL[a.grp][1]}">${a.grp === 'law' ? 'all employees' : 'fitness group'}</text></g>`).join('');
+  bindArch();
+}
+const AI = {
+  claude: ['Claude', 'The assistant people already use, in the browser or the app. It only ever talks to the gateway.', ['Sees one set of stable tools', 'Never receives passwords or tokens', 'Asks the user before sensitive actions']],
+  identity: ['Identity', 'Confirms who is asking. The Microsoft sign-in already present in bear_backend may be reused here.', ['Single sign-in for employees', 'Provides the user’s group membership', 'Reuse to be confirmed']],
+  policy: ['Access policy', 'Decides, for each request, whether this user may use this tool.', ['OpenCaseLaw: all employees', 'Fitness tools: pilot group only', 'Rules can differ per tool, not just per connector']],
+  vault: ['Token vault', 'Holds each user’s own provider tokens, encrypted. Nothing is shared between users.', ['One set of tokens per person', 'Revoke one user without touching others', 'Replaces local files and browser cookies']],
+  guard: ['Confirmation guard', 'Pauses any tool that creates, edits or deletes data and asks the user to confirm.', ['Off entirely in phase 1 (read-only)', 'Shows exactly what will change', 'Cancel leaves everything untouched']],
+  audit: ['Audit log', 'Records who used which tool and when, and whether it was allowed. It does not store the content.', ['Helps with reviews and incidents', 'Visible to administrators', 'No search text or fitness values kept']],
+  'a-law': ['OpenCaseLaw adapter', 'Calls the OpenCaseLaw MCP server. Needs no personal credentials.', ['Pilot: public remote server', 'Production: internal proxy or self-hosted if queries are confidential', 'Read-only']],
+  'a-garmin': ['Garmin adapter', 'Fetches activities, sleep, heart rate and more using the user’s own Garmin token.', ['Pilot: community garmin_mcp (unofficial library)', 'Production: official Garmin developer programme', 'May need approval and a commercial licence']],
+  'a-mfp': ['MyFitnessPal adapter', 'Reads the food diary, nutrition summary and weight for the user.', ['Pilot: community server using internal endpoints', 'Production: official OAuth API', 'Most fragile of the four']],
+  'a-tp': ['TrainingPeaks adapter', 'Reads workouts and fitness curves. Some tools can write or delete.', ['Pilot: community server using a session cookie', 'Production: official API after approval', 'Write tools held for confirmation']],
+  'p-law': ['OpenCaseLaw', 'Swiss court decisions, statutes and citations. Public data, read-only, 42 tools.', ['Available to the whole firm']],
+  'p-garmin': ['Garmin', 'Watch and device data: activities, sleep, heart rate, stress, GPS, weight.', ['Health-related personal data', 'Pilot group only']],
+  'p-mfp': ['MyFitnessPal', 'Nutrition tracking: meals, calories, macros, water, weight.', ['Health-related personal data', 'Pilot group only']],
+  'p-tp': ['TrainingPeaks', 'Training plans, calendar, load and fitness for endurance athletes.', ['Health-related personal data', 'Pilot group only']]
+};
+function showInfo(k) {
+  const [t, d, l] = AI[k];
+  $('#archInfo').innerHTML = `<h4>${t}</h4><p>${d}</p><ul>${l.map(x => `<li>${x}</li>`).join('')}</ul>`;
+  $$('#archSvg .arch-node').forEach(n => n.classList.toggle('sel', n.dataset.info === k));
+}
+function bindArch() {
+  $$('#archSvg .arch-node').forEach(n => {
+    n.onclick = () => showInfo(n.dataset.info);
+    n.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showInfo(n.dataset.info); } };
+  });
+}
+let curInfo = 'gateway-default';
+drawAdapters('pilot');
+$('#archInfo').innerHTML = '<h4>Click a box to explore</h4><p>Each component in the diagram has a single job. Select the gateway parts, the adapters or the platforms to see what they do and how they change between pilot and production.</p>';
+seg($('#modeSeg'), b => { drawAdapters(b.dataset.mode); $('#archInfo').innerHTML = b.dataset.mode === 'pilot' ? '<h4>Pilot stage</h4><p>Adapters wrap the community servers for fast validation. Good enough to prove the idea, not to rely on.</p>' : '<h4>Production stage</h4><p>Same gateway, same tools for users. Only the adapters change, now calling official APIs or an internal proxy.</p>'; });
+bindArch();
+
+/* ---------- DOSSIERS ---------- */
+const DOS = {
+  law: { name: 'OpenCaseLaw', grp: 'law', lead: 'A Swiss legal database: court decisions, federal and cantonal case law, statutes and the citation links between them.',
+    tags: [['ok', 'Remote MCP exists'], ['ok', 'No authentication'], ['ok', 'Read-only'], ['law', '42 tools'], ['law', 'All employees']],
+    ex: '“Find Federal Supreme Court decisions on employer liability and give me the references.”',
+    metrics: [['Server maturity', 4], ['Stability', 4], ['Credential safety', 5], ['Official-API route', 4], ['Data sensitivity', 2]],
+    tools: [['search_decisions', 'r', 'Search court decisions by topic, court or date'], ['get_decision', 'r', 'Fetch the full text of one decision'], ['find_citations', 'r', 'Follow which decisions cite or are cited by another'], ['search_laws', 'r', 'Search statutes and provisions']],
+    auth: ['Claude calls the public URL', 'No sign-in required', 'Server returns results, read-only', 'Gateway can log who searched'],
+    watch: ['Decisions are public, but the query can expose a client matter', 'Decide: public server, internal proxy or self-hosted copy', 'Tool names shown are examples of the 42 available'] },
+  garmin: { name: 'Garmin', grp: 'fit', lead: 'Data from Garmin watches and devices: activities, steps, heart rate, sleep, stress, GPS, weight and training readiness.',
+    tags: [['warn', 'Community server'], ['warn', 'Unofficial library'], ['fit', 'Personal accounts'], ['fit', 'Fitness group']],
+    ex: '“Analyse my Garmin activities for the last four weeks.”',
+    metrics: [['Server maturity', 4], ['Stability', 3], ['Credential safety', 2], ['Official-API route', 3], ['Data sensitivity', 5]],
+    tools: [['get_activities', 'r', 'List recent workouts'], ['get_sleep_data', 'r', 'Nightly sleep and averages'], ['get_heart_rate', 'r', 'Heart rate across a day or activity'], ['get_stress', 'r', 'Stress levels'], ['get_training_readiness', 'r', 'Readiness and recovery indicators']],
+    auth: ['User signs in once to Garmin', 'Library stores session tokens', 'Tools call Garmin Connect', 'In production the gateway holds tokens per user'],
+    watch: ['Relies on an unofficial Garmin Connect library', 'Official developer programme may require approval and a commercial licence', 'GPS and heart rate are sensitive personal data'] },
+  mfp: { name: 'MyFitnessPal', grp: 'fit', lead: 'Food and nutrition tracking: meals, calories, protein, carbohydrates, fat, water, weight and nutrition goals.',
+    tags: [['risk', 'Most fragile'], ['warn', 'Scraping and browser cookies'], ['fit', 'Personal accounts'], ['fit', 'Fitness group']],
+    ex: '“How much protein did I eat on average this week?”',
+    metrics: [['Server maturity', 2], ['Stability', 1], ['Credential safety', 1], ['Official-API route', 3], ['Data sensitivity', 4]],
+    tools: [['get_food_diary', 'r', 'Meals logged for a date or range'], ['get_nutrition_summary', 'r', 'Calories and macros summary'], ['get_weight', 'r', 'Weight entries'], ['add_food', 'w', 'Add an entry to the diary']],
+    auth: ['User exports a browser cookie', 'Server stores the cookie', 'Server reads internal endpoints', 'Pilot only: replace with official OAuth'],
+    watch: ['Uses internal endpoints and cookies, so it can stop working without notice', 'Prefer the official OAuth route for anything beyond a pilot', 'Write tools stay off in phase 1'] },
+  tp: { name: 'TrainingPeaks', grp: 'fit', lead: 'Training planning and analysis for endurance athletes: calendar, workouts, power and heart-rate zones, fatigue, fitness and goals.',
+    tags: [['warn', 'Cookie-based access'], ['warn', 'Has write tools'], ['fit', 'Personal accounts'], ['fit', 'Fitness group']],
+    ex: '“Review my training load and suggest a session for Tuesday.”',
+    metrics: [['Server maturity', 4], ['Stability', 3], ['Credential safety', 2], ['Official-API route', 3], ['Data sensitivity', 4]],
+    tools: [['get_workouts', 'r', 'Planned and completed workouts'], ['get_fitness', 'r', 'Fitness, fatigue and form over time'], ['create_workout', 'w', 'Add a workout to the calendar'], ['update_ftp', 'w', 'Change the stored threshold power'], ['delete_workout', 'w', 'Remove a workout']],
+    auth: ['User provides a session cookie', 'Server uses it for every request', 'The cookie gives full account access', 'Replace with an approved API token'],
+    watch: ['The cookie grants full access to the account', 'Official API requires approval from TrainingPeaks', 'Write and delete tools need confirmation or stay disabled'] }
+};
+$('#dosTabs').innerHTML = Object.entries(DOS).map(([k, d], i) => `<button class="${i ? '' : 'active'}" role="tab" data-d="${k}">${d.name}</button>`).join('');
+function showDos(k, filter = 'all') {
+  const d = DOS[k];
+  $('#dosBody').innerHTML = `<div class="dos">
+  <h3>${d.name}</h3><p class="lead">${d.lead}</p>
+  <div class="meta-row">${d.tags.map(t => `<span class="tag ${t[0]}">${t[1]}</span>`).join('')}</div>
+  <div class="card" style="margin-bottom:18px"><p style="margin:0"><b style="color:var(--ink)">Example question.</b> ${d.ex}</p></div>
+  <div class="grid two">
+    <article class="card"><h3>Assessment</h3>
+      ${d.metrics.map(m => `<div class="metric"><span>${m[0]}</span><div class="track"><div class="fill ${m[0] === 'Data sensitivity' ? 'sens' : m[1] >= 4 ? '' : m[1] >= 3 ? 'mid' : 'low'}" data-w="${m[1] * 20}"></div></div><b>${m[1]}/5</b></div>`).join('')}
+      <p style="font-size:13px;margin-top:8px">Longer green bar is better. For data sensitivity, a longer bar means more sensitive.</p></article>
+    <article class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px"><h3 style="margin:0">Tools (examples)</h3>
+      <div class="seg" id="toolFilter"><button data-f="all" class="${filter === 'all' ? 'on' : ''}">All</button><button data-f="r" class="${filter === 'r' ? 'on' : ''}">Read</button><button data-f="w" class="${filter === 'w' ? 'on' : ''}">Write</button></div></div>
+      ${d.tools.filter(t => filter === 'all' || t[1] === filter).map(t => `<div class="toolrow"><code>${t[0]}</code><span><span class="pill ${t[1]}">${t[1] === 'r' ? 'read' : 'write'}</span></span><span class="d">${t[2]}</span></div>`).join('') || '<p>No tools of this type on this platform.</p>'}
+    </article>
+  </div>
+  <div class="sec"><h3>How sign-in works today</h3></div>
+  <div class="authchain">${d.auth.map((a, i) => `<div class="auth-step" style="animation-delay:${i * 1.5}s"><b>Step ${i + 1}</b>${a}</div>${i < d.auth.length - 1 ? '<span class="auth-gap"></span>' : ''}`).join('')}</div>
+  <div class="sec"><h3>Watch-outs</h3></div>
+  <div class="card"><ul>${d.watch.map(w => `<li>${w}</li>`).join('')}</ul></div></div>`;
+  seg($('#toolFilter'), b => showDos(k, b.dataset.f));
+  requestAnimationFrame(() => requestAnimationFrame(() => $$('.fill').forEach(f => f.style.width = f.dataset.w + '%')));
+}
+let curDos = 'law';
+seg($('#dosTabs'), b => { curDos = b.dataset.d; showDos(curDos); });
+$$('#dosTabs button').forEach(b => b.setAttribute('aria-selected', 'false'));
+showDos('law');
+document.addEventListener('pageshow', e => { if (e.detail === 'connectors') showDos(curDos); });
+
+/* ---------- SECURITY ---------- */
+const PERM = {
+  employee: [['OpenCaseLaw', ['y', 'Visible'], ['y', 'Allowed'], ['n', 'Not applicable'], ['n', 'No']], ['Garmin', ['n', 'Hidden'], ['n', 'Refused'], ['n', 'Refused'], ['n', 'No']], ['MyFitnessPal', ['n', 'Hidden'], ['n', 'Refused'], ['n', 'Refused'], ['n', 'No']], ['TrainingPeaks', ['n', 'Hidden'], ['n', 'Refused'], ['n', 'Refused'], ['n', 'No']]],
+  fitness: [['OpenCaseLaw', ['y', 'Visible'], ['y', 'Allowed'], ['n', 'Not applicable'], ['n', 'No']], ['Garmin', ['y', 'Visible'], ['y', 'Own account'], ['c', 'Confirm first'], ['n', 'No']], ['MyFitnessPal', ['y', 'Visible'], ['y', 'Own account'], ['c', 'Confirm first'], ['n', 'No']], ['TrainingPeaks', ['y', 'Visible'], ['y', 'Own account'], ['c', 'Confirm first'], ['n', 'No']]],
+  admin: [['OpenCaseLaw', ['y', 'Can manage'], ['y', 'Allowed'], ['n', 'Not applicable'], ['n', 'No']], ['Garmin', ['y', 'Can manage'], ['c', 'Only if in group'], ['c', 'Only if in group'], ['n', 'No: metadata only']], ['MyFitnessPal', ['y', 'Can manage'], ['c', 'Only if in group'], ['c', 'Only if in group'], ['n', 'No: metadata only']], ['TrainingPeaks', ['y', 'Can manage'], ['c', 'Only if in group'], ['c', 'Only if in group'], ['n', 'No: metadata only']]]
+};
+function drawPerm(r) {
+  $('#permTable').innerHTML = '<thead><tr><th>Connector</th><th>Sees connector</th><th>Reads data</th><th>Changes data</th><th>Sees other people’s data</th></tr></thead><tbody>' +
+    PERM[r].map(row => `<tr><td><b>${row[0]}</b></td>${row.slice(1).map(c => `<td><span class="cell ${c[0]}">${c[1]}</span></td>`).join('')}</tr>`).join('') + '</tbody>';
+}
+drawPerm('employee'); seg($('#permSeg'), b => drawPerm(b.dataset.r));
+stepper($('#stepToken'), [
+  { icon: '🔑', label: 'Sign in', title: 'The employee signs in to Claude', text: 'Through the firm’s Microsoft sign-in. The gateway learns who the person is and which groups they belong to.' },
+  { icon: '🛡️', label: 'Group check', title: 'The gateway checks the fitness group', text: 'Only members of the pilot group are offered the Garmin, MyFitnessPal and TrainingPeaks connectors. Everyone else never sees them.' },
+  { icon: '👤', label: 'Own account', title: 'The user connects their own account', text: 'The person signs in to the platform themselves, ideally with the official OAuth flow. The firm never sees or shares their password.' },
+  { icon: '🗄️', label: 'Vault', title: 'Tokens go into the vault', text: 'The gateway stores that person’s tokens encrypted and tied to them alone. No shared account, no shared cookie.' },
+  { icon: '⚡', label: 'Use', title: 'The adapter uses only that user’s token', text: 'Every request carries the caller’s own token, so Alice can only ever reach Alice’s data. Removing Alice deletes her tokens and nothing else.' }
+]);
+const CHK = ['Written approval of each provider’s terms of use', 'Official API access requested for Garmin, MyFitnessPal and TrainingPeaks', 'Data-protection assessment for health-related data', 'Per-user tokens encrypted at rest', 'Procedure to revoke one user’s access tested', 'Audit log reviewed by an administrator (metadata only)', 'Write actions require confirmation', 'Fitness connectors visible only to the pilot group', 'OpenCaseLaw query policy agreed (public, proxy or self-hosted)', 'Retention settings confirmed with the Claude plan owner'];
+$('#chkList').innerHTML = CHK.map((c, i) => `<label class="check"><input type="checkbox" data-i="${i}"><span>${c}</span></label>`).join('');
+$$('#chkList input').forEach(c => c.addEventListener('change', () => { const n = $$('#chkList input:checked').length; $('#chkLabel').textContent = `${n} of ${CHK.length} complete`; $('#chkBar').style.width = n / CHK.length * 100 + '%'; }));
+
+/* ---------- ROADMAP ---------- */
+const WS = [
+  { id: 'w1', name: 'Feasibility checks', s: 1, e: 2, c: 'gen', ttl: 'Confirm each connector works', ul: ['Run the four servers with test accounts', 'List tools, authentication method and risks per platform', 'Confirm the Claude plan and admin access'], out: 'Checkpoint: feasibility confirmed' },
+  { id: 'w2', name: 'OpenCaseLaw for the firm', s: 3, e: 4, c: 'law', ttl: 'OpenCaseLaw for the whole firm', ul: ['Add the connector in Claude at organisation level', 'Test real legal searches', 'Decide public server versus proxy'], out: 'Checkpoint: law connector live' },
+  { id: 'w3', name: 'Fitness pilot', s: 5, e: 7, c: 'fit', ttl: 'Garmin, MyFitnessPal and TrainingPeaks', ul: ['Connect personal accounts for a small pilot group', 'Restrict the connectors to that group', 'Test typical questions on each platform'], out: 'Checkpoint: fitness pilot demo' },
+  { id: 'w4', name: 'Gateway &amp; sign-in', s: 8, e: 9, c: 'gen', ttl: 'Gateway design and sign-in review', ul: ['Check whether the existing Microsoft sign-in can be reused', 'Document token storage and removal of a user'], out: 'Checkpoint: access model reviewed' },
+  { id: 'w5', name: 'Documentation', s: 9, e: 10, c: 'gen', ttl: 'Documentation and handover', ul: ['Simple setup guide the client can repeat', 'Risks, open decisions and next phase'], out: 'Checkpoint: handover' }
+];
+const MS = [[2, 'Feasibility confirmed'], [4, 'Law live'], [7, 'Fitness pilot demo'], [9, 'Access model reviewed'], [10, 'Handover']];
+let selWs = null;
+function drawGantt(day) {
+  const g = $('#gantt'); g.style.setProperty('--day', day);
+  g.innerHTML = '<div class="grow hd"><div class="lab">Workstream</div>' + [...Array(10)].map((_, i) => `<div>${i + 1}</div>`).join('') + '</div>' +
+    WS.map(w => { const st = day > w.e ? 'done' : day >= w.s ? 'active' : ''; return `<div class="grow"><div class="lab">${w.name}</div><button class="gbar ${w.c} ${st} ${selWs === w.id ? 'sel' : ''}" data-w="${w.id}" style="grid-column:${w.s + 1} / ${w.e + 2}">${st === 'done' ? 'Done' : st === 'active' ? 'In progress' : 'Planned'}</button></div>`; }).join('') +
+    '<div class="grow"><div class="lab">Checkpoints</div>' + [...Array(10)].map((_, i) => { const m = MS.find(x => x[0] === i + 1); return `<div style="text-align:center" ${m ? `title="${m[1]}"` : ''}>${m ? `<span class="ms" aria-label="${m[1]}">${day >= m[0] ? '◆' : '◇'}</span>` : ''}</div>`; }).join('') + '</div>' +
+    '<div class="gcols"><div class="gmark"></div></div>';
+  $$('.gbar', g).forEach(b => b.addEventListener('click', () => { selWs = b.dataset.w; drawGantt(+$('#daySlider').value); showWs(selWs); }));
+  const active = WS.filter(w => day >= w.s && day <= w.e).map(w => w.name).join(', ');
+  const ms = MS.filter(m => m[0] === day).map(m => m[1]);
+  $('#dayLabel').textContent = 'Day ' + day + (ms.length ? ' · ' + ms[0] : '');
+  if (!selWs) $('#ganttInfo').innerHTML = `<div><h4>Day ${day}</h4><p style="margin:6px 0 0;color:var(--muted)">Under way: ${active || 'nothing'}.${ms.length ? ' Checkpoint reached: ' + ms[0] + '.' : ''} Click a bar for the detail.</p></div>`;
+}
+function showWs(id) {
+  const w = WS.find(x => x.id === id);
+  $('#ganttInfo').innerHTML = `<div><h4>${w.ttl} <span class="tag" style="margin-left:6px">Days ${w.s}–${w.e}</span></h4><ul style="margin:8px 0;padding-left:20px;color:var(--muted)">${w.ul.map(u => `<li>${u}</li>`).join('')}</ul><span class="tag ok">${w.out}</span></div>`;
+}
+drawGantt(1);
+$('#daySlider').addEventListener('input', e => { selWs = null; drawGantt(+e.target.value); });
+const EST = [
+  ['Setup, testing and handover (always)', 2, true, 'Test accounts, setup guide, risk summary'],
+  ['OpenCaseLaw for the whole firm', 1, true, 'Organisation-level connector and legal test queries'],
+  ['Garmin connector', 1.5, true, 'Personal accounts, pilot group'],
+  ['MyFitnessPal connector', 1.5, true, 'Most fragile, more testing'],
+  ['TrainingPeaks connector', 1.5, true, 'Cookie-based access in pilot'],
+  ['Gateway design', 1, true, 'Design document, no build'],
+  ['Microsoft sign-in review', 1, true, 'Check reuse from bear_backend'],
+  ['Write actions with confirmation', 2, false, 'Confirmation guard and write tests'],
+  ['Internal proxy for OpenCaseLaw', 2, false, 'Filtering and logging of legal queries'],
+  ['Official API applications', 1.5, false, 'Prepare and submit provider applications']
+];
+$('#estOpts').innerHTML = EST.map((o, i) => `<label class="opt"><input type="checkbox" data-i="${i}" ${o[2] ? 'checked' : ''} ${i === 0 ? 'disabled' : ''}><span>${o[0]}<small>${o[3]}</small></span><b>${o[1]} d</b></label>`).join('');
+function calc() {
+  let t = 0; $$('#estOpts input').forEach(c => { if (c.checked) t += EST[+c.dataset.i][1]; });
+  $('#estTotal').textContent = t % 1 ? t.toFixed(1) : t;
+  $('#estBar').style.width = Math.min(100, t / 15 * 100) + '%';
+  $('#estNote').textContent = t <= 10 ? 'Within the 8 to 10 day window for V1.' : 'Beyond the 8 to 10 day window. Plan extra time or a second phase.';
+}
+$$('#estOpts input').forEach(c => c.addEventListener('change', calc)); calc();
+
+/* ---------- DELIVERABLES ---------- */
+const DV = [
+  ['Working connections', 'Claude connected to OpenCaseLaw and the three fitness platforms, with tested example questions.', ['One tested question per platform', 'Screenshots or a short recording', 'List of tools exposed']],
+  ['Access configuration', 'Law open to the firm, fitness restricted to the pilot group, each user on their own account.', ['Group definitions', 'Connector visibility settings', 'Instructions to add or remove a user']],
+  ['Architecture document', 'Gateway and adapter design, so a connector can be swapped without changing what users see.', ['Component diagram', 'Token and sign-in flow', 'Replacement plan per provider']],
+  ['Setup guide', 'Plain-language steps so the client can deploy and reconfigure the connectors alone.', ['Local and remote setup', 'Troubleshooting notes', 'How to add a new connector']],
+  ['Risk and cost estimate', 'Provider approvals, hosting needs, effort for a production rollout and what is out of scope.', ['Risk list with owners', 'Production effort range', 'Open decisions']],
+  ['Status updates', 'Short, regular updates during the work, including blockers as soon as they appear.', ['Update at each checkpoint', 'Early warning on blockers', 'Final summary']]
+];
+$('#delivGrid').innerHTML = DV.map(d => `<details class="card"><summary>${d[0]}</summary><div class="body"><p>${d[1]}</p><ul>${d[2].map(x => `<li>${x}</li>`).join('')}</ul></div></details>`).join('');
+
+/* ---------- DECISIONS ---------- */
+const DQ = [
+  ['Pilot or production?', 'Is the first delivery a proof of concept or something users depend on?', [['Pilot', 'Community servers allowed. About 8 to 10 working days for V1.'], ['Production', 'Official APIs, hosting, security review and legal sign-off. Several weeks beyond V1.']]],
+  ['Read-only or read and write?', 'May Claude create, edit or delete data in the fitness platforms?', [['Read-only', 'Lowest risk. No confirmation screens to build.'], ['Read and write', 'Adds the confirmation guard and write testing, about 2 extra days.']]],
+  ['Are unofficial connections acceptable?', 'The tested repos use unofficial libraries, scraping or cookies.', [['Yes, for the pilot', 'Fastest route. Plan to replace them before production.'], ['No', 'Official API approvals come first. Waiting time depends on each provider and cannot be fixed in advance.']]],
+  ['Who hosts the servers?', 'Where will the remote servers and gateway run?', [['Client infrastructure', 'Full control. Needs access and a deployment owner.'], ['Existing backend', 'Reuses sign-in and hosting. Needs confirming that it can run the extra services.'], ['New environment', 'Clean separation. More setup time.']]],
+  ['Public or private OpenCaseLaw?', 'Are lawyers’ searches allowed to reach the public server?', [['Public server', 'Simplest. Queries leave the firm.'], ['Internal proxy', 'Filters and logs queries, about 2 extra days.'], ['Self-hosted', 'Full control, ongoing maintenance.']]],
+  ['Which Claude plan and who is in the group?', 'Team or Enterprise, and how many people are in the pilot.', [['Team', 'Check that group-level connector restrictions are available on this plan.'], ['Enterprise', 'Organisation controls available. Confirm group setup with the admin.'], ['Not sure yet', 'Resolve first. Access design depends on it.']]]
+];
+const decided = {};
+$('#decGrid').innerHTML = DQ.map((q, i) => `<div class="dq"><h3>${q[0]}</h3><p>${q[1]}</p><div class="seg" data-q="${i}">${q[2].map((o, j) => `<button data-j="${j}">${o[0]}</button>`).join('')}</div><div class="impact" id="imp${i}">Pick an option to see the impact.</div></div>`).join('');
+$$('#decGrid .seg').forEach(s => seg(s, b => {
+  const i = +s.dataset.q, j = +b.dataset.j; decided[i] = j;
+  const el = $('#imp' + i); el.classList.add('set'); el.innerHTML = `<b>Impact</b>${DQ[i][2][j][1]}`;
+  const n = Object.keys(decided).length;
+  $('#decLabel').textContent = `${n} of ${DQ.length} decided`; $('#decBar').style.width = n / DQ.length * 100 + '%';
+  $('#decSummary').textContent = Object.entries(decided).map(([a, c]) => `${DQ[a][0].replace('?', '')}: ${DQ[a][2][c][0]}`).join(' · ');
+}));
+
+showPage(location.hash.slice(1) || 'overview', false);
+})();
+</script>
+</body>
+</html>
