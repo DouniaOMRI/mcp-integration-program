@@ -481,7 +481,7 @@ details.card.q summary{font:600 16px var(--sans)}
         <article class="card"><h3>Swappable parts</h3><p>Change the Garmin adapter from a community server to the official API without touching Claude or what users see. Use the stage switch above to see the change.</p></article>
         <article class="card"><h3>Legal and fitness separated</h3><p>OpenCaseLaw needs no personal credentials. The fitness adapters only run with the user’s own tokens and only for the pilot group.</p></article>
       </div>
-      <div class="notice warn"><strong>Open point:</strong> the existing Microsoft sign-in in the client’s backend may be reusable for the gateway. This needs confirming on day 1, because it changes days 6 and 9.</div>
+      <div class="notice warn"><strong>Open point:</strong> the Microsoft 365 sign-in code already present in the client’s backend may be reusable for the gateway. This needs confirming on day 1, because it changes days 6 and 9.</div>
     </section>
 
     <!-- APPROACH -->
@@ -561,7 +561,7 @@ details.card.q summary{font:600 16px var(--sans)}
     <section class="page" id="security">
       <div class="page-head">
         <h2>Security and access</h2>
-        <p>Legal search is for everyone in the firm. Fitness is for a selected group. Each person connects their own account and nobody else can see it.</p>
+        <p>Legal search is for everyone in the firm. Fitness is for a selected group, named by email address. Each person connects their own account and nobody else can see it.</p>
       </div>
       <div class="ctlbar"><b>View permissions as</b>
         <div class="seg" id="permSeg"><button class="on" data-r="employee">Firm employee</button><button data-r="fitness">Fitness pilot member</button><button data-r="admin">Administrator</button></div>
@@ -1064,10 +1064,10 @@ document.addEventListener('pageshow', e => { if (e.detail === 'connectors') show
 /* ---------- REQUIREMENTS ---------- */
 const REQ = [
   // [type, platform, day, title, detail, mandatory]
-  ['c', 'all', 1, 'Claude plan supports custom remote connectors', 'And a Claude Owner is available to add organisation connectors.', 1],
-  ['c', 'all', 1, 'Named technical approver and exact pilot-user list', 'Two groups: all staff (legal) and fitness pilot.', 1],
+  ['c', 'all', 1, 'Claude plan supports custom remote connectors, and the administrator is named', 'The client’s Claude administrator (Owner) adds the connectors. We do not need access to their Claude platform: we supply the setup guide and a short walkthrough.', 1],
+  ['c', 'all', 1, 'Named technical contact and the pilot users’ email addresses', 'Two groups: all staff for legal search (no list needed) and the fitness pilot, given as exact email addresses.', 1],
   ['c', 'all', 1, 'Written confirmation that V1 is read-only', 'Write actions stay out of the 12 days.', 1],
-  ['c', 'all', 1, 'Microsoft sign-in access (app registration, group data)', 'Needed to map firm groups to connector visibility. Day 1 decides whether existing sign-in is reused.', 1],
+  ['c', 'all', 1, 'Access to the existing Microsoft 365 sign-in and group data', 'The sign-in code already exists in the client’s backend. Day 1 decides whether it is reused to map users to connector visibility.', 1],
   ['c', 'law', 2, 'Legal test questions and expected answers', 'At least five, including one that must return no result.', 1],
   ['c', 'all', 2, 'Expected-answer examples for each fitness platform', 'Five questions each, plus empty-data, unauthorised and expired-session cases.', 1],
   ['c', 'all', 2, 'Fitness data purpose, participant consent and retention rule', 'Needed before any real person connects an account.', 1],
@@ -1089,11 +1089,13 @@ const REQ = [
   ['t', 'all', 6, 'Gateway: HTTPS, client authentication, group rules, health checks', 'Deny by default.', 1],
   ['t', 'mfp', 7, 'MyFitnessPal adapter, allowlist and tests', 'Fragile login handled with retries and clear errors.', 1],
   ['t', 'tp', 8, 'TrainingPeaks adapter, allowlist and tests', 'Write tools disabled.', 1],
-  ['t', 'all', 10, 'Connector registration in Claude and group-visibility verification', 'Employee, pilot member and outsider tested.', 1],
+  ['t', 'all', 10, 'Connector setup steps for the client’s administrator and group-visibility verification', 'Employee, pilot member and outsider tested.', 1],
   ['t', 'all', 10, 'Negative and adversarial tests', 'Unauthorised user, expired token, provider down, unsafe tool call.', 1],
   ['t', 'all', 12, 'Runbook, setup guide, risk register, demo and next-phase backlog', 'So the client can repeat the setup alone.', 1],
   ['a', 'all', 1, 'The Claude plan allows group-based connector visibility', 'If not, access separation needs another design and the plan changes.', 1],
   ['a', 'all', 1, 'The existing Microsoft sign-in can be reused', 'If not, a new identity integration stops the clock.', 1],
+  ['a', 'all', 1, 'We have no access to the client’s Claude platform', 'Their administrator registers the connectors by following our guide, or in a short shared session.', 1],
+  ['a', 'all', 1, 'Servers must be remote (reachable by URL)', 'Some users use Claude on their phone, so local servers on one computer are not enough.', 1],
   ['a', 'all', 1, 'Community servers are acceptable for the pilot', 'Unofficial libraries, scraping and cookies are tolerated for 12 days.', 1],
   ['a', 'all', 1, 'Provider terms allow use of test accounts', 'To be checked by the client for each platform.', 1],
   ['a', 'all', 1, 'Start is a Monday and the calendar has no holidays in the window', 'Otherwise the delivery date moves day for day.', 0],
@@ -1167,7 +1169,7 @@ const WS = [
   { id: 'w1', name: 'Discovery and architecture', s: 1, e: 2, c: 'gen', ttl: 'Days 1 and 2: discovery, repository audit and architecture', owner: 'Our team, with client contacts',
     ul: ['Confirm users, use cases, data classes and the read-only boundary', 'Inventory Claude plan, admin roles, identity provider and hosting limits', 'Audit each repository: licence, maintenance, dependencies, transports, tools', 'Define public and private flows, gateway boundary, secret storage and audit events', 'Write acceptance scenarios and the architecture decision record'], out: 'Exit evidence: compatibility matrix, diagram, risk log' },
   { id: 'w2', name: 'OpenCaseLaw (public pattern)', s: 3, e: 3, c: 'law', ttl: 'Day 3: OpenCaseLaw integration baseline', owner: 'Our team, Claude Owner for approval',
-    ul: ['Add the remote connector in Claude at organisation level', 'Verify tool discovery and the 42 read-only tools', 'Run the legal query suite and check citations against sources', 'Write usage guidance and handle failures'], out: 'Exit evidence: reproducible legal demo with sources' },
+    ul: ['Add the remote connector in Claude on a test account (the client administrator repeats it later)', 'Verify tool discovery and the 42 read-only tools', 'Run the legal query suite and check citations against sources', 'Write usage guidance and handle failures'], out: 'Exit evidence: reproducible legal demo with sources' },
   { id: 'w3', name: 'Garmin (private pattern)', s: 4, e: 5, c: 'fit', ttl: 'Days 4 and 5: Garmin local proof (day 5 holds margin)', owner: 'Our team, test-account holder for MFA',
     ul: ['Set up the runtime and test data', 'Log in with live MFA and persist tokens', 'Cut 110+ tools to a read-only allowlist', 'Test timeouts and one full re-authentication cycle', 'Validate representative questions against known data'], out: 'Exit evidence: Garmin answers checked, no password exposed' },
   { id: 'w4', name: 'Gateway, TLS and secrets', s: 6, e: 6, c: 'gen', ttl: 'Day 6: protected remote path', owner: 'Our team, IT for host, domain and secret store',
@@ -1177,7 +1179,7 @@ const WS = [
   { id: 'w6', name: 'TrainingPeaks (replicate)', s: 8, e: 8, c: 'fit', ttl: 'Day 8: TrainingPeaks', owner: 'Our team, test-account holder',
     ul: ['Set up the adapter with cookie-to-token exchange', 'Reduce 84 tools to a read-only allowlist', 'Test workouts, fitness curve and summary questions', 'Prepare the official API application text for the client'], out: 'Exit evidence: working read-only connector, risks logged' },
   { id: 'w7', name: 'Claude integration and tests', s: 9, e: 10, c: 'gen', ttl: 'Days 9 and 10: Claude integration, groups and adversarial tests (day 10 holds margin)', owner: 'Our team, Claude Owner',
-    ul: ['Register all connectors in Claude', 'Verify visibility for employee, pilot member and outsider', 'Test unauthorised access, expired tokens, provider outage and unsafe tool calls', 'Confirm logs contain no sensitive payloads', 'Fix defects found'], out: 'Exit evidence: test report and visibility proof' },
+    ul: ['Prepare the connector setup steps and walk the client’s Claude administrator through registering all four', 'Verify visibility for employee, pilot member and outsider', 'Test unauthorised access, expired tokens, provider outage and unsafe tool calls', 'Confirm logs contain no sensitive payloads', 'Fix defects found'], out: 'Exit evidence: test report and visibility proof' },
   { id: 'w8', name: 'Fixes, docs, demo, handover', s: 11, e: 12, c: 'gen', ttl: 'Days 11 and 12: corrections, documentation, demo and handover (day 11 holds margin)', owner: 'Our team, reviewer from the client',
     ul: ['Absorb any overrun from the fragile connectors', 'Apply one review correction cycle', 'Write the runbook, setup guide and risk register', 'Run the live demo and record evidence', 'Hand over the next-phase backlog and official-API plan'], out: 'Exit evidence: handover pack and demo accepted' }
 ];
@@ -1239,7 +1241,7 @@ const DV = [
   ['Access configuration', 'Legal open to all staff, fitness restricted to the pilot group, each user on their own account.', ['Group definitions', 'Connector visibility settings', 'Steps to add or remove a user']],
   ['Gateway and security setup', 'HTTPS endpoint, client authentication, secret handling, health checks and audit events.', ['Component diagram', 'Token and sign-in flow', 'Revocation procedure, tested']],
   ['Test and risk report', 'Positive and negative cases, expired sessions, provider outage, privacy-safe logs and what remains open.', ['Test results per connector', 'Risk list with owners', 'Production blockers']],
-  ['Setup guide and runbook', 'Plain-language steps so the client can deploy, operate and reconfigure the connectors alone.', ['Local and remote setup', 'Troubleshooting notes', 'How to add a new connector']],
+  ['Setup guide and runbook', 'Plain-language steps so the client can deploy, operate and reconfigure the connectors alone.', ['Simple step-by-step guide to build an MCP server and connect it to Claude', 'Short screen recording of the Claude connector setup', 'Troubleshooting notes and how to add a new connector']],
   ['Demo and next-phase plan', 'A live demo, an official-API plan per provider, effort for production and what is out of scope.', ['Demo script', 'Official API route and lead times', 'Prioritised backlog']]
 ];
 $('#delivGrid').innerHTML = DV.map(d => `<details class="card"><summary>${d[0]}</summary><div class="body"><p>${d[1]}</p><ul>${d[2].map(x => `<li>${x}</li>`).join('')}</ul></div></details>`).join('');
