@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Interactive architecture and delivery brief for a Claude MCP integration pilot.">
+<meta name="description" content="Interactive architecture, requirements and delivery plan for connecting Claude to four MCP servers in 12 working days.">
 <title>MCP Integration Programme</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,7 +27,7 @@ a{color:var(--law)}
 button{font:inherit;cursor:pointer;color:inherit}
 :focus-visible{outline:3px solid var(--law);outline-offset:2px}
 code{font:500 13px var(--mono);background:#eceff4;padding:2px 6px;border-radius:5px}
-pre{margin:0;font:500 13px/1.55 var(--mono);background:#0f1b2d;color:#d6e2f5;padding:14px 16px;border-radius:10px;overflow:auto}
+pre{margin:0;font:500 13px/1.55 var(--mono);background:#0f1b2d;color:#d6e2f5;padding:14px 16px;border-radius:10px;overflow:auto;white-space:pre-wrap}
 
 .app{display:grid;grid-template-columns:288px 1fr;min-height:100vh}
 .rail{background:var(--rail);color:var(--rail-ink);padding:24px 18px;position:sticky;top:0;height:100vh;overflow:auto;display:flex;flex-direction:column;gap:20px}
@@ -38,7 +38,7 @@ pre{margin:0;font:500 13px/1.55 var(--mono);background:#0f1b2d;color:#d6e2f5;pad
 .brand span{font-size:12.5px;color:#93a1b8}
 .nav-title{font-size:12.5px;color:#7b8aa3;margin-bottom:-8px}
 nav{display:flex;flex-direction:column;gap:2px}
-nav button{display:flex;align-items:center;gap:11px;width:100%;text-align:left;background:none;border:0;color:var(--rail-ink);padding:10px 12px;border-radius:8px;font-weight:500;font-size:14.5px}
+nav button{display:flex;align-items:center;gap:11px;width:100%;text-align:left;background:none;border:0;color:var(--rail-ink);padding:9px 12px;border-radius:8px;font-weight:500;font-size:14.5px}
 nav button svg{width:18px;height:18px;flex:none;stroke-width:1.6}
 nav button:hover{background:rgba(255,255,255,.07)}
 nav button.active{background:#fff;color:var(--ink);font-weight:700}
@@ -52,14 +52,14 @@ main{padding:0 clamp(18px,4vw,56px) 64px;min-width:0}
 .print svg{width:16px;height:16px}
 .print:hover{border-color:var(--ink)}
 
-.page{display:none;max-width:1100px}
+.page{display:none;max-width:1120px}
 .page.active{display:block}
-.page-head{margin-bottom:26px;max-width:70ch}
+.page-head{margin-bottom:26px;max-width:72ch}
 .page-head h2{font-size:clamp(26px,3.4vw,38px);margin-bottom:10px}
 .page-head p{color:var(--muted);font-size:17px}
-.sec{margin:38px 0 14px}
+.sec{margin:42px 0 14px}
 .sec h3{font-size:22px;margin-bottom:6px}
-.sec p{color:var(--muted);max-width:68ch}
+.sec p{color:var(--muted);max-width:70ch}
 .kicker{font-weight:700;font-size:14px;color:var(--law);margin-bottom:10px}
 
 .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px}
@@ -73,6 +73,7 @@ main{padding:0 clamp(18px,4vw,56px) 64px;min-width:0}
 .grid.three{grid-template-columns:repeat(3,1fr)}
 .notice{margin-top:22px;background:var(--law-soft);border-left:4px solid var(--law);padding:16px 20px;border-radius:0 10px 10px 0}
 .notice.warn{background:var(--warn-soft);border-color:var(--warn)}
+.notice.ok{background:var(--ok-soft);border-color:var(--ok)}
 .tag{display:inline-block;font-size:13px;font-weight:600;padding:4px 11px;border-radius:99px;background:#eceff4}
 .tag.ok{background:var(--ok-soft);color:var(--ok)}
 .tag.warn{background:var(--warn-soft);color:var(--warn)}
@@ -81,7 +82,6 @@ main{padding:0 clamp(18px,4vw,56px) 64px;min-width:0}
 .tag.fit{background:var(--fit-soft);color:var(--fit)}
 .meta-row{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 20px}
 
-/* segmented control */
 .seg{display:inline-flex;background:#e8ebf1;border-radius:10px;padding:3px;gap:2px;flex-wrap:wrap}
 .seg button{border:0;background:none;padding:8px 14px;border-radius:8px;font-weight:600;font-size:14.5px;color:var(--muted)}
 .seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(15,27,45,.15)}
@@ -90,10 +90,13 @@ main{padding:0 clamp(18px,4vw,56px) 64px;min-width:0}
 .btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
 .btn:hover{opacity:.9}
 .btn:disabled{opacity:.4;cursor:not-allowed}
+.ctlbar{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin:0 0 14px}
+.switch{display:flex;gap:8px;align-items:center;font-size:14.5px;font-weight:500;cursor:pointer}
+.switch input{width:18px;height:18px;accent-color:var(--risk)}
 
 /* overview */
-.executive{display:grid;grid-template-columns:1.6fr 1fr;gap:36px;margin-bottom:28px}
-.executive h1{font-size:clamp(30px,4.2vw,50px);margin-bottom:18px;max-width:18ch}
+.executive{display:grid;grid-template-columns:1.5fr 1fr;gap:36px;margin-bottom:28px}
+.executive h1{font-size:clamp(30px,4.2vw,48px);margin-bottom:18px;max-width:19ch}
 .summary{font-size:18px;color:var(--muted);max-width:60ch}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
 .chip{background:var(--law-soft);color:var(--law);font-weight:600;font-size:13.5px;padding:5px 12px;border-radius:99px}
@@ -108,13 +111,11 @@ main{padding:0 clamp(18px,4vw,56px) 64px;min-width:0}
 .stat b{display:block;font:800 30px/1.2 var(--display);margin:2px 0}
 .stat small{color:var(--muted);font-size:13px}
 
-/* generic svg */
 .diagram{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;overflow-x:auto}
 .diagram svg{display:block;width:100%;height:auto}
 .diagram svg text{font-family:var(--sans)}
 .flow{stroke-dasharray:6 6;animation:dash 1s linear infinite}
 @keyframes dash{to{stroke-dashoffset:-12}}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(29,78,216,.0)}50%{box-shadow:0 0 0 6px rgba(29,78,216,.18)}}
 
 /* stepper */
 .stepper{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px}
@@ -123,7 +124,7 @@ main{padding:0 clamp(18px,4vw,56px) 64px;min-width:0}
 .st-node .ic{font-size:19px;line-height:1}
 .st-node.done{background:var(--ok-soft);color:var(--ok)}
 .st-node.on{background:var(--law-soft);border-color:var(--law);color:var(--law);transform:translateY(-2px)}
-.st-arrow{width:34px;height:2px;background:var(--line);position:relative;flex:none;transition:.25s}
+.st-arrow{width:30px;height:2px;background:var(--line);position:relative;flex:none;transition:.25s}
 .st-arrow::after{content:"";position:absolute;right:-1px;top:-4px;border-left:7px solid var(--line);border-top:5px solid transparent;border-bottom:5px solid transparent;transition:.25s}
 .st-arrow.done{background:var(--ok)}
 .st-arrow.done::after{border-left-color:var(--ok)}
@@ -136,20 +137,20 @@ main{padding:0 clamp(18px,4vw,56px) 64px;min-width:0}
 .demo{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;align-items:start}
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
 .panel-h{padding:12px 16px;border-bottom:1px solid var(--line);font:700 14.5px var(--display);display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
-.chat{padding:16px;display:flex;flex-direction:column;gap:12px;min-height:320px;max-height:460px;overflow:auto}
-.bubble{max-width:88%;padding:11px 15px;border-radius:14px;font-size:15px;line-height:1.5;animation:pop .3s ease}
+.chat{padding:16px;display:flex;flex-direction:column;gap:12px;min-height:320px;max-height:480px;overflow:auto}
+.bubble{max-width:90%;padding:11px 15px;border-radius:14px;font-size:15px;line-height:1.5;animation:pop .3s ease}
 @keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .bubble.u{align-self:flex-end;background:var(--ink);color:#fff;border-bottom-right-radius:4px}
 .bubble.c{align-self:flex-start;background:#eef1f6;border-bottom-left-radius:4px}
 .bubble.c.bad{background:var(--risk-soft);color:var(--risk)}
 .bubble small{display:block;margin-top:6px;font-size:12px;color:var(--muted)}
 .bubble .row{display:flex;gap:8px;margin-top:10px}
-.empty{color:var(--muted);font-size:14.5px;align-self:center;margin:auto;text-align:center;max-width:32ch}
+.empty{color:var(--muted);font-size:14.5px;align-self:center;margin:auto;text-align:center;max-width:34ch}
 .chips-q{padding:14px 16px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px;background:#fafbfc}
-.qchip{background:#fff;border:1px solid var(--line);border-radius:99px;padding:7px 13px;font-size:14px;font-weight:500}
+.qchip{background:#fff;border:1px solid var(--line);border-radius:99px;padding:7px 13px;font-size:14px;font-weight:500;text-align:left}
 .qchip:hover:not(:disabled){border-color:var(--law);color:var(--law)}
 .qchip:disabled{opacity:.45;cursor:not-allowed}
-.log{list-style:none;margin:0;padding:12px 16px;display:flex;flex-direction:column;gap:8px;min-height:140px;max-height:240px;overflow:auto;font-size:14px}
+.log{list-style:none;margin:0;padding:12px 16px;display:flex;flex-direction:column;gap:8px;min-height:160px;max-height:300px;overflow:auto;font-size:14px}
 .log li{display:flex;gap:10px;animation:pop .3s ease}
 .log li i{flex:none;width:8px;height:8px;border-radius:50%;background:var(--law);margin-top:8px}
 .log li.ok i{background:var(--ok)} .log li.bad i{background:var(--risk)} .log li.wait i{background:var(--warn)}
@@ -158,6 +159,7 @@ main{padding:0 clamp(18px,4vw,56px) 64px;min-width:0}
 .dnode.ok rect{stroke:var(--ok);fill:var(--ok-soft)}
 .dnode.bad rect{stroke:var(--risk);fill:var(--risk-soft)}
 .dnode.wait rect{stroke:var(--warn);fill:var(--warn-soft)}
+.dnode.dim{opacity:.35}
 
 /* architecture */
 .arch-node{cursor:pointer}
@@ -173,16 +175,15 @@ main{padding:0 clamp(18px,4vw,56px) 64px;min-width:0}
 .tabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin-bottom:22px}
 .tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:10px 14px;font-weight:600;color:var(--muted);margin-bottom:-1px}
 .tabs button:hover{color:var(--ink)}
-.tabs button.active{color:var(--ink);border-bottom-color:var(--law)}
+.tabs button.on{color:var(--ink);border-bottom-color:var(--law)}
 .dos h3{font-size:26px;margin-bottom:6px}
-.dos .lead{color:var(--muted);font-size:16.5px;max-width:64ch}
+.dos .lead{color:var(--muted);font-size:16.5px;max-width:66ch}
 .metric{display:grid;grid-template-columns:150px 1fr 40px;gap:12px;align-items:center;margin-bottom:10px;font-size:14.5px}
 .track{height:10px;background:#e8ebf1;border-radius:99px;overflow:hidden}
 .fill{height:100%;width:0;border-radius:99px;background:var(--ok);transition:width .9s cubic-bezier(.2,.8,.2,1)}
 .fill.mid{background:#d4a017} .fill.low{background:var(--risk)} .fill.sens{background:var(--warn)}
 .toolrow{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;padding:10px 0;border-bottom:1px solid var(--line);align-items:center}
 .toolrow:last-child{border-bottom:0}
-.toolrow code{justify-self:start}
 .toolrow span.d{color:var(--muted);font-size:14.5px;grid-column:1/-1}
 .pill{font-size:12px;font-weight:700;padding:2px 8px;border-radius:99px}
 .pill.r{background:var(--ok-soft);color:var(--ok)} .pill.w{background:var(--risk-soft);color:var(--risk)}
@@ -191,8 +192,12 @@ main{padding:0 clamp(18px,4vw,56px) 64px;min-width:0}
 .auth-step b{display:block;font:700 12.5px var(--sans);color:var(--muted);margin-bottom:3px}
 @keyframes glow{0%,20%,100%{background:#f0f2f6}6%,14%{background:var(--law-soft)}}
 .auth-gap{width:16px;flex:none}
+.facts{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden;margin-bottom:18px}
+.fact{padding:12px 16px;border-bottom:1px solid var(--line);font-size:14.5px}
+.fact:nth-child(odd){border-right:1px solid var(--line)}
+.fact b{display:block;font-size:12.5px;color:var(--muted);font-weight:600}
 
-/* security */
+/* tables */
 .matrix{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px}
 table{border-collapse:collapse;width:100%;min-width:620px;font-size:15px}
 th,td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
@@ -203,6 +208,8 @@ td .cell{display:inline-block;font-weight:700;padding:3px 10px;border-radius:99p
 .check{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px;cursor:pointer}
 .check:last-child{border-bottom:0}
 .check input{width:19px;height:19px;margin-top:3px;accent-color:var(--ok);flex:none}
+.check small{display:block;color:var(--muted);font-size:13.5px}
+.check .meta{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;flex:none}
 .progress{height:12px;background:#e8ebf1;border-radius:99px;overflow:hidden;margin:6px 0 4px}
 .progress i{display:block;height:100%;width:0;background:var(--ok);transition:width .4s ease}
 .twocol{display:grid;grid-template-columns:1fr 1fr;gap:18px}
@@ -211,8 +218,8 @@ td .cell{display:inline-block;font-weight:700;padding:3px 10px;border-radius:99p
 
 /* roadmap */
 .gantt{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow-x:auto}
-.ginner{min-width:760px;position:relative}
-.grow{display:grid;grid-template-columns:200px repeat(10,1fr);align-items:center;border-bottom:1px solid var(--line);min-height:52px}
+.ginner{min-width:900px;position:relative}
+.grow{display:grid;grid-template-columns:220px repeat(12,1fr);align-items:center;border-bottom:1px solid var(--line);min-height:50px}
 .grow:last-child{border-bottom:0}
 .grow.hd{background:#f0f2f6;min-height:38px;font-weight:700;font-size:13.5px;text-align:center}
 .grow .lab{padding:8px 14px;font-weight:600;font-size:14.5px;text-align:left}
@@ -222,12 +229,13 @@ td .cell{display:inline-block;font-weight:700;padding:3px 10px;border-radius:99p
 .gbar.active.fit{background:var(--fit);box-shadow:0 0 0 4px rgba(15,118,110,.2)}
 .gbar.done{background:var(--ok);color:#fff}
 .gbar.sel{outline:3px solid var(--ink);outline-offset:1px}
-.gcols{position:absolute;left:200px;right:0;top:0;bottom:0;pointer-events:none}
-.gmark{position:absolute;top:0;bottom:0;width:2px;background:var(--risk);left:calc((var(--day) - .5) * 10%);transition:left .4s ease}
+.mbuf{height:22px;margin:0 2px;border-radius:6px;background:repeating-linear-gradient(135deg,#f3d9a6 0 6px,#fdf1de 6px 12px);border:1px solid #e7c98c}
+.gcols{position:absolute;left:220px;right:0;top:0;bottom:0;pointer-events:none}
+.gmark{position:absolute;top:0;bottom:0;width:2px;background:var(--risk);left:calc((var(--day) - .5) * 8.3333%);transition:left .4s ease}
 .gmark::before{content:"";position:absolute;top:-1px;left:-5px;border:6px solid transparent;border-top-color:var(--risk)}
 .ms{font-size:18px;color:var(--ink)}
-.ctlbar{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin:0 0 14px}
-input[type=range]{accent-color:var(--law);width:min(340px,100%)}
+input[type=range]{accent-color:var(--law);width:min(360px,100%)}
+input[type=date]{font:inherit;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:#fff}
 .estimate{display:grid;grid-template-columns:1.4fr 1fr;gap:18px}
 .opt{display:grid;grid-template-columns:22px 1fr auto;gap:12px;align-items:start;padding:10px 0;border-bottom:1px solid var(--line);cursor:pointer;font-size:15px}
 .opt:last-child{border-bottom:0}
@@ -241,7 +249,8 @@ input[type=range]{accent-color:var(--law);width:min(340px,100%)}
 .total .bar{height:10px;background:rgba(255,255,255,.15);border-radius:99px;margin:12px 0;overflow:hidden}
 .total .bar i{display:block;height:100%;background:#7aa2ff;width:0;transition:width .5s ease}
 
-/* decisions */
+/* approach */
+.tile{transition:.35s}
 .dq{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px}
 .dq h3{font-size:17px;margin-bottom:4px}
 .dq>p{color:var(--muted);font-size:15px;margin-bottom:12px}
@@ -251,7 +260,7 @@ input[type=range]{accent-color:var(--law);width:min(340px,100%)}
 .impact b{display:block;font-size:13px;color:var(--law);margin-bottom:2px}
 
 details.card{padding:0}
-details.card summary{padding:20px 22px;cursor:pointer;font:700 17px var(--display);list-style:none;display:flex;justify-content:space-between;gap:10px;align-items:center}
+details.card summary{padding:18px 22px;cursor:pointer;font:700 17px var(--display);list-style:none;display:flex;justify-content:space-between;gap:10px;align-items:center}
 details.card summary::-webkit-details-marker{display:none}
 details.card summary::after{content:"+";font-size:22px;color:var(--muted);transition:transform .25s}
 details.card[open] summary::after{transform:rotate(45deg)}
@@ -270,21 +279,22 @@ details.card.q summary{font:600 16px var(--sans)}
   nav{flex-direction:row;flex-wrap:wrap}
   nav button{width:auto;padding:8px 12px}
   .rail-note{display:none}
-  .executive,.grid.two,.grid.three,.demo,.estimate,.twocol,.info{grid-template-columns:1fr}
+  .executive,.grid.two,.grid.three,.demo,.estimate,.twocol,.info,.facts{grid-template-columns:1fr}
+  .fact:nth-child(odd){border-right:0}
   .stats{grid-template-columns:repeat(2,1fr)}
   .stat{border-bottom:1px solid var(--line)}
   .metric{grid-template-columns:110px 1fr 32px}
+  .check{flex-wrap:wrap}
+  .check .meta{margin-left:31px;justify-content:flex-start}
 }
 @media print{
   .rail,.print,.seg,.st-ctl,.chips-q{display:none}
   .app{display:block}
   .page{display:block!important;break-after:page}
-  .dos{display:block!important}
   body{background:#fff}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
-  html{scroll-behavior:auto}
 }
 </style>
 </head>
@@ -293,16 +303,16 @@ details.card.q summary{font:600 16px var(--sans)}
   <aside class="rail" aria-label="Programme navigation">
     <div class="brand">
       <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="19" cy="19" r="2"/><path d="M7 12h4m0 0 6-6m-6 6 6 6"/></svg></div>
-      <div><strong>MCP Integration Programme</strong><span>Architecture &amp; delivery brief</span></div>
+      <div><strong>MCP Integration Programme</strong><span>Architecture, requirements and delivery</span></div>
     </div>
-    <div class="nav-title">Document sections</div>
+    <div class="nav-title">Sections</div>
     <nav id="nav"></nav>
-    <div class="rail-note"><strong>Working document</strong>Prepared for stakeholder review. Scope and timing depend on access, test accounts and provider approval.</div>
+    <div class="rail-note"><strong>Working document</strong>Timings assume the client inputs listed under Requirements are available on day 1. Provider approval times are not included.</div>
   </aside>
 
   <main>
     <header class="mast">
-      <div class="mast-meta">Internal programme · Version 2.0 · 06 October 2026</div>
+      <div class="mast-meta">Internal programme · Version 3.0 · 07 October 2026</div>
       <button class="print" id="printButton"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M7 8V3h10v5M7 17H4V9h16v8h-3M7 14h10v7H7z"/></svg><span>Print brief</span></button>
     </header>
 
@@ -311,8 +321,8 @@ details.card.q summary{font:600 16px var(--sans)}
       <div class="executive">
         <div>
           <div class="kicker">Executive recommendation</div>
-          <h1>Build one controlled MCP pilot, not four isolated experiments.</h1>
-          <p class="summary">Create a first functional version connecting Claude to Swiss case law and three fitness platforms through one governed architecture. Reuse the community servers for rapid validation, while keeping every provider adapter replaceable.</p>
+          <h1>Four MCP servers, one governed architecture, 12 working days.</h1>
+          <p class="summary">A senior AI engineer can deliver a functional pilot connecting Claude to OpenCaseLaw, Garmin, MyFitnessPal and TrainingPeaks in 12 working days, including authentication, access control, security and handover. The plan proves one public and one private pattern first, then repeats it.</p>
           <div class="chips"><span class="chip">Read-only first</span><span class="chip">Role-based access</span><span class="chip">Replaceable adapters</span><span class="chip">Audit-ready design</span></div>
         </div>
         <div class="hub">
@@ -329,7 +339,7 @@ details.card.q summary{font:600 16px var(--sans)}
             <circle r="5" fill="#0f766e"><animateMotion dur="3s" begin="1.4s" repeatCount="indefinite" path="M320 150C360 150 360 250 400 250"/></circle>
             <rect x="200" y="105" width="120" height="90" rx="14" fill="#0f1b2d"/>
             <text x="260" y="143" text-anchor="middle" fill="#fff" font-size="16" font-weight="700">Claude</text>
-            <text x="260" y="165" text-anchor="middle" fill="#9fb0cc" font-size="12">+ firm gateway</text>
+            <text x="260" y="165" text-anchor="middle" fill="#9fb0cc" font-size="12">+ gateway</text>
             <rect x="10" y="118" width="110" height="64" rx="10" fill="#e6edfd" stroke="#1d4ed8" stroke-width="2"/>
             <text x="65" y="146" text-anchor="middle" fill="#0f1b2d" font-size="13" font-weight="700">OpenCaseLaw</text>
             <text x="65" y="164" text-anchor="middle" fill="#1d4ed8" font-size="11">all employees</text>
@@ -339,57 +349,54 @@ details.card.q summary{font:600 16px var(--sans)}
               <rect x="400" y="222" width="110" height="56" rx="10" fill="#dff3f0" stroke="#0f766e" stroke-width="2"/><text x="455" y="255" text-anchor="middle">TrainingPeaks</text>
             </g>
           </svg>
-          <div class="hub-cap">Blue is open to the whole firm. Green is restricted to the fitness group.</div>
+          <div class="hub-cap">Blue is open to all employees. Green is restricted to the fitness group.</div>
         </div>
       </div>
       <div class="stats">
-        <div class="stat"><span>Provider domains</span><b data-count="4">4</b><small>law + fitness</small></div>
-        <div class="stat"><span>Access populations</span><b data-count="2">2</b><small>firm-wide + selected group</small></div>
-        <div class="stat"><span>Delivery checkpoints</span><b data-count="5">5</b><small>feasibility to handover</small></div>
-        <div class="stat"><span>Initial operating mode</span><b>RO</b><small>read-only by default</small></div>
-        <div class="stat"><span>Recommended commitment</span><b>8–10</b><small>working days for V1</small></div>
+        <div class="stat"><span>MCP servers</span><b data-count="4">4</b><small>1 legal, 3 fitness</small></div>
+        <div class="stat"><span>Access groups</span><b data-count="2">2</b><small>all staff and fitness pilot</small></div>
+        <div class="stat"><span>Delivery checkpoints</span><b data-count="6">6</b><small>audit to handover</small></div>
+        <div class="stat"><span>Operating mode</span><b>RO</b><small>read-only in V1</small></div>
+        <div class="stat"><span>Committed delivery</span><b data-count="12">12</b><small>working days (about 2.5 weeks)</small></div>
       </div>
       <div class="grid three">
-        <article class="card"><h3>What the client wants</h3><p>Claude should answer using authorised data from OpenCaseLaw, Garmin, MyFitnessPal and TrainingPeaks without users manually copying information.</p></article>
-        <article class="card"><h3>What the pilot proves</h3><p>Technical compatibility, authentication paths, access separation and useful end-to-end queries for each platform.</p></article>
-        <article class="card"><h3>What it does not claim</h3><p>This is not yet a production rollout, formal legal sign-off, full security audit or guaranteed provider partnership approval.</p></article>
+        <article class="card"><h3>What the client wants</h3><p>Claude answers using authorised data from OpenCaseLaw, Garmin, MyFitnessPal and TrainingPeaks, with proper authentication and security, and without anyone copying data by hand.</p></article>
+        <article class="card"><h3>What the 12 days prove</h3><p>All four servers connected, per-user sign-in, two access groups, protected remote hosting, negative tests, a repeatable setup guide and a live demo.</p></article>
+        <article class="card"><h3>What it does not claim</h3><p>Not a production rollout, legal sign-off, a full security audit or guaranteed approval from Garmin, MyFitnessPal or TrainingPeaks for official API access.</p></article>
       </div>
-      <div class="notice"><strong>Where to start:</strong> open <b>Live demo</b> to watch a request travel through the system, then <b>Target architecture</b> to click through each component.</div>
+      <div class="sec"><h3>How the 12 days are shaped</h3><p>Build the two hardest patterns first, then replicate. About a quarter of the time is deliberate margin for the fragile parts.</p></div>
+      <div class="grid two">
+        <article class="card"><h3>Pattern first</h3><p>Day 3 proves the simplest case: a public remote server with no credentials (OpenCaseLaw). Days 4 and 5 prove the hardest: personal data, login with MFA, stored tokens (Garmin).</p></article>
+        <article class="card"><h3>Then replicate</h3><p>Days 7 and 8 reuse the same gateway, policy and test method for MyFitnessPal and TrainingPeaks. Days 11 and 12 absorb overruns before documentation and the demo.</p></article>
+      </div>
+      <div class="notice"><strong>Where to start:</strong> open <b>Live demo</b> to watch a question travel through Claude, the gateway and the right MCP server. Then open <b>Requirements</b> to see what the client and our team each provide.</div>
     </section>
 
     <!-- LIVE DEMO -->
     <section class="page" id="demo">
       <div class="page-head">
         <h2>Live demo</h2>
-        <p>Pick who you are, then ask Claude a question. The diagram shows what happens behind the scenes. All results are sample data to illustrate the flow.</p>
+        <p>Choose who is signed in, then pick a question. Watch Claude scan the four servers, choose a tool, pass the gateway checks and return the answer. All answers are sample data that illustrate the flow.</p>
       </div>
       <div class="ctlbar"><b>Signed in as</b>
         <div class="seg" id="roleSeg" role="group" aria-label="User role">
           <button class="on" data-role="fitness">Fitness pilot member</button>
           <button data-role="employee">Firm employee</button>
         </div>
+        <label class="switch"><input type="checkbox" id="simExpire"> Simulate an expired Garmin session</label>
       </div>
       <div class="diagram" style="margin-bottom:18px">
-        <svg viewBox="0 0 900 190" id="demoSvg" role="img" aria-label="Request path from user to Claude, gateway, adapter and platform">
-          <g stroke="#dde1e8" stroke-width="3" fill="none"><path d="M130 100H195M315 100H395M515 100H590M710 100H770"/></g>
-          <g class="dnode" id="n-user"><rect x="10" y="68" width="120" height="64" rx="12"/><text x="70" y="97" text-anchor="middle" font-size="15" font-weight="700" fill="#0f1b2d">User</text><text x="70" y="116" text-anchor="middle" font-size="11.5" fill="#5a6678">asks a question</text></g>
-          <g class="dnode" id="n-claude"><rect x="195" y="68" width="120" height="64" rx="12"/><text x="255" y="97" text-anchor="middle" font-size="15" font-weight="700" fill="#0f1b2d">Claude</text><text x="255" y="116" text-anchor="middle" font-size="11.5" fill="#5a6678">picks a tool</text></g>
-          <g class="dnode" id="n-gateway"><rect x="395" y="68" width="120" height="64" rx="12"/><text x="455" y="97" text-anchor="middle" font-size="15" font-weight="700" fill="#0f1b2d">Gateway</text><text x="455" y="116" text-anchor="middle" font-size="11.5" fill="#5a6678">checks access</text></g>
-          <g class="dnode" id="n-adapter"><rect x="590" y="68" width="120" height="64" rx="12"/><text x="650" y="97" text-anchor="middle" font-size="15" font-weight="700" fill="#0f1b2d">Adapter</text><text x="650" y="116" text-anchor="middle" font-size="11.5" fill="#5a6678">translates</text></g>
-          <g class="dnode" id="n-platform"><rect x="770" y="68" width="120" height="64" rx="12"/><text x="830" y="97" text-anchor="middle" font-size="15" font-weight="700" fill="#0f1b2d" id="platLabel">Platform</text><text x="830" y="116" text-anchor="middle" font-size="11.5" fill="#5a6678">holds the data</text></g>
-          <circle id="pkt" r="9" cx="70" cy="100" fill="#1d4ed8" opacity="0"/>
-          <text id="dcap" x="450" y="170" text-anchor="middle" font-size="14" fill="#5a6678">Choose a question below to start.</text>
-        </svg>
+        <svg viewBox="0 0 940 390" id="demoSvg" role="img" aria-label="Request path from user to Claude, gateway, one of four MCP servers and its platform"></svg>
       </div>
       <div class="demo">
         <div class="panel">
           <div class="panel-h">Conversation <button class="btn ghost" id="demoReset" style="padding:4px 10px;font-size:13px">Clear</button></div>
-          <div class="chat" id="chat"><div class="empty">Nothing asked yet. Pick a question to see Claude, the gateway and the platform work together.</div></div>
+          <div class="chat" id="chat"></div>
           <div class="chips-q" id="qchips"></div>
         </div>
         <div style="display:grid;gap:18px">
-          <div class="panel"><div class="panel-h">What is happening</div><ul class="log" id="log"><li><i></i><span>Waiting for a question.</span></li></ul></div>
-          <div class="panel"><div class="panel-h">Tool call sent by Claude</div><pre id="toolcall">// appears when Claude picks a tool</pre></div>
+          <div class="panel"><div class="panel-h">What is happening</div><ul class="log" id="log"></ul></div>
+          <div class="panel"><div class="panel-h">Tool call sent by Claude</div><pre id="toolcall"></pre></div>
         </div>
       </div>
     </section>
@@ -398,17 +405,28 @@ details.card.q summary{font:600 16px var(--sans)}
     <section class="page" id="fundamentals">
       <div class="page-head">
         <h2>MCP fundamentals</h2>
-        <p>MCP (Model Context Protocol) is an open standard that lets an AI assistant like Claude connect to external data and services. Think of it as a universal plug between Claude and a platform.</p>
+        <p>MCP (Model Context Protocol) is an open standard that lets an AI assistant such as Claude discover and call external tools. Think of it as a standard plug between Claude and a business system.</p>
       </div>
       <div class="sec"><h3>A question’s journey</h3><p>Step through what happens when someone asks “What was my average sleep this week?”</p></div>
       <div id="stepJourney"></div>
+
+      <div class="sec"><h3>What travels on the wire</h3><p>Claude and a server exchange short structured messages. Pick a message to see its role.</p></div>
+      <div class="ctlbar"><div class="seg" id="msgSeg"><button class="on" data-m="0">1. List tools</button><button data-m="1">2. Call a tool</button><button data-m="2">3. Receive result</button></div></div>
+      <div class="grid two"><pre id="msgPre"></pre><div class="card"><h3 id="msgTitle"></h3><p id="msgText"></p></div></div>
+
+      <div class="sec"><h3>The three building blocks</h3></div>
+      <div class="grid three">
+        <article class="card"><h3>Host</h3><p>The application the person uses, here Claude. It decides which tool fits the question and asks for consent where required.</p></article>
+        <article class="card"><h3>MCP server</h3><p>An adapter that offers tools, validates inputs and translates each call into the platform’s real API. It owns no data itself.</p></article>
+        <article class="card"><h3>Platform</h3><p>The system that actually holds the data and enforces its own permissions, limits and availability.</p></article>
+      </div>
 
       <div class="sec"><h3>Local or remote MCP</h3><p>The same connector can run on one person’s computer or on a server run by the firm. Switch to compare.</p></div>
       <div class="ctlbar"><div class="seg" id="locSeg"><button class="on" data-loc="local">Local MCP</button><button data-loc="remote">Remote MCP</button></div></div>
       <div class="diagram"><svg viewBox="0 0 900 190" id="locSvg" role="img" aria-label="Comparison of local and remote MCP deployment"></svg></div>
       <div class="grid two" style="margin-top:14px" id="locCards"></div>
 
-      <div class="sec"><h3>Anatomy of a tool</h3><p>A tool is a named action the server offers to Claude. Claude reads the description to decide when to use it. Hover a part to see what it does.</p></div>
+      <div class="sec"><h3>Anatomy of a tool</h3><p>A tool is a named action the server offers to Claude. Hover or tap a part to see what it does.</p></div>
       <div class="grid two">
         <pre id="toolAnat"><span data-t="name">"name"</span>: "get_sleep_data",
 <span data-t="desc">"description"</span>: "Average and nightly sleep
@@ -436,8 +454,8 @@ details.card.q summary{font:600 16px var(--sans)}
       <div class="diagram">
         <svg viewBox="0 0 1000 560" id="archSvg" role="group" aria-label="Interactive architecture diagram">
           <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#5a6678"/></marker></defs>
-          <rect x="225" y="25" width="310" height="510" rx="16" fill="#f1f4fb" stroke="#1d4ed8" stroke-width="2" stroke-dasharray="2 0"/>
-          <text x="380" y="52" text-anchor="middle" font-size="15" font-weight="700" fill="#1d4ed8">MCP Gateway · run by the firm</text>
+          <rect x="225" y="25" width="310" height="510" rx="16" fill="#f1f4fb" stroke="#1d4ed8" stroke-width="2"/>
+          <text x="380" y="52" text-anchor="middle" font-size="15" font-weight="700" fill="#1d4ed8">MCP gateway, run by the firm</text>
           <g fill="none" stroke="#5a6678" stroke-width="2" marker-end="url(#ar)">
             <path class="flow" d="M150 280H223"/>
             <path class="flow" d="M535 100C575 100 580 85 618 85"/>
@@ -448,10 +466,10 @@ details.card.q summary{font:600 16px var(--sans)}
           </g>
           <g class="arch-node" data-info="claude" tabindex="0" role="button"><rect class="bx" x="20" y="225" width="130" height="110" rx="12" fill="#0f1b2d" stroke="#0f1b2d"/><text x="85" y="275" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">Claude</text><text x="85" y="297" text-anchor="middle" fill="#9fb0cc" font-size="12">web &amp; app</text></g>
           <g class="arch-node" data-info="identity" tabindex="0" role="button"><rect class="bx" x="250" y="72" width="260" height="62" rx="10" fill="#fff" stroke="#c4cbd8" stroke-width="1.5"/><text x="380" y="98" text-anchor="middle" font-size="14" font-weight="700" fill="#0f1b2d">Identity</text><text x="380" y="118" text-anchor="middle" font-size="12" fill="#5a6678">Microsoft sign-in</text></g>
-          <g class="arch-node" data-info="policy" tabindex="0" role="button"><rect class="bx" x="250" y="172" width="260" height="62" rx="10" fill="#fff" stroke="#c4cbd8" stroke-width="1.5"/><text x="380" y="198" text-anchor="middle" font-size="14" font-weight="700" fill="#0f1b2d">Access policy</text><text x="380" y="218" text-anchor="middle" font-size="12" fill="#5a6678">groups · roles · per tool</text></g>
-          <g class="arch-node" data-info="vault" tabindex="0" role="button"><rect class="bx" x="250" y="272" width="260" height="62" rx="10" fill="#fff" stroke="#c4cbd8" stroke-width="1.5"/><text x="380" y="298" text-anchor="middle" font-size="14" font-weight="700" fill="#0f1b2d">Token vault</text><text x="380" y="318" text-anchor="middle" font-size="12" fill="#5a6678">one set per user · encrypted</text></g>
-          <g class="arch-node" data-info="guard" tabindex="0" role="button"><rect class="bx" x="250" y="372" width="260" height="62" rx="10" fill="#fff" stroke="#c4cbd8" stroke-width="1.5"/><text x="380" y="398" text-anchor="middle" font-size="14" font-weight="700" fill="#0f1b2d">Confirmation guard</text><text x="380" y="418" text-anchor="middle" font-size="12" fill="#5a6678">asks before any change</text></g>
-          <g class="arch-node" data-info="audit" tabindex="0" role="button"><rect class="bx" x="250" y="456" width="260" height="62" rx="10" fill="#fff" stroke="#c4cbd8" stroke-width="1.5"/><text x="380" y="482" text-anchor="middle" font-size="14" font-weight="700" fill="#0f1b2d">Audit log</text><text x="380" y="502" text-anchor="middle" font-size="12" fill="#5a6678">who · what · when (no content)</text></g>
+          <g class="arch-node" data-info="policy" tabindex="0" role="button"><rect class="bx" x="250" y="172" width="260" height="62" rx="10" fill="#fff" stroke="#c4cbd8" stroke-width="1.5"/><text x="380" y="198" text-anchor="middle" font-size="14" font-weight="700" fill="#0f1b2d">Access policy</text><text x="380" y="218" text-anchor="middle" font-size="12" fill="#5a6678">groups, roles, per tool</text></g>
+          <g class="arch-node" data-info="vault" tabindex="0" role="button"><rect class="bx" x="250" y="272" width="260" height="62" rx="10" fill="#fff" stroke="#c4cbd8" stroke-width="1.5"/><text x="380" y="298" text-anchor="middle" font-size="14" font-weight="700" fill="#0f1b2d">Secret store and token vault</text><text x="380" y="318" text-anchor="middle" font-size="12" fill="#5a6678">one set per user, encrypted</text></g>
+          <g class="arch-node" data-info="guard" tabindex="0" role="button"><rect class="bx" x="250" y="372" width="260" height="62" rx="10" fill="#fff" stroke="#c4cbd8" stroke-width="1.5"/><text x="380" y="398" text-anchor="middle" font-size="14" font-weight="700" fill="#0f1b2d">Tool allowlist and confirmation</text><text x="380" y="418" text-anchor="middle" font-size="12" fill="#5a6678">read-only tools only in V1</text></g>
+          <g class="arch-node" data-info="audit" tabindex="0" role="button"><rect class="bx" x="250" y="456" width="260" height="62" rx="10" fill="#fff" stroke="#c4cbd8" stroke-width="1.5"/><text x="380" y="482" text-anchor="middle" font-size="14" font-weight="700" fill="#0f1b2d">Audit log</text><text x="380" y="502" text-anchor="middle" font-size="12" fill="#5a6678">who, what, when (no content)</text></g>
           <g id="adapters"></g>
           <g id="platforms"></g>
         </svg>
@@ -459,68 +477,147 @@ details.card.q summary{font:600 16px var(--sans)}
       <div class="info" id="archInfo"></div>
       <div class="sec"><h3>Why this shape</h3></div>
       <div class="grid three">
-        <article class="card"><h3>One door</h3><p>Users and administrators deal with one stable entry point. Rules, logging and confirmations live in one place instead of being rebuilt per platform.</p></article>
+        <article class="card"><h3>One door</h3><p>Users and administrators deal with one stable entry point. Rules, logging and tool filtering live in one place instead of being rebuilt per platform.</p></article>
         <article class="card"><h3>Swappable parts</h3><p>Change the Garmin adapter from a community server to the official API without touching Claude or what users see. Use the stage switch above to see the change.</p></article>
-        <article class="card"><h3>Law and fitness separated</h3><p>OpenCaseLaw needs no personal credentials. The fitness adapters only run with the user’s own tokens and only for the pilot group.</p></article>
+        <article class="card"><h3>Legal and fitness separated</h3><p>OpenCaseLaw needs no personal credentials. The fitness adapters only run with the user’s own tokens and only for the pilot group.</p></article>
       </div>
-      <div class="notice warn"><strong>Open point:</strong> the existing Microsoft sign-in in <code>bear_backend</code> may be reusable for the gateway. This needs confirming before the design is final.</div>
+      <div class="notice warn"><strong>Open point:</strong> the existing Microsoft sign-in in the client’s backend may be reusable for the gateway. This needs confirming on day 1, because it changes days 6 and 9.</div>
+    </section>
+
+    <!-- APPROACH -->
+    <section class="page" id="approach">
+      <div class="page-head">
+        <h2>Delivery approach</h2>
+        <p>Do not build four connectors in parallel. Prove one public and one private pattern, check them against a gate, then repeat the pattern twice.</p>
+      </div>
+      <div class="grid two">
+        <article class="card"><span class="tag law">Pattern A · public</span><h3 style="margin-top:10px">OpenCaseLaw</h3><p>A remote server that needs no sign-up or key. It validates Claude administration, remote transport, tool discovery and whether legal answers carry verifiable sources. Day 3.</p></article>
+        <article class="card"><span class="tag fit">Pattern B · private</span><h3 style="margin-top:10px">Garmin</h3><p>Personal data, MFA login, stored tokens, a large tool surface to cut down, and a remote endpoint that needs its own protection. This is the hard case. Days 4 and 5.</p></article>
+      </div>
+      <div class="sec"><h3>Pattern replication</h3><p>Choose a moment in the plan to see which connectors are working and which parts of the gateway exist by then.</p></div>
+      <div class="ctlbar"><div class="seg" id="stageSeg">
+        <button class="on" data-s="0">After day 3</button><button data-s="1">After day 5</button><button data-s="2">After day 6</button><button data-s="3">After day 8</button><button data-s="4">After day 12</button></div></div>
+      <div class="diagram"><svg viewBox="0 0 940 300" id="stageSvg" role="img" aria-label="Connector status at the selected moment"></svg></div>
+      <div class="info" id="stageInfo" style="grid-template-columns:1fr"></div>
+
+      <div class="sec"><h3>Architecture gate</h3><p>Reached after the Garmin work and the gateway. Do not replicate the pattern until these six conditions pass. Tick them to simulate the gate.</p></div>
+      <div class="card"><b id="gateLabel">0 of 6 conditions confirmed</b><div class="progress"><i id="gateBar"></i></div><div id="gateList"></div></div>
+      <div class="notice ok" id="gateNote" style="display:none"><strong>Gate passed.</strong> Replicate the pattern for MyFitnessPal (day 7) and TrainingPeaks (day 8).</div>
+      <div class="notice warn" id="gateWarn"><strong>If the gate fails:</strong> margin on days 10 and 11 is used to fix it. If two conditions are still failing on day 6, the plan is re-baselined with the client rather than silently stretched.</div>
     </section>
 
     <!-- CONNECTORS -->
     <section class="page" id="connectors">
       <div class="page-head">
         <h2>Platform dossiers</h2>
-        <p>Four very different platforms. Each dossier covers what it holds, the tools exposed, how sign-in works and what to watch. Scores are our own assessment from testing and reading the repos.</p>
+        <p>Four very different platforms. Each dossier covers what it holds, the tools exposed, how sign-in works, what we need and what to watch. Scores are our own assessment from testing and reading the repositories.</p>
       </div>
       <div class="tabs" id="dosTabs" role="tablist"></div>
       <div id="dosBody"></div>
     </section>
 
+    <!-- REQUIREMENTS -->
+    <section class="page" id="requirements">
+      <div class="page-head">
+        <h2>Requirements and assumptions</h2>
+        <p>Everything needed to start and finish the 12 days, split by who provides it. Tick items as they are received or confirmed. The clock starts when the mandatory items for day 1 are in place.</p>
+      </div>
+      <div class="card" style="margin-bottom:16px">
+        <b id="reqLabel">0 of 0 received or confirmed</b>
+        <div class="progress"><i id="reqBar"></i></div>
+        <p id="reqNote" style="font-size:14.5px;margin:6px 0 0"></p>
+      </div>
+      <div class="ctlbar">
+        <div class="seg" id="reqType">
+          <button class="on" data-t="all">All</button><button data-t="c">Client provides</button><button data-t="t">Our team provides</button><button data-t="a">Assumptions to confirm</button>
+        </div>
+        <div class="seg" id="reqPlat">
+          <button class="on" data-p="all">All platforms</button><button data-p="law">OpenCaseLaw</button><button data-p="garmin">Garmin</button><button data-p="mfp">MyFitnessPal</button><button data-p="tp">TrainingPeaks</button>
+        </div>
+      </div>
+      <div class="card" id="reqList"></div>
+
+      <div class="sec"><h3>What each platform needs for the pilot</h3><p>No API key is needed for the community servers. Official API access is a separate, slower track.</p></div>
+      <div class="matrix"><table>
+        <thead><tr><th>Platform</th><th>Needed for the community-server pilot</th><th>API key</th><th>Official route</th><th>Planning consequence</th></tr></thead>
+        <tbody>
+          <tr><td><b>OpenCaseLaw</b></td><td>Public endpoint and Claude Owner approval</td><td>No</td><td>Public remote server already available</td><td>Can start on day 3 with no waiting</td></tr>
+          <tr><td><b>Garmin</b></td><td>Test account, login, live MFA, persisted tokens, Python 3.12+</td><td>Not for the repo</td><td>Garmin developer programme; approval and a commercial licence may apply</td><td>MFA slot must be booked for day 4. Approval is not in the estimate</td></tr>
+          <tr><td><b>MyFitnessPal</b></td><td>Test account and active browser session, Python 3.10 to 3.12</td><td>Not for the repo</td><td>Partner client ID and secret with OAuth 2.0 consent</td><td>Fragile login. Day 11 holds margin</td></tr>
+          <tr><td><b>TrainingPeaks</b></td><td>Test account and session cookie in a keyring</td><td>Not for the repo</td><td>Approved-developer API, published response time 7 to 10 days</td><td>Application runs in parallel and is external lead time</td></tr>
+        </tbody></table></div>
+
+      <div class="sec"><h3>Handling credentials</h3></div>
+      <div class="twocol">
+        <article class="card"><h3>We should not receive</h3><ul><li>Real employee passwords by email, chat, tickets or source files</li><li>Shared cookies copied between people</li><li>Production health data before consent and retention are agreed</li></ul></article>
+        <article class="card"><h3>Preferred handling</h3><ul><li>Test accounts signed in live during a short call</li><li>Secrets delivered through the client’s approved secret channel</li><li>Separate development and production credentials</li></ul></article>
+      </div>
+
+      <div class="sec"><h3>Data examples to request</h3></div>
+      <div class="card"><p>For each platform, five representative questions with expected fields, plus one empty-data case, one unauthorised case and one expired-session case. These become the acceptance tests on days 9 and 10.</p></div>
+    </section>
+
     <!-- SECURITY -->
     <section class="page" id="security">
       <div class="page-head">
-        <h2>Security &amp; access</h2>
-        <p>Law is for everyone in the firm. Fitness is for a selected group. Each person connects their own account and nobody else can see it.</p>
+        <h2>Security and access</h2>
+        <p>Legal search is for everyone in the firm. Fitness is for a selected group. Each person connects their own account and nobody else can see it.</p>
       </div>
       <div class="ctlbar"><b>View permissions as</b>
         <div class="seg" id="permSeg"><button class="on" data-r="employee">Firm employee</button><button data-r="fitness">Fitness pilot member</button><button data-r="admin">Administrator</button></div>
       </div>
       <div class="matrix"><table id="permTable"></table></div>
-      <p style="font-size:14px;color:var(--muted);margin-top:8px">Phase 1 is read-only. “Confirm first” applies once write actions are switched on in phase 2.</p>
+      <p style="font-size:14px;color:var(--muted);margin-top:8px">V1 is read-only. “Confirm first” applies only if write actions are approved in a later phase.</p>
 
       <div class="sec"><h3>How a personal account gets connected</h3><p>Step through the sign-in and token journey. Passwords and cookies are never shared between users.</p></div>
       <div id="stepToken"></div>
 
+      <div class="sec"><h3>Defence in layers</h3><p>A request must pass every layer. Select a layer to see what it stops.</p></div>
+      <div class="ctlbar"><div class="seg" id="layerSeg"></div></div>
+      <div class="diagram"><svg viewBox="0 0 900 230" id="layerSvg" role="img" aria-label="Security layers"></svg></div>
+      <div class="info" id="layerInfo" style="grid-template-columns:1fr"></div>
+
       <div class="sec"><h3>What is stored</h3></div>
       <div class="twocol">
-        <article class="card"><h3>Kept by the gateway</h3><ul><li>Per-user provider tokens, encrypted</li><li>Group membership (from the firm’s directory)</li><li>Audit entries: user, tool, time, allowed or refused</li></ul></article>
+        <article class="card"><h3>Kept by the gateway</h3><ul><li>Per-user provider tokens, encrypted</li><li>Group membership from the firm’s directory</li><li>Audit entries: user, tool, time, allowed or refused</li></ul></article>
         <article class="card"><h3>Not kept by the gateway</h3><ul><li>Search text or fitness values returned to Claude</li><li>Shared passwords or shared cookies</li><li>Anything for users outside the allowed group</li></ul></article>
       </div>
       <p style="font-size:14px;color:var(--muted);margin-top:8px">What Claude itself retains depends on the firm’s Claude plan settings, to be confirmed with the plan owner.</p>
 
-      <div class="sec"><h3>Before production: checklist</h3><p>Tick items as they are done. These are the gates between pilot and rollout.</p></div>
+      <div class="sec"><h3>Before production: checklist</h3><p>These are the gates between the pilot and a rollout. They are outside the 12 days unless stated.</p></div>
       <div class="card">
         <b id="chkLabel">0 of 10 complete</b>
         <div class="progress"><i id="chkBar"></i></div>
         <div id="chkList"></div>
       </div>
-      <div class="notice"><strong>Why fitness data is sensitive:</strong> weight, sleep, heart rate, stress, GPS routes and food logs are health-related personal data. In Switzerland they count as sensitive personal data under data-protection law, so the legal review comes before any production use.</div>
+      <div class="notice"><strong>Why fitness data is sensitive:</strong> weight, sleep, heart rate, stress, GPS routes and food logs are health-related personal data. Purpose, consent, retention and processor responsibilities must be confirmed under the data-protection rules that apply to the firm, before any production use.</div>
     </section>
 
     <!-- ROADMAP -->
     <section class="page" id="roadmap">
       <div class="page-head">
         <h2>Delivery roadmap</h2>
-        <p>A realistic V1 takes 8 to 10 working days. Drag the day slider to see what is under way, and click any bar for the detail.</p>
+        <p>12 working days, five days a week. Drag the day slider to see what is under way, click a bar for the sub-tasks, and set a start date to get the delivery date.</p>
       </div>
-      <div class="ctlbar"><b>Day</b><input type="range" id="daySlider" min="1" max="10" value="1" aria-label="Project day"><b id="dayLabel">Day 1</b></div>
+      <div class="ctlbar">
+        <b>Start date</b><input type="date" id="startDate" value="2026-10-12" aria-label="Start date">
+        <b>Day</b><input type="range" id="daySlider" min="1" max="12" value="1" aria-label="Project day"><b id="dayLabel">Day 1</b>
+      </div>
+      <p id="endDate" style="color:var(--muted);margin:0 0 14px"></p>
       <div class="gantt"><div class="ginner" id="gantt" style="--day:1"></div></div>
       <div class="info" id="ganttInfo" style="grid-template-columns:1fr"></div>
 
-      <div class="sec"><h3>Effort estimator</h3><p>Tick the pieces in scope to see the effort. Indicative figures that assume test accounts and Claude admin access are ready.</p></div>
+      <div class="sec"><h3>Why 12 days and not fewer</h3><p>The plan separates engineering effort from waiting time. Each risky task has margin built in.</p></div>
+      <div class="grid three">
+        <article class="card"><h3>Margin on the fragile parts</h3><p>Garmin gets two days for login, MFA and one re-authentication cycle. Day 10 absorbs access-group surprises. Day 11 absorbs any overrun from MyFitnessPal or TrainingPeaks.</p></article>
+        <article class="card"><h3>Clock-start conditions</h3><ul><li>Claude Owner and IT contact available</li><li>Garmin test account populated, MFA reachable</li><li>Host, domain, TLS and secret store approved</li><li>Read-only scope and groups agreed</li></ul></article>
+        <article class="card"><h3>The schedule stops or changes when</h3><ul><li>A provider requires approval before test access</li><li>Security requires a new identity integration</li><li>No representative account or data exists</li><li>Write actions or a production SLA enter scope</li></ul></article>
+      </div>
+
+      <div class="sec"><h3>Effort estimator</h3><p>The baseline is fixed at 12 days. Tick optional work to see its effect. Figures are indicative and assume the client inputs are ready.</p></div>
       <div class="estimate">
         <div class="card" id="estOpts"></div>
-        <div class="total"><span>Estimated effort</span><strong id="estTotal">9.5</strong><div class="bar"><i id="estBar"></i></div><p id="estNote"></p></div>
+        <div class="total"><span>Estimated effort, working days</span><strong id="estTotal">12</strong><div class="bar"><i id="estBar"></i></div><p id="estNote"></p></div>
       </div>
     </section>
 
@@ -528,7 +625,7 @@ details.card.q summary{font:600 16px var(--sans)}
     <section class="page" id="deliverables">
       <div class="page-head">
         <h2>Deliverables</h2>
-        <p>What the client receives at the end of the pilot. Open a card for the contents.</p>
+        <p>What the client receives. A connector counts as delivered only when a documented Claude query reaches the intended source and returns a verified, permission-appropriate result.</p>
       </div>
       <div class="grid two" id="delivGrid"></div>
     </section>
@@ -539,7 +636,7 @@ details.card.q summary{font:600 16px var(--sans)}
         <h2>Decisions required</h2>
         <p>Points the client has not settled yet. Pick an option on each card to see what it means for scope and timing.</p>
       </div>
-      <div class="card" style="margin-bottom:18px"><b id="decLabel">0 of 6 decided</b><div class="progress"><i id="decBar"></i></div><p id="decSummary" style="margin:6px 0 0;font-size:14.5px">No decision recorded yet.</p></div>
+      <div class="card" style="margin-bottom:18px"><b id="decLabel">0 of 7 decided</b><div class="progress"><i id="decBar"></i></div><p id="decSummary" style="margin:6px 0 0;font-size:14.5px">No decision recorded yet.</p></div>
       <div class="grid two" id="decGrid"></div>
     </section>
 
@@ -547,16 +644,15 @@ details.card.q summary{font:600 16px var(--sans)}
     <section class="page" id="sources">
       <div class="page-head">
         <h2>Sources</h2>
-        <p>References used for this brief. The three fitness repos are examples; the final implementations may differ.</p>
+        <p>Official documentation is used for architecture and governance. The community repositories are replaceable pilot candidates: a working repository proves feasibility, not production suitability.</p>
       </div>
       <ul class="src-list">
+        <li><strong><a target="_blank" rel="noopener" href="https://modelcontextprotocol.io">Model Context Protocol</a></strong><span>Official specification and documentation.</span></li>
+        <li><strong><a target="_blank" rel="noopener" href="https://support.claude.com">Claude Help Center</a></strong><span>Custom connector setup and organisation-level administration.</span></li>
+        <li><strong><a target="_blank" rel="noopener" href="https://mcp.opencaselaw.ch">OpenCaseLaw MCP</a></strong><span>Remote, read-only MCP server for case law.</span></li>
         <li><strong><a target="_blank" rel="noopener" href="https://github.com/taxuspt/garmin_mcp">garmin_mcp</a></strong><span>Community MCP server for Garmin, tested by the client.</span></li>
         <li><strong><a target="_blank" rel="noopener" href="https://github.com/AdamWalt/myfitnesspal-mcp-python">myfitnesspal-mcp-python</a></strong><span>Community MCP server for MyFitnessPal, tested by the client.</span></li>
         <li><strong><a target="_blank" rel="noopener" href="https://github.com/JamsusMaximus/trainingpeaks-mcp">trainingpeaks-mcp</a></strong><span>Community MCP server for TrainingPeaks, tested by the client.</span></li>
-        <li><strong><a target="_blank" rel="noopener" href="https://mcp.opencaselaw.ch">OpenCaseLaw MCP</a></strong><span>Remote, read-only MCP server for Swiss case law.</span></li>
-        <li><strong><a target="_blank" rel="noopener" href="https://modelcontextprotocol.io">Model Context Protocol</a></strong><span>Official specification and documentation.</span></li>
-        <li><strong><a target="_blank" rel="noopener" href="https://www.edoeb.admin.ch">FDPIC</a></strong><span>Swiss Federal Data Protection and Information Commissioner, for health and personal data guidance.</span></li>
-        <li><strong><a target="_blank" rel="noopener" href="https://support.claude.com">Claude Help Center</a></strong><span>Connector setup and organisation-level administration.</span></li>
       </ul>
     </section>
   </main>
@@ -576,8 +672,10 @@ const PAGES = [
   ['demo','Live demo','<path d="M8 5v14l11-7z"/>'],
   ['fundamentals','MCP fundamentals','<circle cx="5" cy="12" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="19" cy="18" r="2"/><path d="M7 12h5m2-4 3-1m-3 9 3 1m-5-8v6"/>'],
   ['architecture','Target architecture','<rect x="3" y="3" width="18" height="5"/><rect x="3" y="16" width="6" height="5"/><rect x="15" y="16" width="6" height="5"/><path d="M12 8v4M6 12h12M6 12v4m12-4v4"/>'],
+  ['approach','Delivery approach','<path d="M4 12h6l2-6 2 12 2-6h4"/>'],
   ['connectors','Platform dossiers','<path d="M9 3v5m6-5v5M7 8h10v4a5 5 0 0 1-10 0V8Zm5 9v4"/>'],
-  ['security','Security &amp; access','<path d="M12 3 4 6v5c0 5 3.4 8.5 8 10 4.6-1.5 8-5 8-10V6l-8-3Z"/><path d="m9 12 2 2 4-5"/>'],
+  ['requirements','Requirements','<path d="M9 11l2 2 4-4"/><rect x="4" y="4" width="16" height="16" rx="2"/>'],
+  ['security','Security and access','<path d="M12 3 4 6v5c0 5 3.4 8.5 8 10 4.6-1.5 8-5 8-10V6l-8-3Z"/><path d="m9 12 2 2 4-5"/>'],
   ['roadmap','Delivery roadmap','<path d="M5 3v18M5 6h12l-2 4 2 4H5"/>'],
   ['deliverables','Deliverables','<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>'],
   ['decisions','Decisions required','<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3 2.45c-.5.2-.5.55-.5 1.55m0 4h.01"/>'],
@@ -586,7 +684,8 @@ const PAGES = [
 $('#nav').innerHTML = PAGES.map(([id, t, ic]) => `<button data-page="${id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor">${ic}</svg>${t}</button>`).join('');
 const navBtns = $$('#nav button'), pages = $$('.page');
 function showPage(id, upd = true) {
-  const t = document.getElementById(id) && pages.includes(document.getElementById(id)) ? document.getElementById(id) : $('#overview');
+  const el = document.getElementById(id);
+  const t = el && pages.includes(el) ? el : $('#overview');
   pages.forEach(p => p.classList.toggle('active', p === t));
   navBtns.forEach(b => b.classList.toggle('active', b.dataset.page === t.id));
   if (upd) { try { history.replaceState(null, '', '#' + t.id); } catch (e) {} }
@@ -597,15 +696,13 @@ navBtns.forEach(b => b.addEventListener('click', () => showPage(b.dataset.page))
 $('#printButton').addEventListener('click', () => window.print());
 window.addEventListener('hashchange', () => showPage(location.hash.slice(1) || 'overview', false));
 
-/* ---------- segmented control helper ---------- */
+/* ---------- helpers ---------- */
 function seg(root, cb) {
   $$('button', root).forEach(b => b.addEventListener('click', () => {
     $$('button', root).forEach(x => x.classList.toggle('on', x === b));
     cb(b);
   }));
 }
-
-/* ---------- generic stepper ---------- */
 function stepper(root, steps) {
   let i = 0, timer = null;
   root.className = 'stepper';
@@ -631,8 +728,17 @@ function stepper(root, steps) {
   });
   set(0);
 }
+function checklist(listEl, items, labelEl, barEl, suffix) {
+  listEl.innerHTML = items.map((c, i) => `<label class="check"><input type="checkbox" data-i="${i}"><span>${c}</span></label>`).join('');
+  $$('input', listEl).forEach(c => c.addEventListener('change', () => {
+    const n = $$('input:checked', listEl).length;
+    labelEl.textContent = `${n} of ${items.length} ${suffix}`;
+    barEl.style.width = n / items.length * 100 + '%';
+    listEl.dispatchEvent(new CustomEvent('tick', { detail: n }));
+  }));
+}
 
-/* ---------- overview: count up ---------- */
+/* ---------- overview count up ---------- */
 document.addEventListener('pageshow', e => {
   if (e.detail !== 'overview' || reduced) return;
   $$('[data-count]').forEach(el => {
@@ -642,39 +748,64 @@ document.addEventListener('pageshow', e => {
 });
 
 /* ---------- LIVE DEMO ---------- */
-const NODE = { user: [70, 100], claude: [255, 100], gateway: [455, 100], adapter: [650, 100], platform: [830, 100] };
+const SRV = { law: 'OpenCaseLaw', garmin: 'Garmin', mfp: 'MyFitnessPal', tp: 'TrainingPeaks' };
+const SRVY = { law: 20, garmin: 110, mfp: 200, tp: 290 };
+const C = { user: [75, 200], claude: [230, 200], gw: [395, 200] };
+Object.keys(SRV).forEach(k => { C['s-' + k] = [615, SRVY[k] + 32]; C['p-' + k] = [840, SRVY[k] + 32]; });
+function dnode(id, x, y, w, h, t, sub, fill) {
+  return `<g class="dnode" id="n-${id}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="12"${fill ? ` style="fill:${fill}"` : ''}/><text x="${x + w / 2}" y="${y + h / 2 - 2}" text-anchor="middle" font-size="14" font-weight="700" fill="#0f1b2d">${t}</text><text x="${x + w / 2}" y="${y + h / 2 + 16}" text-anchor="middle" font-size="11" fill="#5a6678">${sub}</text></g>`;
+}
+function drawDemo() {
+  let s = '<g stroke="#dde1e8" stroke-width="3" fill="none"><path d="M130 200H170M290 200H330"/>';
+  Object.keys(SRV).forEach(k => { s += `<path d="M460 200L540 ${SRVY[k] + 32}M690 ${SRVY[k] + 32}H770"/>`; });
+  s += '</g>';
+  s += dnode('user', 20, 170, 110, 60, 'User', 'asks a question') + dnode('claude', 170, 170, 120, 60, 'Claude', 'picks a server') + dnode('gw', 330, 165, 130, 70, 'Gateway', 'identity and policy');
+  Object.keys(SRV).forEach(k => {
+    s += dnode('s-' + k, 540, SRVY[k], 150, 64, SRV[k] + ' MCP', k === 'law' ? 'all employees' : 'fitness group');
+    s += dnode('p-' + k, 770, SRVY[k], 140, 64, SRV[k], 'holds the data');
+  });
+  s += '<circle id="pkt" r="9" cx="75" cy="200" fill="#1d4ed8" opacity="0"/><text id="dcap" x="470" y="380" text-anchor="middle" font-size="14" fill="#5a6678">Choose a question below to start.</text>';
+  $('#demoSvg').innerHTML = s;
+}
+drawDemo();
 const SC = {
-  law: { q: 'Find Federal Supreme Court decisions on employer liability for workplace accidents.', plat: 'OpenCaseLaw', group: 'law', write: false, tool: 'search_decisions',
-    args: { query: 'employer liability workplace accident', court: 'Federal Supreme Court', max_results: 5 },
-    note: 'No personal token needed: OpenCaseLaw is public and read-only.',
-    ans: 'I found 5 matching decisions. For each one I can give the reference, the date, the legal question and a link to the full text. Want me to compare how the court reasons across them?' },
-  sleep: { q: 'What was my average sleep this week?', plat: 'Garmin', group: 'fitness', write: false, tool: 'get_sleep_data', args: { days: 7 },
-    note: 'Adapter uses this user’s own Garmin token from the vault.',
+  law: { q: 'Find Supreme Court decisions on employer liability for workplace accidents.', targets: ['law'], calls: [['law', 'search_decisions', { query: 'employer liability workplace accident', court: 'Supreme Court', max_results: 5 }]],
+    note: 'OpenCaseLaw is public and read-only, so no personal token is needed.',
+    ans: 'I found 5 matching decisions. For each I can give the reference, the date, the legal question and a link to the full text. Want me to compare how the court reasons across them?' },
+  sleep: { q: 'What was my average sleep this week?', targets: ['garmin'], calls: [['garmin', 'get_sleep_data', { days: 7 }]],
+    note: 'The Garmin server uses this user’s own token from the vault.',
     ans: 'Your average sleep over the last 7 days was <b>7 h 12 min</b>. Your shortest night was 6 h 05 min on Thursday, and deep sleep averaged 1 h 24 min.' },
-  food: { q: 'How much protein did I eat on average this week?', plat: 'MyFitnessPal', group: 'fitness', write: false, tool: 'get_nutrition_summary', args: { days: 7, nutrient: 'protein' },
-    note: 'Adapter uses this user’s own MyFitnessPal access.',
+  food: { q: 'How much protein did I eat on average this week?', targets: ['mfp'], calls: [['mfp', 'get_nutrition_summary', { days: 7, nutrient: 'protein' }]],
+    note: 'The MyFitnessPal server uses this user’s own session.',
     ans: 'You averaged <b>128 g of protein per day</b>, about 94% of your 136 g goal. Your lowest day was Wednesday at 96 g.' },
-  train: { q: 'Review my training load and suggest a session for Tuesday.', plat: 'TrainingPeaks', group: 'fitness', write: false, tool: 'get_fitness', args: { range: '6w' },
-    note: 'Adapter uses this user’s own TrainingPeaks access.',
-    ans: 'Fitness (CTL) is <b>62</b> and fatigue (ATL) is <b>71</b>, so form is −9: tired but normal in a build block. For Tuesday I’d suggest an easy 60-minute aerobic session. I have not added it to your calendar.' },
-  del: { q: 'Delete my workout of 5 October.', plat: 'TrainingPeaks', group: 'fitness', write: true, tool: 'delete_workout', args: { date: '2026-10-05' },
-    note: 'Write action: the gateway pauses for the user’s confirmation.',
-    ans: 'Done. The workout of 5 October has been deleted.' }
+  train: { q: 'Review my training load and suggest a session for Tuesday.', targets: ['tp'], calls: [['tp', 'get_fitness', { range: '6w' }]],
+    note: 'The TrainingPeaks server uses this user’s own session.',
+    ans: 'Fitness (CTL) is <b>62</b> and fatigue (ATL) is <b>71</b>, so form is −9: tired but normal in a build block. For Tuesday I’d suggest an easy 60-minute aerobic session. I have not changed your calendar.' },
+  combo: { q: 'Did my poor sleep match my hardest training days this week?', targets: ['garmin', 'tp'], calls: [['garmin', 'get_sleep_data', { days: 7 }], ['tp', 'get_workouts', { range: '7d', fields: ['load'] }]],
+    note: 'Two servers are called in turn. Each uses this user’s own token.',
+    ans: 'Yes, partly. Your two shortest nights (6 h 05 and 6 h 20) followed your two highest-load sessions on Wednesday and Friday. Sleep was normal after the easy days.' },
+  del: { q: 'Delete my workout of 5 October.', targets: ['tp'], write: true, calls: [['tp', 'delete_workout', { date: '2026-10-05' }]],
+    note: 'In V1 this tool is not on the allowlist.',
+    ans: '' }
 };
 let role = 'fitness', running = false;
 const chat = $('#chat'), logEl = $('#log');
-$('#qchips').innerHTML = Object.entries(SC).map(([k, s]) => `<button class="qchip" data-k="${k}">${s.q.length > 44 ? s.q.slice(0, 42) + '…' : s.q}</button>`).join('');
-function mark(id, cls) { const g = $('#n-' + id); g.classList.remove('on', 'ok', 'bad', 'wait'); if (cls) g.classList.add(cls); }
-function resetNodes() { Object.keys(NODE).forEach(k => mark(k)); $('#pkt').style.opacity = 0; }
+const EMPTY = '<div class="empty">Nothing asked yet. Pick a question to see Claude, the gateway and the right MCP server work together.</div>';
+const TCPH = '// appears when Claude picks a tool';
+chat.innerHTML = EMPTY; $('#toolcall').textContent = TCPH;
+logEl.innerHTML = '<li data-ph="1"><i></i><span>Waiting for a question.</span></li>';
+$('#qchips').innerHTML = Object.entries(SC).map(([k, s]) => `<button class="qchip" data-k="${k}">${s.q.length > 46 ? s.q.slice(0, 44) + '…' : s.q}</button>`).join('');
+function mark(id, cls) { const g = $('#n-' + id); if (!g) return; g.classList.remove('on', 'ok', 'bad', 'wait'); if (cls) g.classList.add(cls); }
+function resetNodes() { Object.keys(C).forEach(k => { mark(k); const g = $('#n-' + k); if (g) g.classList.remove('dim'); }); $('#pkt').style.opacity = 0; }
 function cap(t) { $('#dcap').textContent = t; }
 function addLog(t, cls = '') { if (logEl.firstElementChild && logEl.firstElementChild.dataset.ph) logEl.innerHTML = ''; const li = document.createElement('li'); if (cls) li.className = cls; li.innerHTML = `<i></i><span>${t}</span>`; logEl.appendChild(li); logEl.scrollTop = logEl.scrollHeight; }
 function bubble(cls, html) { const e = chat.querySelector('.empty'); if (e) e.remove(); const b = document.createElement('div'); b.className = 'bubble ' + cls; b.innerHTML = html; chat.appendChild(b); chat.scrollTop = chat.scrollHeight; return b; }
 function fly(a, b, color) {
   return new Promise(res => {
-    const p = $('#pkt'), [x1, y1] = NODE[a], [x2, y2] = NODE[b];
+    const p = $('#pkt'), [x1, y1] = C[a], [x2, y2] = C[b];
     p.setAttribute('fill', color || '#1d4ed8'); p.style.opacity = 1;
     if (reduced) { p.setAttribute('cx', x2); p.setAttribute('cy', y2); return res(); }
-    const t0 = performance.now(), d = 650;
+    const t0 = performance.now(), d = 600;
     (function f(t) {
       const k = Math.min(1, (t - t0) / d), e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
       p.setAttribute('cx', x1 + (x2 - x1) * e); p.setAttribute('cy', y1 + (y2 - y1) * e);
@@ -683,84 +814,96 @@ function fly(a, b, color) {
   });
 }
 function lockChips(v) { $$('.qchip').forEach(b => b.disabled = v); }
-function ask(label) {
-  return new Promise(res => {
-    const b = bubble('c', `<b>Confirmation needed</b><br>${label}<div class="row"><button class="btn" data-y>Confirm</button><button class="btn ghost" data-n>Cancel</button></div>`);
-    b.querySelector('[data-y]').onclick = () => { b.querySelector('.row').remove(); res(true); };
-    b.querySelector('[data-n]').onclick = () => { b.querySelector('.row').remove(); res(false); };
-  });
-}
+function end() { running = false; lockChips(false); }
 async function run(key) {
   if (running) return; running = true; lockChips(true);
-  const s = SC[key]; resetNodes(); logEl.innerHTML = '';
-  $('#platLabel').textContent = s.plat;
-  $('#toolcall').textContent = '// appears when Claude picks a tool';
+  const s = SC[key], who = role === 'fitness' ? 'fitness pilot member' : 'firm employee';
+  resetNodes(); logEl.innerHTML = ''; $('#toolcall').textContent = TCPH;
   bubble('u', s.q);
   mark('user', 'on'); cap('The user asks a question in Claude.'); addLog('Question typed in Claude.'); await wait(500);
-  await fly('user', 'claude'); mark('user'); mark('claude', 'on'); cap('Claude chooses a tool.');
-  addLog(`Claude picks the tool <code>${s.tool}</code> and fills in the arguments.`);
-  $('#toolcall').textContent = JSON.stringify({ tool: s.tool, arguments: s.args }, null, 2);
-  await wait(700);
-  await fly('claude', 'gateway'); mark('claude'); mark('gateway', 'on'); cap('The gateway checks who is asking.');
-  addLog(`Gateway identifies the user as <b>${role === 'fitness' ? 'fitness pilot member' : 'firm employee'}</b> via Microsoft sign-in.`); await wait(800);
-  if (s.group === 'fitness' && role === 'employee') {
-    mark('gateway', 'bad'); cap('Refused: this user is not in the fitness group.');
-    addLog('Access policy: the <b>fitness</b> connectors are not enabled for this user. Request refused.', 'bad');
+  await fly('user', 'claude'); mark('user'); mark('claude', 'on'); cap('Claude reads the catalogue of connected servers.');
+  addLog('Claude reads the catalogue: 4 MCP servers and their tools.');
+  Object.keys(SRV).forEach(k => mark('s-' + k, 'wait')); await wait(700);
+  Object.keys(SRV).forEach(k => { mark('s-' + k); if (!s.targets.includes(k)) $('#n-s-' + k).classList.add('dim'); });
+  s.targets.forEach(k => mark('s-' + k, 'on'));
+  addLog('Best match: ' + s.calls.map(c => `<code>${c[1]}</code> on <b>${SRV[c[0]]}</b>`).join(' and ') + '.');
+  $('#toolcall').textContent = JSON.stringify(s.calls.map(c => ({ server: SRV[c[0]], tool: c[1], arguments: c[2] })), null, 2);
+  cap('Claude chose ' + s.targets.map(k => SRV[k]).join(' and ') + '.'); await wait(900);
+  await fly('claude', 'gw'); mark('claude'); mark('gw', 'on'); cap('The gateway checks who is asking.');
+  addLog(`Gateway identifies the user as <b>${who}</b> through Microsoft sign-in.`); await wait(800);
+  const needsFit = s.targets.some(k => k !== 'law');
+  if (needsFit && role === 'employee') {
+    mark('gw', 'bad'); cap('Refused: this user is not in the fitness group.');
+    addLog('Access policy: the fitness servers are not enabled for this user. Request refused.', 'bad');
     addLog('Audit log records the refusal (user, tool, time).', 'bad'); await wait(500);
-    await fly('gateway', 'claude', '#b42318'); mark('claude', 'bad');
-    bubble('c bad', 'I can’t reach ' + s.plat + ' from your account. The fitness connectors are only enabled for the pilot group. Ask an administrator to add you if you need access.');
-    running = false; lockChips(false); return;
+    await fly('gw', 'claude', '#b42318'); mark('claude', 'bad');
+    bubble('c bad', 'I can’t reach the fitness servers from your account. They are only enabled for the pilot group. Ask an administrator to add you if you need access.');
+    return end();
   }
-  mark('gateway', 'ok'); addLog('Access policy: allowed.', 'ok'); await wait(500);
+  mark('gw', 'ok'); addLog('Access policy: allowed for this user.', 'ok'); await wait(500);
   if (s.write) {
-    mark('gateway', 'wait'); cap('Waiting for the user to confirm the change.');
-    addLog('This tool changes data, so the confirmation guard pauses the request.', 'wait');
-    const yes = await ask('Claude wants to <b>delete</b> the TrainingPeaks workout of 5 October. This cannot be undone.');
-    if (!yes) {
-      mark('gateway', 'bad'); cap('Cancelled by the user. Nothing changed.');
-      addLog('User cancelled. Nothing was sent to TrainingPeaks.', 'bad');
-      await fly('gateway', 'claude', '#b42318'); mark('claude', 'on');
-      bubble('c', 'Cancelled. Nothing was changed.'); running = false; lockChips(false); return;
-    }
-    mark('gateway', 'ok'); addLog('User confirmed.', 'ok');
+    mark('gw', 'bad'); cap('Blocked: write tools are not allowed in V1.');
+    addLog('Tool allowlist: <code>delete_workout</code> is a write tool and is not enabled in V1.', 'bad');
+    addLog('Nothing was sent to TrainingPeaks. Audit log records the refusal.', 'bad'); await wait(500);
+    await fly('gw', 'claude', '#b42318'); mark('claude', 'bad');
+    bubble('c bad', 'I can’t delete that workout. This connection is read-only in the pilot, so changes to your TrainingPeaks calendar are switched off.');
+    return end();
   }
-  await fly('gateway', 'adapter'); mark('gateway'); mark('adapter', 'on'); cap('The adapter translates the call for the platform.');
-  addLog(s.note); await wait(700);
-  await fly('adapter', 'platform'); mark('adapter'); mark('platform', 'on'); cap(s.plat + ' returns the data.');
-  addLog(`${s.plat} answers the request.`); await wait(700);
-  await fly('platform', 'adapter', '#15803d'); mark('platform', 'ok'); mark('adapter', 'ok');
-  await fly('adapter', 'gateway', '#15803d'); mark('gateway', 'ok'); addLog('Gateway writes an audit entry: who, which tool, when. No content is stored.', 'ok');
-  await wait(400);
-  await fly('gateway', 'claude', '#15803d'); mark('claude', 'ok'); cap('Claude reads the result and writes the answer.'); await wait(500);
+  const results = [];
+  for (const k of s.targets) {
+    const tk = 's-' + k, pk = 'p-' + k;
+    mark('gw', 'ok');
+    await fly('gw', tk); mark(tk, 'on'); cap(SRV[k] + ' MCP receives the call.');
+    addLog(k === 'law' ? s.note : `The <b>${SRV[k]}</b> server uses this user’s own token from the vault.`); await wait(600);
+    await fly(tk, pk); mark(pk, 'on'); cap(SRV[k] + ' returns the data.');
+    if (k === 'garmin' && $('#simExpire').checked) {
+      await wait(500); mark(pk, 'bad'); mark(tk, 'bad'); cap('The Garmin session has expired.');
+      addLog('Garmin answers: session expired (401). The server does not retry with shared credentials.', 'bad');
+      addLog('Audit log records the failure without any health data.', 'bad'); await wait(500);
+      await fly(pk, 'gw', '#b42318'); await fly('gw', 'claude', '#b42318'); mark('claude', 'bad');
+      bubble('c bad', 'Your Garmin session has expired, so I can’t read your data. Reconnect your Garmin account in the connector settings, then ask again.');
+      return end();
+    }
+    addLog(`${SRV[k]} answers the request.`); await wait(500);
+    await fly(pk, tk, '#15803d'); mark(pk, 'ok'); mark(tk, 'ok');
+    await fly(tk, 'gw', '#15803d'); mark('gw', 'ok');
+    addLog('Gateway writes an audit entry: who, which tool, when. No content is stored.', 'ok'); results.push(k);
+  }
+  await fly('gw', 'claude', '#15803d'); mark('claude', 'ok'); cap('Claude reads the results and writes the answer.'); await wait(500);
   await fly('claude', 'user', '#15803d'); mark('user', 'ok');
-  bubble('c', s.ans + (s.write ? '' : '<small>Sample data for illustration only.</small>'));
-  cap('Done.'); running = false; lockChips(false);
+  bubble('c', s.ans + '<small>Sample data for illustration only.</small>');
+  cap('Done.'); end();
 }
 $$('.qchip').forEach(b => b.addEventListener('click', () => run(b.dataset.k)));
 seg($('#roleSeg'), b => { role = b.dataset.role; });
 $('#demoReset').addEventListener('click', () => {
   if (running) return;
-  chat.innerHTML = '<div class="empty">Nothing asked yet. Pick a question to see Claude, the gateway and the platform work together.</div>';
-  logEl.innerHTML = '<li data-ph="1"><i></i><span>Waiting for a question.</span></li>'; resetNodes(); cap('Choose a question below to start.');
-  $('#toolcall').textContent = '// appears when Claude picks a tool';
+  chat.innerHTML = EMPTY; logEl.innerHTML = '<li data-ph="1"><i></i><span>Waiting for a question.</span></li>';
+  resetNodes(); cap('Choose a question below to start.'); $('#toolcall').textContent = TCPH;
 });
-logEl.innerHTML = '<li data-ph="1"><i></i><span>Waiting for a question.</span></li>';
 
 /* ---------- FUNDAMENTALS ---------- */
 stepper($('#stepJourney'), [
-  { icon: '💬', label: 'User', title: 'The user asks a question', text: 'In Claude, in plain language: “What was my average sleep this week?” No technical knowledge needed.' },
+  { icon: '💬', label: 'User', title: 'The user asks a question', text: 'In Claude, in plain language: “What was my average sleep this week?” No technical knowledge is needed.' },
   { icon: '🧠', label: 'Claude', title: 'Claude picks a tool', text: 'Claude cannot see a Garmin account on its own. It reads the list of tools offered by connected MCP servers and chooses <code>get_sleep_data</code>.' },
-  { icon: '🔌', label: 'MCP server', title: 'The server talks to the platform', text: 'With the user’s permission, the server signs in to the platform, requests the sleep data for the last 7 days and sends it back to Claude.' },
+  { icon: '🔌', label: 'MCP server', title: 'The server talks to the platform', text: 'With the user’s permission, the server signs in to the platform, requests the last 7 days of sleep and sends the result back to Claude.' },
   { icon: '📊', label: 'Platform', title: 'The platform holds the data', text: 'Garmin returns nightly sleep records. The same pattern applies to nutrition in MyFitnessPal, training in TrainingPeaks and decisions in OpenCaseLaw.' },
   { icon: '✅', label: 'Answer', title: 'Claude writes the answer', text: 'Claude turns the raw numbers into a clear reply with the average, the best and worst nights and any pattern worth noting.' }
 ]);
+const MSG = [
+  ['tools/list', 'Claude asks what the server can do. The server replies with its tool names, descriptions and argument shapes. This is how Claude learns that <code>get_sleep_data</code> exists.', '// Claude to server\n{ "method": "tools/list" }\n\n// server to Claude\n{ "tools": [\n  { "name": "get_sleep_data",\n    "description": "Nightly sleep for the last N days",\n    "inputSchema": { "days": "integer" } }\n] }'],
+  ['tools/call', 'Claude picks a tool and fills in the arguments from the user’s question. The gateway sits in the middle and can refuse the call.', '// Claude to server\n{ "method": "tools/call",\n  "params": {\n    "name": "get_sleep_data",\n    "arguments": { "days": 7 } } }'],
+  ['Result', 'The server returns structured content. Claude never sees tokens or passwords, only the data the call returned.', '// server to Claude\n{ "content": [ {\n  "type": "text",\n  "text": "avg 7h12, shortest 6h05 (Thu)" } ] }']
+];
+function showMsg(i) { $('#msgPre').textContent = MSG[i][2]; $('#msgTitle').textContent = MSG[i][0]; $('#msgText').innerHTML = MSG[i][1]; }
+showMsg(0); seg($('#msgSeg'), b => showMsg(+b.dataset.m));
 const LOC = {
   local: { nodes: ['Claude Desktop', 'Local server on the PC', 'Platform'], cards: [
     ['Local MCP', 'Runs on one person’s computer and is launched by Claude Desktop. Quick to set up, so it suits a prototype.'],
     ['Trade-offs', 'Each user installs and updates it. Tokens sit on the PC. Hard for an administrator to control or switch off for one person.']] },
-  remote: { nodes: ['Claude web &amp; app', 'URL of the firm’s gateway', 'Platform'], cards: [
+  remote: { nodes: ['Claude web and app', 'URL of the firm’s gateway', 'Platform'], cards: [
     ['Remote MCP', 'Hosted on a server run by the firm and added to Claude through a URL. One setup serves everyone who is allowed.'],
-    ['Trade-offs', 'Needs hosting and sign-in design. In return, access, logging and updates are managed centrally. This is the target for production.']] }
+    ['Trade-offs', 'Needs hosting, HTTPS and sign-in design. In return, access, logging and updates are managed centrally. This is the target for the 12 days.']] }
 };
 function drawLoc(k) {
   const L = LOC[k], col = k === 'local' ? '#b45309' : '#1d4ed8', soft = k === 'local' ? '#fdf1de' : '#e6edfd';
@@ -769,14 +912,13 @@ function drawLoc(k) {
   ${[[20, 0], [330, 1], [650, 2]].map(([x, i]) => `<rect x="${x}" y="55" width="230" height="80" rx="12" fill="${i === 1 ? soft : '#fff'}" stroke="${i === 1 ? col : '#c4cbd8'}" stroke-width="2"/><text x="${x + 115}" y="100" text-anchor="middle" font-size="15" font-weight="700" fill="#0f1b2d">${L.nodes[i]}</text>`).join('')}
   <text x="450" y="170" text-anchor="middle" font-size="13.5" fill="#5a6678">${k === 'local' ? 'Everything runs on the user’s own machine' : 'The server runs in the firm’s environment'}</text>`;
   $('#locCards').innerHTML = L.cards.map(c => `<article class="card"><h3>${c[0]}</h3><p>${c[1]}</p></article>`).join('');
-  if (reduced) $('#locSvg').pauseAnimations && $('#locSvg').pauseAnimations();
 }
 drawLoc('local'); seg($('#locSeg'), b => drawLoc(b.dataset.loc));
-const ANAT = { name: ['Name', 'The identifier Claude uses to call the tool. Stable names let us swap the implementation behind them.'], desc: ['Description', 'Plain text Claude reads to decide when this tool fits the question. Clear descriptions mean better tool choices.'], args: ['Arguments', 'The inputs Claude fills in from the user’s question, here the number of days.'], mode: ['Access mode', 'Read-only tools cannot change anything. Tools that write or delete are held for confirmation by the gateway.'] };
+const ANAT = { name: ['Name', 'The identifier Claude uses to call the tool. Stable names let us swap the implementation behind them.'], desc: ['Description', 'Plain text Claude reads to decide when this tool fits the question. Clear descriptions mean better tool choices.'], args: ['Arguments', 'The inputs Claude fills in from the user’s question, here the number of days.'], mode: ['Access mode', 'Read-only tools cannot change anything. Tools that write or delete are not on the allowlist in V1.'] };
 $$('#toolAnat span').forEach(s => { s.style.cssText = 'cursor:help;border-bottom:1px dashed #7aa2ff'; const f = () => { $('#anatTitle').textContent = ANAT[s.dataset.t][0]; $('#anatText').textContent = ANAT[s.dataset.t][1]; }; s.addEventListener('mouseenter', f); s.addEventListener('click', f); });
-const GL = [['MCP', 'Model Context Protocol. An open standard for connecting AI assistants to tools and data.'], ['MCP server', 'A small program that offers a list of tools to Claude and talks to one platform.'], ['Tool', 'A named action, such as search_decisions or get_sleep_data.'], ['Gateway', 'The firm’s single entry point. It checks identity and permissions before any tool runs.'], ['Adapter', 'The part that speaks to one platform. It can be replaced without changing what Claude sees.'], ['Token', 'A key that proves a user’s permission to a platform, issued per user and stored encrypted.'], ['OAuth', 'The official way to let an app act for a user without ever seeing their password.'], ['Read-only', 'A mode in which tools can look at data but never create, change or delete it.'], ['Audit log', 'A record of who used which tool and when, without storing the content.'], ['Role / group', 'A label such as “fitness pilot” that decides which connectors a person can use.']];
+const GL = [['MCP', 'Model Context Protocol. An open standard for connecting AI assistants to tools and data.'], ['MCP server', 'A small program that offers a list of tools to Claude and talks to one platform.'], ['Tool', 'A named action, such as search_decisions or get_sleep_data.'], ['Gateway', 'The firm’s single entry point. It checks identity and permissions before any tool runs.'], ['Adapter', 'The part that speaks to one platform. It can be replaced without changing what Claude sees.'], ['Allowlist', 'The short list of tools that are switched on. Everything else, especially anything that writes, stays off.'], ['Token', 'A key that proves a user’s permission to a platform, issued per user and stored encrypted.'], ['OAuth', 'The official way to let an app act for a user without ever seeing their password.'], ['MFA', 'Multi-factor authentication. Garmin asks for a one-time code, so a person must be present at first login.'], ['Audit log', 'A record of who used which tool and when, without storing the content.']];
 $('#gloss').innerHTML = GL.map(g => `<details class="card q"><summary>${g[0]}</summary><div class="body"><p>${g[1]}</p></div></details>`).join('');
-const FQ = [['Can my colleagues see my fitness data?', 'Not by design. Each person connects their own account, and administrators only see audit metadata, never the data itself.'], ['Can Claude change or delete my data?', 'Not in phase 1, which is read-only. If write tools are enabled later, each change asks for confirmation first.'], ['What if a community server stops working?', 'That is the reason for adapters. We replace the adapter, for example with the official API, and users keep the same tools.'], ['Is OpenCaseLaw private?', 'The decisions are public, but a search query can reveal a confidential case. The client chooses between the public server, an internal proxy or a self-hosted copy.'], ['Does this need a new AI model?', 'No. MCP only connects Claude to platforms. It is neither a new AI nor a database.']];
+const FQ = [['Can my colleagues see my fitness data?', 'Not by design. Each person connects their own account, and administrators only see audit metadata, never the data itself.'], ['Can Claude change or delete my data?', 'Not in V1, which is read-only. Write tools are not on the allowlist, so a request to delete is refused.'], ['What if a community server stops working?', 'That is the reason for adapters. We replace the adapter, for example with the official API, and users keep the same tools.'], ['Is OpenCaseLaw private?', 'The decisions are public, but a search query can reveal a confidential case. The client chooses between the public server, an internal proxy or a self-hosted copy.'], ['Does this need a new AI model?', 'No. MCP only connects Claude to platforms. It is neither a new AI nor a database.'], ['Why not do the four servers in parallel?', 'Authentication, hosting and policy are shared work. Doing them once on two connectors, then repeating, is faster and safer than four separate efforts.']];
 $('#faq').innerHTML = FQ.map(g => `<details class="card q"><summary>${g[0]}</summary><div class="body"><p>${g[1]}</p></div></details>`).join('');
 
 /* ---------- ARCHITECTURE ---------- */
@@ -793,17 +935,17 @@ function drawAdapters(mode) {
   bindArch();
 }
 const AI = {
-  claude: ['Claude', 'The assistant people already use, in the browser or the app. It only ever talks to the gateway.', ['Sees one set of stable tools', 'Never receives passwords or tokens', 'Asks the user before sensitive actions']],
-  identity: ['Identity', 'Confirms who is asking. The Microsoft sign-in already present in bear_backend may be reused here.', ['Single sign-in for employees', 'Provides the user’s group membership', 'Reuse to be confirmed']],
-  policy: ['Access policy', 'Decides, for each request, whether this user may use this tool.', ['OpenCaseLaw: all employees', 'Fitness tools: pilot group only', 'Rules can differ per tool, not just per connector']],
-  vault: ['Token vault', 'Holds each user’s own provider tokens, encrypted. Nothing is shared between users.', ['One set of tokens per person', 'Revoke one user without touching others', 'Replaces local files and browser cookies']],
-  guard: ['Confirmation guard', 'Pauses any tool that creates, edits or deletes data and asks the user to confirm.', ['Off entirely in phase 1 (read-only)', 'Shows exactly what will change', 'Cancel leaves everything untouched']],
+  claude: ['Claude', 'The assistant people already use, in the browser or the app. It only ever talks to the gateway.', ['Sees one set of stable tools', 'Never receives passwords or tokens', 'Cannot call a tool that is not on the allowlist']],
+  identity: ['Identity', 'Confirms who is asking. The Microsoft sign-in already present in the client’s backend may be reused here.', ['Single sign-in for employees', 'Provides the user’s group membership', 'Reuse to be confirmed on day 1']],
+  policy: ['Access policy', 'Decides, for each request, whether this user may use this tool. Deny by default.', ['OpenCaseLaw: all employees', 'Fitness tools: pilot group only', 'Rules can differ per tool, not just per connector']],
+  vault: ['Secret store and token vault', 'Holds each user’s own provider tokens and the gateway’s secrets, encrypted. Nothing is shared between users.', ['One set of tokens per person', 'Revoke one user without touching others', 'Replaces local files and copied cookies']],
+  guard: ['Tool allowlist and confirmation', 'Only a short list of read-only tools is switched on. Garmin exposes 110+ tools and TrainingPeaks 84, so most are disabled.', ['Write, delete and download tools off in V1', 'If writes are approved later, each change asks for confirmation', 'Cancel leaves everything untouched']],
   audit: ['Audit log', 'Records who used which tool and when, and whether it was allowed. It does not store the content.', ['Helps with reviews and incidents', 'Visible to administrators', 'No search text or fitness values kept']],
   'a-law': ['OpenCaseLaw adapter', 'Calls the OpenCaseLaw MCP server. Needs no personal credentials.', ['Pilot: public remote server', 'Production: internal proxy or self-hosted if queries are confidential', 'Read-only']],
   'a-garmin': ['Garmin adapter', 'Fetches activities, sleep, heart rate and more using the user’s own Garmin token.', ['Pilot: community garmin_mcp (unofficial library)', 'Production: official Garmin developer programme', 'May need approval and a commercial licence']],
-  'a-mfp': ['MyFitnessPal adapter', 'Reads the food diary, nutrition summary and weight for the user.', ['Pilot: community server using internal endpoints', 'Production: official OAuth API', 'Most fragile of the four']],
-  'a-tp': ['TrainingPeaks adapter', 'Reads workouts and fitness curves. Some tools can write or delete.', ['Pilot: community server using a session cookie', 'Production: official API after approval', 'Write tools held for confirmation']],
-  'p-law': ['OpenCaseLaw', 'Swiss court decisions, statutes and citations. Public data, read-only, 42 tools.', ['Available to the whole firm']],
+  'a-mfp': ['MyFitnessPal adapter', 'Reads the food diary, nutrition summary and weight for the user.', ['Pilot: community server using a browser session', 'Production: official OAuth API', 'Most fragile of the four']],
+  'a-tp': ['TrainingPeaks adapter', 'Reads workouts and fitness curves. The repository also has write tools, which stay disabled.', ['Pilot: community server using a session cookie', 'Production: official API after approval', 'Write tools off in V1']],
+  'p-law': ['OpenCaseLaw', 'Court decisions, legislation and citations. Public data, read-only, 42 tools.', ['Available to the whole firm']],
   'p-garmin': ['Garmin', 'Watch and device data: activities, sleep, heart rate, stress, GPS, weight.', ['Health-related personal data', 'Pilot group only']],
   'p-mfp': ['MyFitnessPal', 'Nutrition tracking: meals, calories, macros, water, weight.', ['Health-related personal data', 'Pilot group only']],
   'p-tp': ['TrainingPeaks', 'Training plans, calendar, load and fitness for endurance athletes.', ['Health-related personal data', 'Pilot group only']]
@@ -819,60 +961,95 @@ function bindArch() {
     n.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showInfo(n.dataset.info); } };
   });
 }
-let curInfo = 'gateway-default';
 drawAdapters('pilot');
-$('#archInfo').innerHTML = '<h4>Click a box to explore</h4><p>Each component in the diagram has a single job. Select the gateway parts, the adapters or the platforms to see what they do and how they change between pilot and production.</p>';
+$('#archInfo').innerHTML = '<h4>Click a box to explore</h4><p>Each component has a single job. Select the gateway parts, the adapters or the platforms to see what they do and how they change between pilot and production.</p>';
 seg($('#modeSeg'), b => { drawAdapters(b.dataset.mode); $('#archInfo').innerHTML = b.dataset.mode === 'pilot' ? '<h4>Pilot stage</h4><p>Adapters wrap the community servers for fast validation. Good enough to prove the idea, not to rely on.</p>' : '<h4>Production stage</h4><p>Same gateway, same tools for users. Only the adapters change, now calling official APIs or an internal proxy.</p>'; });
-bindArch();
+
+/* ---------- APPROACH ---------- */
+const STAGES = [
+  { st: { law: 'live', garmin: 'idle', mfp: 'idle', tp: 'idle' }, gw: 0, t: 'After day 3', d: 'OpenCaseLaw is registered in Claude and answers real legal queries with sources. The gateway does not exist yet. This proves the simplest remote pattern and the Claude administration steps.' },
+  { st: { law: 'live', garmin: 'live', mfp: 'idle', tp: 'idle' }, gw: 0, t: 'After day 5', d: 'Garmin works locally with login, MFA and stored tokens, restricted to a read-only allowlist. The hard authentication problem is solved on one connector.' },
+  { st: { law: 'live', garmin: 'live', mfp: 'idle', tp: 'idle' }, gw: 1, t: 'After day 6', d: 'The gateway is up with HTTPS, client authentication, group rules, secret handling and health checks. Garmin is now reachable remotely and the architecture gate can be run.' },
+  { st: { law: 'live', garmin: 'live', mfp: 'live', tp: 'live' }, gw: 1, t: 'After day 8', d: 'MyFitnessPal (day 7) and TrainingPeaks (day 8) reuse the gateway, policy model and test method. Each has its own allowlist and test data. Fragile logins may still need fixes.' },
+  { st: { law: 'done', garmin: 'done', mfp: 'done', tp: 'done' }, gw: 2, t: 'After day 12', d: 'All four connectors are registered in Claude, group visibility is verified, negative tests are passed, fixes are applied, and the runbook, risk register and demo are handed over.' }
+];
+const SCOL = { idle: ['#fff', '#c4cbd8', '#9aa5b6', 'not started'], live: ['#e4f4ea', '#15803d', '#15803d', 'working'], done: ['#15803d', '#15803d', '#ffffff', 'verified'] };
+function drawStage(i) {
+  const S = STAGES[i];
+  const gwc = [['#fff', '#c4cbd8', 'Gateway not built'], ['#e6edfd', '#1d4ed8', 'Gateway live'], ['#1d4ed8', '#1d4ed8', 'Gateway tested']][S.gw];
+  const gwt = S.gw === 2 ? '#fff' : '#0f1b2d';
+  let s = `<rect x="20" y="105" width="130" height="90" rx="14" fill="#0f1b2d"/><text x="85" y="156" text-anchor="middle" fill="#fff" font-size="16" font-weight="700">Claude</text>
+  <path d="M150 150H250" stroke="#c4cbd8" stroke-width="3" class="${S.gw ? 'flow' : ''}"/>
+  <rect class="tile" x="250" y="95" width="170" height="110" rx="14" fill="${gwc[0]}" stroke="${gwc[1]}" stroke-width="2.5"/><text x="335" y="144" text-anchor="middle" font-size="16" font-weight="700" fill="${gwt}">Gateway</text><text x="335" y="168" text-anchor="middle" font-size="12" fill="${gwt}">${gwc[2]}</text>`;
+  ['law', 'garmin', 'mfp', 'tp'].forEach((k, n) => {
+    const y = 15 + n * 70, c = SCOL[S.st[k]];
+    s += `<path d="M420 150L520 ${y + 28}" stroke="${S.st[k] === 'idle' ? '#dde1e8' : '#15803d'}" stroke-width="2.5" ${S.st[k] === 'idle' ? '' : 'class="flow"'}/>
+    <rect class="tile" x="520" y="${y}" width="390" height="56" rx="12" fill="${c[0]}" stroke="${c[1]}" stroke-width="2"/>
+    <text x="540" y="${y + 24}" font-size="14" font-weight="700" fill="${S.st[k] === 'done' ? '#fff' : '#0f1b2d'}">${SRV[k]}</text>
+    <text x="540" y="${y + 44}" font-size="12" fill="${c[2]}">${k === 'law' ? 'public pattern (day 3)' : k === 'garmin' ? 'private pattern (days 4 and 5)' : k === 'mfp' ? 'replicated (day 7)' : 'replicated (day 8)'}</text>
+    <text x="890" y="${y + 34}" text-anchor="end" font-size="13" font-weight="700" fill="${c[2]}">${c[3]}</text>`;
+  });
+  $('#stageSvg').innerHTML = s;
+  $('#stageInfo').innerHTML = `<div><h4>${S.t}</h4><p style="margin:6px 0 0">${S.d}</p></div>`;
+}
+drawStage(0); seg($('#stageSeg'), b => drawStage(+b.dataset.s));
+const GATE = ['Claude discovers only approved tools', 'Legal answers contain verifiable sources', 'Garmin works without exposing passwords', 'Non-pilot users cannot see fitness tools', 'Tokens can be revoked and renewed', 'Failures are logged without sensitive payloads'];
+checklist($('#gateList'), GATE, $('#gateLabel'), $('#gateBar'), 'conditions confirmed');
+$('#gateList').addEventListener('tick', e => { const ok = e.detail === GATE.length; $('#gateNote').style.display = ok ? 'block' : 'none'; $('#gateWarn').style.display = ok ? 'none' : 'block'; });
 
 /* ---------- DOSSIERS ---------- */
 const DOS = {
-  law: { name: 'OpenCaseLaw', grp: 'law', lead: 'A Swiss legal database: court decisions, federal and cantonal case law, statutes and the citation links between them.',
+  law: { name: 'OpenCaseLaw', lead: 'A public remote MCP endpoint with more than 1.05 million court decisions, legislation, a citation graph, doctrine and research tools.',
     tags: [['ok', 'Remote MCP exists'], ['ok', 'No authentication'], ['ok', 'Read-only'], ['law', '42 tools'], ['law', 'All employees']],
-    ex: '“Find Federal Supreme Court decisions on employer liability and give me the references.”',
+    facts: [['Audience', 'All authorised staff'], ['Authentication', 'None at the provider. Firm-side connector approval still applies'], ['Transport', 'Streamable HTTP at https://mcp.opencaselaw.ch'], ['Tool surface', '42 public read-only tools'], ['We need', 'Claude Owner access and legal test questions'], ['Planned for', 'Day 3']],
+    ex: '“Find Supreme Court decisions on employer liability and give me the references.”',
     metrics: [['Server maturity', 4], ['Stability', 4], ['Credential safety', 5], ['Official-API route', 4], ['Data sensitivity', 2]],
-    tools: [['search_decisions', 'r', 'Search court decisions by topic, court or date'], ['get_decision', 'r', 'Fetch the full text of one decision'], ['find_citations', 'r', 'Follow which decisions cite or are cited by another'], ['search_laws', 'r', 'Search statutes and provisions']],
+    tools: [['search_decisions', 'r', 'Search court decisions by topic, court or date'], ['get_decision', 'r', 'Fetch the full text of one decision'], ['find_citations', 'r', 'Follow which decisions cite or are cited by another'], ['search_laws', 'r', 'Search legislation and provisions']],
     auth: ['Claude calls the public URL', 'No sign-in required', 'Server returns results, read-only', 'Gateway can log who searched'],
-    watch: ['Decisions are public, but the query can expose a client matter', 'Decide: public server, internal proxy or self-hosted copy', 'Tool names shown are examples of the 42 available'] },
-  garmin: { name: 'Garmin', grp: 'fit', lead: 'Data from Garmin watches and devices: activities, steps, heart rate, sleep, stress, GPS, weight and training readiness.',
-    tags: [['warn', 'Community server'], ['warn', 'Unofficial library'], ['fit', 'Personal accounts'], ['fit', 'Fitness group']],
+    watch: ['Decisions are public, but the query can expose a client matter', 'Decide: public server, internal proxy or self-hosted copy', 'Benchmark coverage and citation accuracy on the client’s test questions', 'Tool names shown are examples of the 42 available'] },
+  garmin: { name: 'Garmin', lead: 'Data from Garmin watches and devices. The community server wraps the python-garminconnect library and exposes 110+ tools, which must be cut to a small read-only allowlist.',
+    tags: [['warn', 'Community server'], ['warn', 'Unofficial library'], ['warn', 'MFA login'], ['fit', 'Personal accounts'], ['fit', 'Fitness group']],
+    facts: [['Audience', 'Selected fitness group only'], ['Authentication', 'Garmin login plus one-time MFA, tokens stored per user'], ['Runtime', 'Python 3.12+, stdio locally or HTTP remotely'], ['Pilot allowlist', 'Activities, sleep, stress, steps, heart rate, readiness'], ['We need', 'Test account with data, live login and MFA'], ['Planned for', 'Days 4 and 5 (margin on day 5)']],
     ex: '“Analyse my Garmin activities for the last four weeks.”',
     metrics: [['Server maturity', 4], ['Stability', 3], ['Credential safety', 2], ['Official-API route', 3], ['Data sensitivity', 5]],
     tools: [['get_activities', 'r', 'List recent workouts'], ['get_sleep_data', 'r', 'Nightly sleep and averages'], ['get_heart_rate', 'r', 'Heart rate across a day or activity'], ['get_stress', 'r', 'Stress levels'], ['get_training_readiness', 'r', 'Readiness and recovery indicators']],
-    auth: ['User signs in once to Garmin', 'Library stores session tokens', 'Tools call Garmin Connect', 'In production the gateway holds tokens per user'],
-    watch: ['Relies on an unofficial Garmin Connect library', 'Official developer programme may require approval and a commercial licence', 'GPS and heart rate are sensitive personal data'] },
-  mfp: { name: 'MyFitnessPal', grp: 'fit', lead: 'Food and nutrition tracking: meals, calories, protein, carbohydrates, fat, water, weight and nutrition goals.',
-    tags: [['risk', 'Most fragile'], ['warn', 'Scraping and browser cookies'], ['fit', 'Personal accounts'], ['fit', 'Fitness group']],
+    auth: ['User signs in once to Garmin', 'One-time MFA code is entered live', 'Library stores session tokens', 'In production the gateway holds tokens per user'],
+    watch: ['The HTTP mode has no built-in client authentication, so it must sit behind the gateway', 'Relies on an unofficial Garmin Connect library', 'Official developer programme may require approval and a commercial licence', 'Disable every write, download and destructive tool', 'GPS and heart rate are sensitive personal data'] },
+  mfp: { name: 'MyFitnessPal', lead: 'Food and nutrition tracking: meals, calories, protein, carbohydrates, fat, water, weight and goals. The candidate reads website data and uses internal endpoints.',
+    tags: [['risk', 'Most fragile'], ['warn', 'Browser session login'], ['fit', 'Personal accounts'], ['fit', 'Fitness group']],
+    facts: [['Audience', 'Selected fitness group only'], ['Authentication', 'Active browser cookies. The password flow is unreliable'], ['Runtime', 'Python 3.10 to 3.12, pip 21.3+'], ['Pilot allowlist', 'Diary, foods, measurements, exercises, goals, water, reports'], ['We need', 'Test account with diary data and a browser session'], ['Planned for', 'Day 7 (overrun absorbed on day 11)']],
     ex: '“How much protein did I eat on average this week?”',
     metrics: [['Server maturity', 2], ['Stability', 1], ['Credential safety', 1], ['Official-API route', 3], ['Data sensitivity', 4]],
-    tools: [['get_food_diary', 'r', 'Meals logged for a date or range'], ['get_nutrition_summary', 'r', 'Calories and macros summary'], ['get_weight', 'r', 'Weight entries'], ['add_food', 'w', 'Add an entry to the diary']],
-    auth: ['User exports a browser cookie', 'Server stores the cookie', 'Server reads internal endpoints', 'Pilot only: replace with official OAuth'],
-    watch: ['Uses internal endpoints and cookies, so it can stop working without notice', 'Prefer the official OAuth route for anything beyond a pilot', 'Write tools stay off in phase 1'] },
-  tp: { name: 'TrainingPeaks', grp: 'fit', lead: 'Training planning and analysis for endurance athletes: calendar, workouts, power and heart-rate zones, fatigue, fitness and goals.',
+    tools: [['get_food_diary', 'r', 'Meals logged for a date or range'], ['get_nutrition_summary', 'r', 'Calories and macros summary'], ['get_weight', 'r', 'Weight entries'], ['add_food', 'w', 'Add an entry to the diary (disabled in V1)']],
+    auth: ['User exports a browser cookie', 'Server stores the cookie', 'Server reads internal endpoints', 'Production: replace with official OAuth'],
+    watch: ['Not a clean public-API integration: it can stop working without notice', 'Confirm terms and sustainability before using beyond a disposable test account', 'Prefer the official OAuth route (client ID and secret) if partner access is granted', 'Write tools stay off in V1'] },
+  tp: { name: 'TrainingPeaks', lead: 'Training planning and analysis for endurance athletes. The candidate exposes 84 tools for workouts, calendars, fitness trends, metrics and coach workflows.',
     tags: [['warn', 'Cookie-based access'], ['warn', 'Has write tools'], ['fit', 'Personal accounts'], ['fit', 'Fitness group']],
+    facts: [['Audience', 'Selected fitness group only'], ['Authentication', 'Browser session cookie stored in a keyring'], ['Session', 'Cookie exchanged for a one-hour token, refreshed automatically'], ['Pilot allowlist', 'Workouts, fitness, summaries, events, health metrics'], ['We need', 'Test account with workouts and a session cookie'], ['Planned for', 'Day 8 (overrun absorbed on day 11)']],
     ex: '“Review my training load and suggest a session for Tuesday.”',
     metrics: [['Server maturity', 4], ['Stability', 3], ['Credential safety', 2], ['Official-API route', 3], ['Data sensitivity', 4]],
-    tools: [['get_workouts', 'r', 'Planned and completed workouts'], ['get_fitness', 'r', 'Fitness, fatigue and form over time'], ['create_workout', 'w', 'Add a workout to the calendar'], ['update_ftp', 'w', 'Change the stored threshold power'], ['delete_workout', 'w', 'Remove a workout']],
-    auth: ['User provides a session cookie', 'Server uses it for every request', 'The cookie gives full account access', 'Replace with an approved API token'],
-    watch: ['The cookie grants full access to the account', 'Official API requires approval from TrainingPeaks', 'Write and delete tools need confirmation or stay disabled'] }
+    tools: [['get_workouts', 'r', 'Planned and completed workouts'], ['get_fitness', 'r', 'Fitness, fatigue and form over time'], ['create_workout', 'w', 'Add a workout to the calendar (disabled)'], ['update_ftp', 'w', 'Change the stored threshold power (disabled)'], ['delete_workout', 'w', 'Remove a workout (disabled)']],
+    auth: ['User provides a session cookie', 'Server exchanges it for a short-lived token', 'Token is refreshed automatically', 'Replace with an approved API token'],
+    watch: ['The cookie grants full access to the account', 'Official API needs approval: TrainingPeaks publishes a 7 to 10 day response time, which is external lead time', 'Restrict the 84-tool surface to read-only', 'Request official API access in parallel'] }
 };
-$('#dosTabs').innerHTML = Object.entries(DOS).map(([k, d], i) => `<button class="${i ? '' : 'active'}" role="tab" data-d="${k}">${d.name}</button>`).join('');
+$('#dosTabs').innerHTML = Object.entries(DOS).map(([k, d], i) => `<button class="${i ? '' : 'on'}" role="tab" data-d="${k}">${d.name}</button>`).join('');
 function showDos(k, filter = 'all') {
   const d = DOS[k];
   $('#dosBody').innerHTML = `<div class="dos">
   <h3>${d.name}</h3><p class="lead">${d.lead}</p>
   <div class="meta-row">${d.tags.map(t => `<span class="tag ${t[0]}">${t[1]}</span>`).join('')}</div>
+  <div class="facts">${d.facts.map(f => `<div class="fact"><b>${f[0]}</b>${f[1]}</div>`).join('')}</div>
   <div class="card" style="margin-bottom:18px"><p style="margin:0"><b style="color:var(--ink)">Example question.</b> ${d.ex}</p></div>
   <div class="grid two">
     <article class="card"><h3>Assessment</h3>
       ${d.metrics.map(m => `<div class="metric"><span>${m[0]}</span><div class="track"><div class="fill ${m[0] === 'Data sensitivity' ? 'sens' : m[1] >= 4 ? '' : m[1] >= 3 ? 'mid' : 'low'}" data-w="${m[1] * 20}"></div></div><b>${m[1]}/5</b></div>`).join('')}
-      <p style="font-size:13px;margin-top:8px">Longer green bar is better. For data sensitivity, a longer bar means more sensitive.</p></article>
+      <p style="font-size:13px;margin-top:8px">A longer green bar is better. For data sensitivity, a longer bar means more sensitive.</p></article>
     <article class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px"><h3 style="margin:0">Tools (examples)</h3>
       <div class="seg" id="toolFilter"><button data-f="all" class="${filter === 'all' ? 'on' : ''}">All</button><button data-f="r" class="${filter === 'r' ? 'on' : ''}">Read</button><button data-f="w" class="${filter === 'w' ? 'on' : ''}">Write</button></div></div>
-      ${d.tools.filter(t => filter === 'all' || t[1] === filter).map(t => `<div class="toolrow"><code>${t[0]}</code><span><span class="pill ${t[1]}">${t[1] === 'r' ? 'read' : 'write'}</span></span><span class="d">${t[2]}</span></div>`).join('') || '<p>No tools of this type on this platform.</p>'}
+      ${d.tools.filter(t => filter === 'all' || t[1] === filter).map(t => `<div class="toolrow"><code>${t[0]}</code><span><span class="pill ${t[1]}">${t[1] === 'r' ? 'read' : 'write'}</span></span><span class="d">${t[2]}</span></div>`).join('') || '<p>No tools of this type are listed for this platform.</p>'}
     </article>
   </div>
-  <div class="sec"><h3>How sign-in works today</h3></div>
+  <div class="sec"><h3>How sign-in works</h3></div>
   <div class="authchain">${d.auth.map((a, i) => `<div class="auth-step" style="animation-delay:${i * 1.5}s"><b>Step ${i + 1}</b>${a}</div>${i < d.auth.length - 1 ? '<span class="auth-gap"></span>' : ''}`).join('')}</div>
   <div class="sec"><h3>Watch-outs</h3></div>
   <div class="card"><ul>${d.watch.map(w => `<li>${w}</li>`).join('')}</ul></div></div>`;
@@ -881,15 +1058,74 @@ function showDos(k, filter = 'all') {
 }
 let curDos = 'law';
 seg($('#dosTabs'), b => { curDos = b.dataset.d; showDos(curDos); });
-$$('#dosTabs button').forEach(b => b.setAttribute('aria-selected', 'false'));
 showDos('law');
 document.addEventListener('pageshow', e => { if (e.detail === 'connectors') showDos(curDos); });
+
+/* ---------- REQUIREMENTS ---------- */
+const REQ = [
+  // [type, platform, day, title, detail, mandatory]
+  ['c', 'all', 1, 'Claude plan supports custom remote connectors', 'And a Claude Owner is available to add organisation connectors.', 1],
+  ['c', 'all', 1, 'Named technical approver and exact pilot-user list', 'Two groups: all staff (legal) and fitness pilot.', 1],
+  ['c', 'all', 1, 'Written confirmation that V1 is read-only', 'Write actions stay out of the 12 days.', 1],
+  ['c', 'all', 1, 'Microsoft sign-in access (app registration, group data)', 'Needed to map firm groups to connector visibility. Day 1 decides whether existing sign-in is reused.', 1],
+  ['c', 'law', 2, 'Legal test questions and expected answers', 'At least five, including one that must return no result.', 1],
+  ['c', 'all', 2, 'Expected-answer examples for each fitness platform', 'Five questions each, plus empty-data, unauthorised and expired-session cases.', 1],
+  ['c', 'all', 2, 'Fitness data purpose, participant consent and retention rule', 'Needed before any real person connects an account.', 1],
+  ['c', 'law', 2, 'Position on legal confidentiality of search queries', 'Public server, internal proxy or self-hosted copy.', 1],
+  ['c', 'garmin', 3, 'Garmin test account with representative activity and sleep data', 'Populated for several weeks so answers can be checked.', 1],
+  ['c', 'garmin', 4, 'Person available for live Garmin login and MFA', 'Booked slot on day 4, plus a short re-authentication on day 5.', 1],
+  ['c', 'all', 5, 'Approved host reachable by Claude over HTTPS', 'With inbound HTTPS and outbound access to Garmin, MyFitnessPal and TrainingPeaks.', 1],
+  ['c', 'all', 5, 'DNS name and TLS certificate ownership', 'Certificate must be trusted by Claude’s connectors.', 1],
+  ['c', 'all', 5, 'Secret store for tokens and cookies', 'For example a managed vault or key service.', 1],
+  ['c', 'all', 6, 'Log destination, health monitoring and alert contact', 'Where audit metadata and failures are sent.', 0],
+  ['c', 'mfp', 6, 'MyFitnessPal test account with diary data and a browser session', 'Session captured live, not sent by message.', 1],
+  ['c', 'tp', 7, 'TrainingPeaks test account with workouts, metrics and a session cookie', 'Cookie handled through the secret store.', 1],
+  ['c', 'all', 8, 'Test users created in the legal group and the fitness group', 'At least one of each, plus one user in neither.', 1],
+  ['c', 'all', 11, 'Reviewer available for the demo and corrections', 'One review cycle is included.', 0],
+  ['t', 'all', 2, 'Repository audit: licences, maintenance, dependencies, transports, tools', 'Compatibility matrix for all four servers.', 1],
+  ['t', 'all', 2, 'Architecture decision record and threat model', 'Gateway boundary, secrets, audit events, replacement plan.', 1],
+  ['t', 'law', 3, 'OpenCaseLaw registered and legal query suite run', 'Citations checked against sources.', 1],
+  ['t', 'garmin', 5, 'Garmin read-only allowlist and token persistence', 'Cuts 110+ tools down to the pilot set.', 1],
+  ['t', 'all', 6, 'Gateway: HTTPS, client authentication, group rules, health checks', 'Deny by default.', 1],
+  ['t', 'mfp', 7, 'MyFitnessPal adapter, allowlist and tests', 'Fragile login handled with retries and clear errors.', 1],
+  ['t', 'tp', 8, 'TrainingPeaks adapter, allowlist and tests', 'Write tools disabled.', 1],
+  ['t', 'all', 10, 'Connector registration in Claude and group-visibility verification', 'Employee, pilot member and outsider tested.', 1],
+  ['t', 'all', 10, 'Negative and adversarial tests', 'Unauthorised user, expired token, provider down, unsafe tool call.', 1],
+  ['t', 'all', 12, 'Runbook, setup guide, risk register, demo and next-phase backlog', 'So the client can repeat the setup alone.', 1],
+  ['a', 'all', 1, 'The Claude plan allows group-based connector visibility', 'If not, access separation needs another design and the plan changes.', 1],
+  ['a', 'all', 1, 'The existing Microsoft sign-in can be reused', 'If not, a new identity integration stops the clock.', 1],
+  ['a', 'all', 1, 'Community servers are acceptable for the pilot', 'Unofficial libraries, scraping and cookies are tolerated for 12 days.', 1],
+  ['a', 'all', 1, 'Provider terms allow use of test accounts', 'To be checked by the client for each platform.', 1],
+  ['a', 'all', 1, 'Start is a Monday and the calendar has no holidays in the window', 'Otherwise the delivery date moves day for day.', 0],
+  ['a', 'garmin', 4, 'Garmin MFA can be completed live within working hours', 'A missed slot costs a day.', 1],
+  ['a', 'all', 5, 'Python 3.12 or Docker is available on the host', 'Garmin needs Python 3.12+, the others 3.10 to 3.12.', 1],
+  ['a', 'all', 12, 'Official API approvals are out of scope', 'TrainingPeaks publishes 7 to 10 days just to answer a request. Garmin and MyFitnessPal approvals are not in the estimate.', 0],
+  ['a', 'all', 12, 'No real employee health data is used in the 12 days', 'Only consenting pilot users and test data.', 1]
+];
+const TY = { c: ['Client', 'law'], t: ['Our team', 'fit'], a: ['Confirm', 'warn'] };
+let fType = 'all', fPlat = 'all';
+const reqState = REQ.map(() => false);
+function drawReq() {
+  const rows = REQ.map((r, i) => [r, i]).filter(([r]) => (fType === 'all' || r[0] === fType) && (fPlat === 'all' || r[1] === fPlat || r[1] === 'all'));
+  $('#reqList').innerHTML = rows.length ? rows.map(([r, i]) => `<label class="check"><input type="checkbox" data-i="${i}" ${reqState[i] ? 'checked' : ''}><span>${r[3]}<small>${r[4]}</small></span><span class="meta"><span class="tag ${TY[r[0]][1]}">${TY[r[0]][0]}</span><span class="tag">Day ${r[2]}</span>${r[5] ? '' : '<span class="tag">Optional</span>'}</span></label>`).join('') : '<p>Nothing matches this filter.</p>';
+  $$('#reqList input').forEach(c => c.addEventListener('change', () => { reqState[+c.dataset.i] = c.checked; updReq(); }));
+  updReq();
+}
+function updReq() {
+  const n = reqState.filter(Boolean).length, m = REQ.filter((r, i) => r[5] && !reqState[i] && r[0] !== 't').length;
+  $('#reqLabel').textContent = `${n} of ${REQ.length} received, done or confirmed`;
+  $('#reqBar').style.width = n / REQ.length * 100 + '%';
+  $('#reqNote').textContent = m ? `${m} mandatory client or assumption items are still open. The 12 days only hold once the day 1 items are in place.` : 'All mandatory client inputs and assumptions are in place.';
+}
+seg($('#reqType'), b => { fType = b.dataset.t; drawReq(); });
+seg($('#reqPlat'), b => { fPlat = b.dataset.p; drawReq(); });
+drawReq();
 
 /* ---------- SECURITY ---------- */
 const PERM = {
   employee: [['OpenCaseLaw', ['y', 'Visible'], ['y', 'Allowed'], ['n', 'Not applicable'], ['n', 'No']], ['Garmin', ['n', 'Hidden'], ['n', 'Refused'], ['n', 'Refused'], ['n', 'No']], ['MyFitnessPal', ['n', 'Hidden'], ['n', 'Refused'], ['n', 'Refused'], ['n', 'No']], ['TrainingPeaks', ['n', 'Hidden'], ['n', 'Refused'], ['n', 'Refused'], ['n', 'No']]],
-  fitness: [['OpenCaseLaw', ['y', 'Visible'], ['y', 'Allowed'], ['n', 'Not applicable'], ['n', 'No']], ['Garmin', ['y', 'Visible'], ['y', 'Own account'], ['c', 'Confirm first'], ['n', 'No']], ['MyFitnessPal', ['y', 'Visible'], ['y', 'Own account'], ['c', 'Confirm first'], ['n', 'No']], ['TrainingPeaks', ['y', 'Visible'], ['y', 'Own account'], ['c', 'Confirm first'], ['n', 'No']]],
-  admin: [['OpenCaseLaw', ['y', 'Can manage'], ['y', 'Allowed'], ['n', 'Not applicable'], ['n', 'No']], ['Garmin', ['y', 'Can manage'], ['c', 'Only if in group'], ['c', 'Only if in group'], ['n', 'No: metadata only']], ['MyFitnessPal', ['y', 'Can manage'], ['c', 'Only if in group'], ['c', 'Only if in group'], ['n', 'No: metadata only']], ['TrainingPeaks', ['y', 'Can manage'], ['c', 'Only if in group'], ['c', 'Only if in group'], ['n', 'No: metadata only']]]
+  fitness: [['OpenCaseLaw', ['y', 'Visible'], ['y', 'Allowed'], ['n', 'Not applicable'], ['n', 'No']], ['Garmin', ['y', 'Visible'], ['y', 'Own account'], ['n', 'Off in V1'], ['n', 'No']], ['MyFitnessPal', ['y', 'Visible'], ['y', 'Own account'], ['n', 'Off in V1'], ['n', 'No']], ['TrainingPeaks', ['y', 'Visible'], ['y', 'Own account'], ['n', 'Off in V1'], ['n', 'No']]],
+  admin: [['OpenCaseLaw', ['y', 'Can configure'], ['y', 'Allowed'], ['n', 'Not applicable'], ['n', 'No']], ['Garmin', ['y', 'Can configure'], ['c', 'Only if in group'], ['n', 'Off in V1'], ['n', 'No: metadata only']], ['MyFitnessPal', ['y', 'Can configure'], ['c', 'Only if in group'], ['n', 'Off in V1'], ['n', 'No: metadata only']], ['TrainingPeaks', ['y', 'Can configure'], ['c', 'Only if in group'], ['n', 'Off in V1'], ['n', 'No: metadata only']]]
 };
 function drawPerm(r) {
   $('#permTable').innerHTML = '<thead><tr><th>Connector</th><th>Sees connector</th><th>Reads data</th><th>Changes data</th><th>Sees other people’s data</th></tr></thead><tbody>' +
@@ -899,82 +1135,124 @@ drawPerm('employee'); seg($('#permSeg'), b => drawPerm(b.dataset.r));
 stepper($('#stepToken'), [
   { icon: '🔑', label: 'Sign in', title: 'The employee signs in to Claude', text: 'Through the firm’s Microsoft sign-in. The gateway learns who the person is and which groups they belong to.' },
   { icon: '🛡️', label: 'Group check', title: 'The gateway checks the fitness group', text: 'Only members of the pilot group are offered the Garmin, MyFitnessPal and TrainingPeaks connectors. Everyone else never sees them.' },
-  { icon: '👤', label: 'Own account', title: 'The user connects their own account', text: 'The person signs in to the platform themselves, ideally with the official OAuth flow. The firm never sees or shares their password.' },
+  { icon: '👤', label: 'Own account', title: 'The user connects their own account', text: 'The person signs in to the platform themselves, including MFA for Garmin, ideally with the official OAuth flow. The firm never sees or shares their password.' },
   { icon: '🗄️', label: 'Vault', title: 'Tokens go into the vault', text: 'The gateway stores that person’s tokens encrypted and tied to them alone. No shared account, no shared cookie.' },
-  { icon: '⚡', label: 'Use', title: 'The adapter uses only that user’s token', text: 'Every request carries the caller’s own token, so Alice can only ever reach Alice’s data. Removing Alice deletes her tokens and nothing else.' }
+  { icon: '⚡', label: 'Use', title: 'The adapter uses only that user’s token', text: 'Every request carries the caller’s own token, so Alice can only reach Alice’s data. Removing Alice deletes her tokens and nothing else.' }
 ]);
-const CHK = ['Written approval of each provider’s terms of use', 'Official API access requested for Garmin, MyFitnessPal and TrainingPeaks', 'Data-protection assessment for health-related data', 'Per-user tokens encrypted at rest', 'Procedure to revoke one user’s access tested', 'Audit log reviewed by an administrator (metadata only)', 'Write actions require confirmation', 'Fitness connectors visible only to the pilot group', 'OpenCaseLaw query policy agreed (public, proxy or self-hosted)', 'Retention settings confirmed with the Claude plan owner'];
-$('#chkList').innerHTML = CHK.map((c, i) => `<label class="check"><input type="checkbox" data-i="${i}"><span>${c}</span></label>`).join('');
-$$('#chkList input').forEach(c => c.addEventListener('change', () => { const n = $$('#chkList input:checked').length; $('#chkLabel').textContent = `${n} of ${CHK.length} complete`; $('#chkBar').style.width = n / CHK.length * 100 + '%'; }));
+const LAY = [
+  ['Identity', 'Is this a known employee?', 'Stops anonymous callers. Only people signed in through the firm’s directory reach the gateway.'],
+  ['Group policy', 'Is this person in the right group?', 'Stops employees outside the fitness pilot from seeing or calling fitness connectors. Deny by default.'],
+  ['Tool allowlist', 'Is this tool switched on?', 'Stops write, delete and download tools, and the many unused tools in Garmin (110+) and TrainingPeaks (84).'],
+  ['Token isolation', 'Is this the caller’s own token?', 'Stops one user reaching another user’s data. Tokens are per person and encrypted.'],
+  ['Audit and alerts', 'Is it recorded?', 'Records who called which tool and when, with no content, so refusals and failures can be reviewed.']
+];
+$('#layerSeg').innerHTML = LAY.map((l, i) => `<button class="${i ? '' : 'on'}" data-l="${i}">${l[0]}</button>`).join('');
+function drawLayers(sel) {
+  let s = '';
+  LAY.forEach((l, i) => {
+    const x = 20 + i * 172, on = i === sel;
+    s += `<rect class="tile" x="${x}" y="40" width="160" height="110" rx="12" fill="${on ? '#e6edfd' : '#fff'}" stroke="${on ? '#1d4ed8' : '#c4cbd8'}" stroke-width="${on ? 3 : 2}"/><text x="${x + 80}" y="88" text-anchor="middle" font-size="14" font-weight="700" fill="#0f1b2d">${l[0]}</text><text x="${x + 80}" y="112" text-anchor="middle" font-size="11" fill="#5a6678">${i + 1} of ${LAY.length}</text>`;
+    if (i < LAY.length - 1) s += `<path class="flow" d="M${x + 160} 95H${x + 172}" stroke="#5a6678" stroke-width="2.5"/>`;
+  });
+  s += '<text x="450" y="195" text-anchor="middle" font-size="13.5" fill="#5a6678">A request must pass every layer, left to right, before data comes back</text>';
+  $('#layerSvg').innerHTML = s;
+  $('#layerInfo').innerHTML = `<div><h4>${LAY[sel][1]}</h4><p style="margin:6px 0 0">${LAY[sel][2]}</p></div>`;
+}
+drawLayers(0); seg($('#layerSeg'), b => drawLayers(+b.dataset.l));
+const CHK = ['Written approval of each provider’s terms of use', 'Official API access requested for Garmin, MyFitnessPal and TrainingPeaks', 'Data-protection assessment for health-related data', 'Per-user tokens encrypted at rest', 'Procedure to revoke one user’s access tested', 'Audit log reviewed by an administrator (metadata only)', 'Write actions approved, confirmed and tested if ever enabled', 'Fitness connectors visible only to the pilot group', 'OpenCaseLaw query policy agreed (public, proxy or self-hosted)', 'Retention settings confirmed with the Claude plan owner'];
+checklist($('#chkList'), CHK, $('#chkLabel'), $('#chkBar'), 'complete');
 
 /* ---------- ROADMAP ---------- */
 const WS = [
-  { id: 'w1', name: 'Feasibility checks', s: 1, e: 2, c: 'gen', ttl: 'Confirm each connector works', ul: ['Run the four servers with test accounts', 'List tools, authentication method and risks per platform', 'Confirm the Claude plan and admin access'], out: 'Checkpoint: feasibility confirmed' },
-  { id: 'w2', name: 'OpenCaseLaw for the firm', s: 3, e: 4, c: 'law', ttl: 'OpenCaseLaw for the whole firm', ul: ['Add the connector in Claude at organisation level', 'Test real legal searches', 'Decide public server versus proxy'], out: 'Checkpoint: law connector live' },
-  { id: 'w3', name: 'Fitness pilot', s: 5, e: 7, c: 'fit', ttl: 'Garmin, MyFitnessPal and TrainingPeaks', ul: ['Connect personal accounts for a small pilot group', 'Restrict the connectors to that group', 'Test typical questions on each platform'], out: 'Checkpoint: fitness pilot demo' },
-  { id: 'w4', name: 'Gateway &amp; sign-in', s: 8, e: 9, c: 'gen', ttl: 'Gateway design and sign-in review', ul: ['Check whether the existing Microsoft sign-in can be reused', 'Document token storage and removal of a user'], out: 'Checkpoint: access model reviewed' },
-  { id: 'w5', name: 'Documentation', s: 9, e: 10, c: 'gen', ttl: 'Documentation and handover', ul: ['Simple setup guide the client can repeat', 'Risks, open decisions and next phase'], out: 'Checkpoint: handover' }
+  { id: 'w1', name: 'Discovery and architecture', s: 1, e: 2, c: 'gen', ttl: 'Days 1 and 2: discovery, repository audit and architecture', owner: 'Our team, with client contacts',
+    ul: ['Confirm users, use cases, data classes and the read-only boundary', 'Inventory Claude plan, admin roles, identity provider and hosting limits', 'Audit each repository: licence, maintenance, dependencies, transports, tools', 'Define public and private flows, gateway boundary, secret storage and audit events', 'Write acceptance scenarios and the architecture decision record'], out: 'Exit evidence: compatibility matrix, diagram, risk log' },
+  { id: 'w2', name: 'OpenCaseLaw (public pattern)', s: 3, e: 3, c: 'law', ttl: 'Day 3: OpenCaseLaw integration baseline', owner: 'Our team, Claude Owner for approval',
+    ul: ['Add the remote connector in Claude at organisation level', 'Verify tool discovery and the 42 read-only tools', 'Run the legal query suite and check citations against sources', 'Write usage guidance and handle failures'], out: 'Exit evidence: reproducible legal demo with sources' },
+  { id: 'w3', name: 'Garmin (private pattern)', s: 4, e: 5, c: 'fit', ttl: 'Days 4 and 5: Garmin local proof (day 5 holds margin)', owner: 'Our team, test-account holder for MFA',
+    ul: ['Set up the runtime and test data', 'Log in with live MFA and persist tokens', 'Cut 110+ tools to a read-only allowlist', 'Test timeouts and one full re-authentication cycle', 'Validate representative questions against known data'], out: 'Exit evidence: Garmin answers checked, no password exposed' },
+  { id: 'w4', name: 'Gateway, TLS and secrets', s: 6, e: 6, c: 'gen', ttl: 'Day 6: protected remote path', owner: 'Our team, IT for host, domain and secret store',
+    ul: ['Stand up the HTTPS endpoint on the approved host', 'Add client authentication in front of the servers', 'Apply group rules and connector visibility', 'Wire in the secret store and health probes', 'Run the architecture gate on Garmin and OpenCaseLaw'], out: 'Exit evidence: gateway live, gate result recorded' },
+  { id: 'w5', name: 'MyFitnessPal (replicate)', s: 7, e: 7, c: 'fit', ttl: 'Day 7: MyFitnessPal', owner: 'Our team, test-account holder',
+    ul: ['Set up the adapter with the browser-session login', 'Define the read-only allowlist', 'Test diary, nutrition summary and weight questions', 'Document fragility and the OAuth replacement plan'], out: 'Exit evidence: working read-only connector, risks logged' },
+  { id: 'w6', name: 'TrainingPeaks (replicate)', s: 8, e: 8, c: 'fit', ttl: 'Day 8: TrainingPeaks', owner: 'Our team, test-account holder',
+    ul: ['Set up the adapter with cookie-to-token exchange', 'Reduce 84 tools to a read-only allowlist', 'Test workouts, fitness curve and summary questions', 'Prepare the official API application text for the client'], out: 'Exit evidence: working read-only connector, risks logged' },
+  { id: 'w7', name: 'Claude integration and tests', s: 9, e: 10, c: 'gen', ttl: 'Days 9 and 10: Claude integration, groups and adversarial tests (day 10 holds margin)', owner: 'Our team, Claude Owner',
+    ul: ['Register all connectors in Claude', 'Verify visibility for employee, pilot member and outsider', 'Test unauthorised access, expired tokens, provider outage and unsafe tool calls', 'Confirm logs contain no sensitive payloads', 'Fix defects found'], out: 'Exit evidence: test report and visibility proof' },
+  { id: 'w8', name: 'Fixes, docs, demo, handover', s: 11, e: 12, c: 'gen', ttl: 'Days 11 and 12: corrections, documentation, demo and handover (day 11 holds margin)', owner: 'Our team, reviewer from the client',
+    ul: ['Absorb any overrun from the fragile connectors', 'Apply one review correction cycle', 'Write the runbook, setup guide and risk register', 'Run the live demo and record evidence', 'Hand over the next-phase backlog and official-API plan'], out: 'Exit evidence: handover pack and demo accepted' }
 ];
-const MS = [[2, 'Feasibility confirmed'], [4, 'Law live'], [7, 'Fitness pilot demo'], [9, 'Access model reviewed'], [10, 'Handover']];
+const MS = [[2, 'Feasibility confirmed'], [3, 'Legal connector live'], [6, 'Gateway and gate'], [8, 'Four connectors working'], [10, 'Access model verified'], [12, 'Handover']];
+const BUF = [5, 10, 11];
 let selWs = null;
+function addBiz(start, n) { const d = new Date(start + 'T12:00:00'); let c = 1; while (c < n) { d.setDate(d.getDate() + 1); if (d.getDay() !== 0 && d.getDay() !== 6) c++; } return d; }
+function fmt(d) { return d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); }
+function dateFor(n) { const v = $('#startDate').value; return v ? addBiz(v, n) : null; }
 function drawGantt(day) {
   const g = $('#gantt'); g.style.setProperty('--day', day);
-  g.innerHTML = '<div class="grow hd"><div class="lab">Workstream</div>' + [...Array(10)].map((_, i) => `<div>${i + 1}</div>`).join('') + '</div>' +
+  g.innerHTML = '<div class="grow hd"><div class="lab">Workstream</div>' + [...Array(12)].map((_, i) => `<div>${i + 1}</div>`).join('') + '</div>' +
     WS.map(w => { const st = day > w.e ? 'done' : day >= w.s ? 'active' : ''; return `<div class="grow"><div class="lab">${w.name}</div><button class="gbar ${w.c} ${st} ${selWs === w.id ? 'sel' : ''}" data-w="${w.id}" style="grid-column:${w.s + 1} / ${w.e + 2}">${st === 'done' ? 'Done' : st === 'active' ? 'In progress' : 'Planned'}</button></div>`; }).join('') +
-    '<div class="grow"><div class="lab">Checkpoints</div>' + [...Array(10)].map((_, i) => { const m = MS.find(x => x[0] === i + 1); return `<div style="text-align:center" ${m ? `title="${m[1]}"` : ''}>${m ? `<span class="ms" aria-label="${m[1]}">${day >= m[0] ? '◆' : '◇'}</span>` : ''}</div>`; }).join('') + '</div>' +
+    '<div class="grow"><div class="lab">Built-in margin</div>' + [...Array(12)].map((_, i) => BUF.includes(i + 1) ? '<div><div class="mbuf" title="Margin for fragile work"></div></div>' : '<div></div>').join('') + '</div>' +
+    '<div class="grow"><div class="lab">Checkpoints</div>' + [...Array(12)].map((_, i) => { const m = MS.find(x => x[0] === i + 1); return `<div style="text-align:center" ${m ? `title="${m[1]}"` : ''}>${m ? `<span class="ms" aria-label="${m[1]}">${day >= m[0] ? '◆' : '◇'}</span>` : ''}</div>`; }).join('') + '</div>' +
     '<div class="gcols"><div class="gmark"></div></div>';
   $$('.gbar', g).forEach(b => b.addEventListener('click', () => { selWs = b.dataset.w; drawGantt(+$('#daySlider').value); showWs(selWs); }));
   const active = WS.filter(w => day >= w.s && day <= w.e).map(w => w.name).join(', ');
   const ms = MS.filter(m => m[0] === day).map(m => m[1]);
+  const dt = dateFor(day);
   $('#dayLabel').textContent = 'Day ' + day + (ms.length ? ' · ' + ms[0] : '');
-  if (!selWs) $('#ganttInfo').innerHTML = `<div><h4>Day ${day}</h4><p style="margin:6px 0 0;color:var(--muted)">Under way: ${active || 'nothing'}.${ms.length ? ' Checkpoint reached: ' + ms[0] + '.' : ''} Click a bar for the detail.</p></div>`;
+  const e = dateFor(12); $('#endDate').textContent = e ? `Starting ${fmt(dateFor(1))}, day 12 falls on ${fmt(e)} (weekends skipped, holidays not counted).` : '';
+  if (!selWs) $('#ganttInfo').innerHTML = `<div><h4>Day ${day}${dt ? ' · ' + dt.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' }) : ''}</h4><p style="margin:6px 0 0;color:var(--muted)">Under way: ${active}.${BUF.includes(day) ? ' This day includes built-in margin.' : ''}${ms.length ? ' Checkpoint reached: ' + ms[0] + '.' : ''} Click a bar for the sub-tasks.</p></div>`;
 }
 function showWs(id) {
   const w = WS.find(x => x.id === id);
-  $('#ganttInfo').innerHTML = `<div><h4>${w.ttl} <span class="tag" style="margin-left:6px">Days ${w.s}–${w.e}</span></h4><ul style="margin:8px 0;padding-left:20px;color:var(--muted)">${w.ul.map(u => `<li>${u}</li>`).join('')}</ul><span class="tag ok">${w.out}</span></div>`;
+  $('#ganttInfo').innerHTML = `<div><h4>${w.ttl}</h4><p style="margin:6px 0;color:var(--muted)"><b>Owner:</b> ${w.owner}</p><ul style="margin:8px 0;padding-left:20px;color:var(--muted)">${w.ul.map(u => `<li>${u}</li>`).join('')}</ul><span class="tag ok">${w.out}</span></div>`;
 }
 drawGantt(1);
 $('#daySlider').addEventListener('input', e => { selWs = null; drawGantt(+e.target.value); });
+$('#startDate').addEventListener('change', () => drawGantt(+$('#daySlider').value));
 const EST = [
-  ['Setup, testing and handover (always)', 2, true, 'Test accounts, setup guide, risk summary'],
-  ['OpenCaseLaw for the whole firm', 1, true, 'Organisation-level connector and legal test queries'],
-  ['Garmin connector', 1.5, true, 'Personal accounts, pilot group'],
-  ['MyFitnessPal connector', 1.5, true, 'Most fragile, more testing'],
-  ['TrainingPeaks connector', 1.5, true, 'Cookie-based access in pilot'],
-  ['Gateway design', 1, true, 'Design document, no build'],
-  ['Microsoft sign-in review', 1, true, 'Check reuse from bear_backend'],
-  ['Write actions with confirmation', 2, false, 'Confirmation guard and write tests'],
-  ['Internal proxy for OpenCaseLaw', 2, false, 'Filtering and logging of legal queries'],
-  ['Official API applications', 1.5, false, 'Prepare and submit provider applications']
+  ['Discovery, audit and architecture', 2, true, 'Days 1 and 2'],
+  ['OpenCaseLaw integration', 1, true, 'Day 3'],
+  ['Garmin connector, login, MFA, allowlist, margin', 2, true, 'Days 4 and 5'],
+  ['Gateway, HTTPS, secrets, access policy', 1, true, 'Day 6'],
+  ['MyFitnessPal connector', 1, true, 'Day 7'],
+  ['TrainingPeaks connector', 1, true, 'Day 8'],
+  ['Claude integration, groups and adversarial tests', 2, true, 'Days 9 and 10'],
+  ['Fixes, documentation, demo and handover', 2, true, 'Days 11 and 12'],
+  ['Write actions with confirmation', 2, false, 'Optional: confirmation guard and write tests'],
+  ['Internal proxy for OpenCaseLaw queries', 2, false, 'Optional: filtering and logging of legal queries'],
+  ['New hosting environment from scratch', 1.5, false, 'Optional: if no approved host exists'],
+  ['New identity integration', 2, false, 'Optional: if the existing Microsoft sign-in cannot be reused'],
+  ['Official API applications', 1.5, false, 'Optional: prepare and submit provider applications']
 ];
-$('#estOpts').innerHTML = EST.map((o, i) => `<label class="opt"><input type="checkbox" data-i="${i}" ${o[2] ? 'checked' : ''} ${i === 0 ? 'disabled' : ''}><span>${o[0]}<small>${o[3]}</small></span><b>${o[1]} d</b></label>`).join('');
+$('#estOpts').innerHTML = EST.map((o, i) => `<label class="opt"><input type="checkbox" data-i="${i}" ${o[2] ? 'checked disabled' : ''}><span>${o[0]}<small>${o[3]}</small></span><b>${o[1]} d</b></label>`).join('');
 function calc() {
   let t = 0; $$('#estOpts input').forEach(c => { if (c.checked) t += EST[+c.dataset.i][1]; });
   $('#estTotal').textContent = t % 1 ? t.toFixed(1) : t;
-  $('#estBar').style.width = Math.min(100, t / 15 * 100) + '%';
-  $('#estNote').textContent = t <= 10 ? 'Within the 8 to 10 day window for V1.' : 'Beyond the 8 to 10 day window. Plan extra time or a second phase.';
+  $('#estBar').style.width = Math.min(100, t / 22 * 100) + '%';
+  $('#estNote').textContent = t === 12 ? 'The committed baseline: four connectors, security and handover.' : `${(t - 12) % 1 ? (t - 12).toFixed(1) : t - 12} days beyond the baseline. Agree this as a change before starting.`;
 }
 $$('#estOpts input').forEach(c => c.addEventListener('change', calc)); calc();
 
 /* ---------- DELIVERABLES ---------- */
 const DV = [
-  ['Working connections', 'Claude connected to OpenCaseLaw and the three fitness platforms, with tested example questions.', ['One tested question per platform', 'Screenshots or a short recording', 'List of tools exposed']],
-  ['Access configuration', 'Law open to the firm, fitness restricted to the pilot group, each user on their own account.', ['Group definitions', 'Connector visibility settings', 'Instructions to add or remove a user']],
-  ['Architecture document', 'Gateway and adapter design, so a connector can be swapped without changing what users see.', ['Component diagram', 'Token and sign-in flow', 'Replacement plan per provider']],
-  ['Setup guide', 'Plain-language steps so the client can deploy and reconfigure the connectors alone.', ['Local and remote setup', 'Troubleshooting notes', 'How to add a new connector']],
-  ['Risk and cost estimate', 'Provider approvals, hosting needs, effort for a production rollout and what is out of scope.', ['Risk list with owners', 'Production effort range', 'Open decisions']],
-  ['Status updates', 'Short, regular updates during the work, including blockers as soon as they appear.', ['Update at each checkpoint', 'Early warning on blockers', 'Final summary']]
+  ['Four working connections', 'Claude connected to OpenCaseLaw, Garmin, MyFitnessPal and TrainingPeaks, each with tested example questions.', ['One tested question per platform', 'Screenshots or a short recording', 'List of enabled tools per connector']],
+  ['Access configuration', 'Legal open to all staff, fitness restricted to the pilot group, each user on their own account.', ['Group definitions', 'Connector visibility settings', 'Steps to add or remove a user']],
+  ['Gateway and security setup', 'HTTPS endpoint, client authentication, secret handling, health checks and audit events.', ['Component diagram', 'Token and sign-in flow', 'Revocation procedure, tested']],
+  ['Test and risk report', 'Positive and negative cases, expired sessions, provider outage, privacy-safe logs and what remains open.', ['Test results per connector', 'Risk list with owners', 'Production blockers']],
+  ['Setup guide and runbook', 'Plain-language steps so the client can deploy, operate and reconfigure the connectors alone.', ['Local and remote setup', 'Troubleshooting notes', 'How to add a new connector']],
+  ['Demo and next-phase plan', 'A live demo, an official-API plan per provider, effort for production and what is out of scope.', ['Demo script', 'Official API route and lead times', 'Prioritised backlog']]
 ];
 $('#delivGrid').innerHTML = DV.map(d => `<details class="card"><summary>${d[0]}</summary><div class="body"><p>${d[1]}</p><ul>${d[2].map(x => `<li>${x}</li>`).join('')}</ul></div></details>`).join('');
 
 /* ---------- DECISIONS ---------- */
 const DQ = [
-  ['Pilot or production?', 'Is the first delivery a proof of concept or something users depend on?', [['Pilot', 'Community servers allowed. About 8 to 10 working days for V1.'], ['Production', 'Official APIs, hosting, security review and legal sign-off. Several weeks beyond V1.']]],
-  ['Read-only or read and write?', 'May Claude create, edit or delete data in the fitness platforms?', [['Read-only', 'Lowest risk. No confirmation screens to build.'], ['Read and write', 'Adds the confirmation guard and write testing, about 2 extra days.']]],
-  ['Are unofficial connections acceptable?', 'The tested repos use unofficial libraries, scraping or cookies.', [['Yes, for the pilot', 'Fastest route. Plan to replace them before production.'], ['No', 'Official API approvals come first. Waiting time depends on each provider and cannot be fixed in advance.']]],
-  ['Who hosts the servers?', 'Where will the remote servers and gateway run?', [['Client infrastructure', 'Full control. Needs access and a deployment owner.'], ['Existing backend', 'Reuses sign-in and hosting. Needs confirming that it can run the extra services.'], ['New environment', 'Clean separation. More setup time.']]],
+  ['Pilot or production?', 'Is the first delivery a proof of concept or something users depend on?', [['Pilot', 'Community servers allowed. 12 working days.'], ['Production', 'Official APIs, hosting, security review and legal sign-off. Several weeks beyond the 12 days, and provider approval times are outside our control.']]],
+  ['Read-only or read and write?', 'May Claude create, edit or delete data in the fitness platforms?', [['Read-only', 'Lowest risk. Included in the 12 days.'], ['Read and write', 'Adds the confirmation guard and write testing, about 2 extra days.']]],
+  ['Are unofficial connections acceptable?', 'The tested repositories use unofficial libraries, browser sessions or cookies.', [['Yes, for the pilot', 'Fastest route. Replace them before production.'], ['No', 'Official API approvals come first. Waiting time depends on each provider and cannot be fixed in advance.']]],
+  ['Who hosts the servers?', 'Where will the remote servers and the gateway run?', [['Client infrastructure', 'Full control. Needs access and a deployment owner by day 5.'], ['Existing backend', 'Reuses sign-in and hosting. Needs confirming that it can run the extra services.'], ['New environment', 'Clean separation. About 1.5 extra days.']]],
   ['Public or private OpenCaseLaw?', 'Are lawyers’ searches allowed to reach the public server?', [['Public server', 'Simplest. Queries leave the firm.'], ['Internal proxy', 'Filters and logs queries, about 2 extra days.'], ['Self-hosted', 'Full control, ongoing maintenance.']]],
-  ['Which Claude plan and who is in the group?', 'Team or Enterprise, and how many people are in the pilot.', [['Team', 'Check that group-level connector restrictions are available on this plan.'], ['Enterprise', 'Organisation controls available. Confirm group setup with the admin.'], ['Not sure yet', 'Resolve first. Access design depends on it.']]]
+  ['Which Claude plan and who is in the group?', 'Team or Enterprise, and how many people are in the pilot.', [['Team', 'Check that group-level connector restrictions are available on this plan.'], ['Enterprise', 'Organisation controls available. Confirm group setup with the admin.'], ['Not sure yet', 'Resolve on day 1. Access design depends on it.']]],
+  ['Start date', 'When can day 1 begin, with all day-1 inputs ready?', [['Next Monday', 'Delivery lands on day 12 of the calendar shown in the roadmap.'], ['Later', 'The date moves by the same amount. Use the roadmap date picker.'], ['Not before inputs are ready', 'The clock does not start until the Requirements page day-1 items are in place.']]]
 ];
 const decided = {};
 $('#decGrid').innerHTML = DQ.map((q, i) => `<div class="dq"><h3>${q[0]}</h3><p>${q[1]}</p><div class="seg" data-q="${i}">${q[2].map((o, j) => `<button data-j="${j}">${o[0]}</button>`).join('')}</div><div class="impact" id="imp${i}">Pick an option to see the impact.</div></div>`).join('');
